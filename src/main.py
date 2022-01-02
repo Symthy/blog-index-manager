@@ -11,7 +11,7 @@ from file.file_accessor import read_blog_config, write_text_file
 CONF_DIR_PATH = '../conf/'
 OUT_DIR_PATH = '../out/'
 BLOG_CONF_PATH = CONF_DIR_PATH + 'blog.conf'
-BLOG_ENTRIES_INDEX_PATH = OUT_DIR_PATH + 'all_entry_index_content.md'
+BLOG_ENTRIES_INDEX_PATH = OUT_DIR_PATH + 'summary_entry_index_result.md'
 
 
 # for debug
