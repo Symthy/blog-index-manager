@@ -1,0 +1,38 @@
+# Group to Category
+- Architecture:
+    - Clean
+    - Micro
+- Development:
+    - Agile
+    - TDD
+    - DDD
+- Program:
+    - Java
+    - Golang
+    - JavaScript
+    - TypeScript
+    - Python
+    - Shell
+- BackEnd:
+    - DB
+    - SQL
+    - ORM
+    - REST
+- FrontEnd:
+    - React
+    - Next
+    - Vue
+    - Nuxt
+    - HTML
+    - CSS
+- Web
+- Infra:
+    - Linux
+    - AWS
+    - GCP
+- Tools
+- Portfolio
+- Job Relation:
+    - Job Memo
+    - Job Change
+- Others

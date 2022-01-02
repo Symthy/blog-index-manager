@@ -1,0 +1,1 @@
+# exclude hatena blog entry id list. (require: index page)
