@@ -1,18 +1,19 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from domain.interface import IConvertibleMarkdownData
 from file.file_accessor import read_text_file, dump_json, load_json
 
 
 class BlogEntry:
-    def __init__(self, id: str, title: str, content: str, url: str, updated: str, categories: List[str]):
-        self.__id = id
+    def __init__(self, entry_id: str, title: str, content: str, url: str, last_updated: Optional[datetime],
+                 categories: List[str]):
+        self.__id = entry_id
         self.__title = title
         self.__content = content
         self.__url = url
-        # format: 2013-09-02T11:28:23+09:00
-        self.__last_updated = datetime.strptime(updated, "%Y-%m-%dT%H:%M:%S%z")
+        # Make it optional just in case
+        self.__last_updated: Optional[datetime] = last_updated
         self.__categories = categories
 
     @property
@@ -31,11 +32,9 @@ class BlogEntry:
     def url(self):
         return self.__url
 
-    @property
-    def updated(self) -> datetime:
-        return self.__last_updated
-
     def get_updated_month_day(self) -> str:
+        if self.__last_updated is None:
+            return 'unknown'
         return self.__last_updated.strftime('%Y/%m')
 
     @property

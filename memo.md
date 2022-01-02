@@ -74,3 +74,5 @@ document.getElementById('output').innerHTML = template({doesWhat: 'rocks!'})
 [Pythonでリストをソートするsortとsortedの違い](https://note.nkmk.me/python-list-sort-sorted/)
 
 [python](https://note.nkmk.me/python/)
+
+[WordPressの記事をはてなブログに自動で連携【AtomPubを使う】](https://www.wegirls.tech/entry/2017/02/03/211023)
