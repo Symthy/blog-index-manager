@@ -24,15 +24,20 @@ class CategoryGroupDef:
     def __init__(self, json_data: List):
         self.__grouping_categories: List[GroupingCategories] = []
         self.__all_group_and_category: List[str] = []
-        for record in json_data:
-            if isinstance(record, str):
-                self.__grouping_categories.append(GroupingCategories(record))
-                self.__all_group_and_category.append(record)
-            elif isinstance(record, dict):
-                for group, categories in record.items():
+        self.__category_to_group = {}
+        for json_field in json_data:
+            if isinstance(json_field, str):
+                self.__grouping_categories.append(GroupingCategories(json_field))
+                self.__all_group_and_category.append(json_field)
+                self.__category_to_group[json_field] = json_field
+            elif isinstance(json_field, dict):
+                for group, categories in json_field.items():
                     self.__grouping_categories.append(GroupingCategories(group, categories))
                     self.__all_group_and_category.append(group)
                     self.__all_group_and_category.extend(categories)
+                    for category in categories:
+                        self.__category_to_group[category] = group
+                    self.__category_to_group[group] = group
 
     @property
     def grouping_categories(self) -> List[GroupingCategories]:
@@ -45,3 +50,6 @@ class CategoryGroupDef:
         # for debug
         for gc in self.__grouping_categories:
             gc.print_data()
+
+    def get_belongs_group(self, category):
+        return self.__category_to_group[category]

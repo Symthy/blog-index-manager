@@ -6,6 +6,8 @@ from datetime import datetime
 
 import requests
 
+from api.response_parser import parse_blog_entries_xml, get_next_page_url, parse_blog_entry_xml
+from domain.blog_entry import BlogEntries, BlogEntry
 from file.blog_config import BlogConfig
 from templates.hatena_entry_format import build_hatena_entry_xml_body, get_summary_page_title
 
@@ -34,11 +36,29 @@ def build_hatena_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
     return api_url
 
 
-def execute_get_hatena_entry_list_api(blog_config: BlogConfig) -> ET.Element:
-    api_url = build_hatena_AtomPub_api_base_url(blog_config)
-    xml_string = execute_get_api(api_url, build_request_header(blog_config))
+def execute_get_hatena_specified_entry_api(blog_config: BlogConfig, entry_id: str) -> BlogEntry:
+    api_url = f'{build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
+    request_headers = build_request_header(blog_config)
+    xml_string = execute_get_api(api_url, request_headers)
     root = ET.fromstring(xml_string)
-    return root
+    return parse_blog_entry_xml(root)
+
+
+def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> BlogEntries:
+    api_url = build_hatena_AtomPub_api_base_url(blog_config)
+    request_headers = build_request_header(blog_config)
+    xml_string = execute_get_api(api_url, request_headers)
+    root = ET.fromstring(xml_string)
+    blog_entries = parse_blog_entries_xml(root, blog_config)
+
+    next_url = get_next_page_url(root)
+    while next_url is not None:
+        next_xml_string = execute_get_api(next_url, request_headers)
+        next_root = ET.fromstring(next_xml_string)
+        next_blog_entries = parse_blog_entries_xml(next_root, blog_config)
+        next_url = get_next_page_url(next_root)
+        blog_entries.merge(next_blog_entries)
+    return blog_entries
 
 
 def execute_put_hatena_summary_entry(blog_config: BlogConfig, content):

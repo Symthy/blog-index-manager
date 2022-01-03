@@ -2,7 +2,7 @@ from datetime import datetime
 from xml.sax.saxutils import escape
 
 from file.blog_config import BlogConfig
-from ltime.time_resolver import resolve_current_time
+from ltime.time_resolver import resolve_entry_current_time
 
 SUMMARY_PAGE_TITLE = ""
 
@@ -31,7 +31,7 @@ def build_hatena_entry_xml_body(blog_conf: BlogConfig, title: str, category: str
         title=title,
         author=blog_conf.hatena_id,
         content=replace_xml_escape(content),
-        update_time=resolve_current_time(),
+        update_time=resolve_entry_current_time(),
         category=category,
         draft='yes'  # yes or no
     )

@@ -75,6 +75,23 @@ document.getElementById('output').innerHTML = template({doesWhat: 'rocks!'})
 
 [python](https://note.nkmk.me/python/)
 
+[Pythonでクラスの引数や戻り値の型アノテーションに自己のクラスを指定する](https://qiita.com/MtDeity/items/fa6cfc4fff8f58140caa)
+
+```python
+from __future__ import annotations
+
+
+class ListNode:
+    def __init__(self, val: int, next: ListNode):
+        self.val = val
+        self.next = next
+
+
+assert ListNode.add.__annotations__ == {
+    'next': 'ListNode'
+}
+```
+
 [WordPressの記事をはてなブログに自動で連携【AtomPubを使う】](https://www.wegirls.tech/entry/2017/02/03/211023)
 
 ## GitBook

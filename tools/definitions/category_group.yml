@@ -13,26 +13,36 @@
     - TypeScript
     - Python
     - Shell
+    - regexp
+- Web
 - BackEnd:
     - DB
     - SQL
     - ORM
+    - Nest
     - REST
 - FrontEnd:
     - React
     - Next
     - Vue
     - Nuxt
+    - UI
     - HTML
     - CSS
-- Web
 - Infra:
     - Linux
+    - Docker
     - AWS
     - GCP
+    - k8s
+    - VMware
+    - Vagrant
+- Algorithm
 - Tools
-- Portfolio
+- Roadmap
+- Management
 - Job Relation:
     - Job Memo
     - Job Change
+- Portfolio
 - Others
