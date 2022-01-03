@@ -1,14 +1,13 @@
-from datetime import datetime
 from xml.sax.saxutils import escape
 
 from file.blog_config import BlogConfig
 from ltime.time_resolver import resolve_entry_current_time
 
-SUMMARY_PAGE_TITLE = ""
+SUMMARY_PAGE_TITLE = "Knowledge Index (記事一覧)"
 
 
 def get_summary_page_title() -> str:
-    return "Knowledge Index (記事一覧)"
+    return SUMMARY_PAGE_TITLE
 
 
 ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
@@ -26,7 +25,6 @@ ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
 
 
 def build_hatena_entry_xml_body(blog_conf: BlogConfig, title: str, category: str, content: str) -> str:
-    current_time = datetime.now()
     entry_xml = ENTRY_TEMPLATE.format(
         title=title,
         author=blog_conf.hatena_id,

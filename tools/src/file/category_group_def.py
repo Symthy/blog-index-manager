@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 
 
 class GroupingCategories:
@@ -22,34 +22,45 @@ class GroupingCategories:
 
 class CategoryGroupDef:
     def __init__(self, json_data: List):
-        self.__grouping_categories: List[GroupingCategories] = []
+        self.__groups: List[str] = []
+        self.__grouping_categories: Dict[str, GroupingCategories] = {}
         self.__all_group_and_category: List[str] = []
         self.__category_to_group = {}
         for json_field in json_data:
             if isinstance(json_field, str):
-                self.__grouping_categories.append(GroupingCategories(json_field))
+                self.__groups.append(json_field)
+                self.__grouping_categories[json_field] = GroupingCategories(json_field)
                 self.__all_group_and_category.append(json_field)
-                self.__category_to_group[json_field] = json_field
             elif isinstance(json_field, dict):
                 for group, categories in json_field.items():
-                    self.__grouping_categories.append(GroupingCategories(group, categories))
+                    self.__groups.append(group)
+                    self.__grouping_categories[group] = GroupingCategories(group, categories)
                     self.__all_group_and_category.append(group)
                     self.__all_group_and_category.extend(categories)
                     for category in categories:
                         self.__category_to_group[category] = group
-                    self.__category_to_group[group] = group
+
+    @property
+    def groups(self) -> List[str]:
+        return self.__groups
 
     @property
     def grouping_categories(self) -> List[GroupingCategories]:
-        return self.__grouping_categories
+        return [self.__grouping_categories[group] for group in self.__groups]
 
     def is_non_exist_group_or_category(self, name) -> bool:
         return not name in self.__all_group_and_category
 
+    def is_group(self, name):
+        return name in self.__groups
+
+    def get_categories(self, group: str) -> List[str]:
+        return self.__grouping_categories[group].categories
+
+    def get_belongs_group(self, category: str):
+        return self.__category_to_group[category]
+
     def print_data(self):
         # for debug
-        for gc in self.__grouping_categories:
-            gc.print_data()
-
-    def get_belongs_group(self, category):
-        return self.__category_to_group[category]
+        for group in self.__groups:
+            self.__grouping_categories[group].print_data()

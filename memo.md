@@ -61,6 +61,8 @@ document.getElementById('output').innerHTML = template({doesWhat: 'rocks!'})
 
 [はてなブログ、フォトライフのAPIを使って投稿を自動化する](https://swfz.hatenablog.com/entry/2019/09/01/040939)
 
+[WordPressの記事をはてなブログに自動で連携【AtomPubを使う】](https://www.wegirls.tech/entry/2017/02/03/211023)
+
 [【Python】XMLのデータを読み取り・書き込みする(ElementTree)](https://pg-chain.com/python-xml-read-write)
 
 [PythonでのXMLファイル操作例](https://qiita.com/sino20023/items/0314438d397240e56576)
@@ -78,21 +80,22 @@ document.getElementById('output').innerHTML = template({doesWhat: 'rocks!'})
 [Pythonでクラスの引数や戻り値の型アノテーションに自己のクラスを指定する](https://qiita.com/MtDeity/items/fa6cfc4fff8f58140caa)
 
 ```python
+# これのみでいけた
 from __future__ import annotations
-
-
-class ListNode:
-    def __init__(self, val: int, next: ListNode):
-        self.val = val
-        self.next = next
-
-
-assert ListNode.add.__annotations__ == {
-    'next': 'ListNode'
-}
 ```
 
-[WordPressの記事をはてなブログに自動で連携【AtomPubを使う】](https://www.wegirls.tech/entry/2017/02/03/211023)
+[[Python] フォルダやファイルのコピー、移動、削除（shutilモジュール）](https://hibiki-press.tech/python/shutil_copy_move_rmtree/1305#toc4)
+
+[Pythonでファイル・ディレクトリを削除するos.remove, shutil.rmtreeなど](https://note.nkmk.me/python-os-remove-rmdir-removedirs-shutil-rmtree/)
+
+```python
+import shutil
+
+# フォルダ丸ごとコピー (既にフォルダがあると失敗)
+shutil.copytree('./sample', './sample_backup')
+# フォルダ丸ごと削除
+shutil.rmtree()
+```
 
 ## GitBook
 

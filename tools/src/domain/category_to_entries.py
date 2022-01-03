@@ -1,9 +1,8 @@
 from typing import List, Dict
 
+from common.constant import NON_CATEGORY_NAME
 from domain.blog_entry import BlogEntries, BlogEntry
 from domain.interface import IConvertibleMarkdownData
-
-NON_CATEGORY_NAME = 'Others'
 
 
 class CategoryToBlogEntriesSet(IConvertibleMarkdownData):

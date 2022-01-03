@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from typing import List, Optional
 
+from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR
 from domain.interface import IConvertibleMarkdownData
 from file.file_accessor import dump_json, load_json
 from ltime.time_resolver import resolve_entry_current_time, convert_entry_datetime_to_str
@@ -129,9 +130,6 @@ class BlogEntries(IConvertibleMarkdownData):
         return [entry.convert_md_line() for entry in self.__entries]
 
     def dump_all_entry(self):
-        HATENA_BLOG_ENTRY_DUMP_DIR = '../out/hatena_entry_data/'
-        HATENA_BLOG_ENTRY_LIST_PATH = '../out/hatena_entry_list.json'
-
         json_data = load_json(HATENA_BLOG_ENTRY_LIST_PATH)
         json_data['updated_time'] = resolve_entry_current_time()
         json_entries = {}

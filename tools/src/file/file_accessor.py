@@ -15,11 +15,12 @@ def read_blog_config(config_path):
     return BlogConfig(conf_parser)
 
 
-def read_text_file(file_path: str):
+def read_text_file(file_path: str) -> List[str]:
     try:
         with codecs.open(file_path, mode='r', encoding='utf-8') as f:
             lines = f.readlines()
-            lines_exclusion_comment = list(filter(lambda line: not line.startswith('#'), lines))
+            lines_exclusion_empty = list(filter(lambda line: line.replace(' ', '').replace('\n', '') != '', lines))
+            lines_exclusion_comment = list(filter(lambda line: not line.startswith('#'), lines_exclusion_empty))
             return [line.replace('\n', '') for line in lines_exclusion_comment]
     except Exception as e:
         print(f'[Warning] Invalid {file_path}, read failure:', e)

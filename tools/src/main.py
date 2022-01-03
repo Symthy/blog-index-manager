@@ -1,17 +1,17 @@
-import codecs
-import os
 import sys
-from typing import List, Optional
+from typing import List
 
 from api.hatena_api_executor import execute_get_hatena_all_entry_api, execute_get_hatena_specified_entry_api
 from api.hatena_api_executor import execute_put_hatena_summary_entry
+from docs.document_initializer import new_local_entry, initialize_docs_dir
+from docs.document_organizer import organize_documents
 from domain.blog_entry import BlogEntries
 from domain.category_to_entries import CategoryToBlogEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IConvertibleMarkdownData
 from file.blog_config import BlogConfig
-from file.file_accessor import read_blog_config, write_text_file
-from ltime.time_resolver import resolve_current_time_sequence
+from file.category_group_def import CategoryGroupDef
+from file.file_accessor import read_blog_config, write_text_file, load_category_group_def_yaml
 
 CONF_DIR_PATH = '../conf/'
 OUT_DIR_PATH = '../out/'
@@ -37,9 +37,11 @@ def join_lines(lines: List[str]) -> str:
     return data
 
 
-def update_hatena_entry_local_list(blog_config: BlogConfig) -> GroupToCategorizedEntriesMap:
+def update_hatena_entry_local_list(blog_config: BlogConfig,
+                                   category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
     """
     はてなブログから全記事を取得し、各記事情報をダンプ＆カテゴリ毎に分類した一覧をmdファイルに出力
+    :param category_group_def:
     :param blog_config:
     :return:
     """
@@ -48,7 +50,7 @@ def update_hatena_entry_local_list(blog_config: BlogConfig) -> GroupToCategorize
     blog_entries.dump_all_entry()
     category_to_entries = CategoryToBlogEntriesMap(blog_entries)
     # print_md_lines(category_to_entries)
-    entries_index_map = GroupToCategorizedEntriesMap(category_to_entries)
+    entries_index_map = GroupToCategorizedEntriesMap(category_to_entries, category_group_def)
     print_md_lines(entries_index_map)
     write_text_file(BLOG_ENTRIES_INDEX_PATH, entries_index_map.convert_md_lines())
     return entries_index_map
@@ -73,38 +75,25 @@ def update_hatena_blog_entry(blog_config, dir_path):
     pass
 
 
-def initialize_new_local_entry(title: Optional[str], category: Optional[str]):
-    if title is None:
-        title = 'doc'  # default value
-    if category is None:
-        category = ''  # default value
-    new_dir_path = '../../in/' + resolve_current_time_sequence()
-    file_name = title + '.md'
-    os.mkdir(new_dir_path)
-    md_file_path = f'{new_dir_path}/{file_name}'
-    with codecs.open(md_file_path, mode='w', encoding='utf-8') as f:
-        f.write(f'# {title}\n')
-    category_file_path = f'{new_dir_path}/category.txt'
-    with codecs.open(category_file_path, mode='w', encoding='utf-8') as f:
-        f.write(category)
-
-
 def main(args: List[str], is_debug: bool):
     blog_config = read_blog_config(BLOG_CONF_PATH)
-    # entries_index_map = update_hatena_entry_local_list(blog_config)
+    category_group_def = load_category_group_def_yaml()
+    # entries_index_map = update_hatena_entry_local_list(blog_config, category_group_def)
     # put_hatena_summary_page(blog_config, entries_index_map)
 
     # show_hatena_entry(blog_config, '26006613443907494')
-    if args[0] == '-init' or args[0] == '-i':
-        title = None
-        category = None
-        t_index = args.index('-t')
-        if t_index != -1 and len(args) >= t_index + 1:
-            title = args[t_index]
-        c_index = args.index('-c')
-        if c_index != -1 and len(args) >= c_index + 1:
-            category = args[c_index]
-        initialize_new_local_entry(title, category)
+    if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
+        initialize_docs_dir(category_group_def)
+        print('Success: created \"docs\" dir')
+        return
+    if len(args) >= 2 and (args[1] == '-new' or args[1] == '-n'):
+        new_local_entry(args)
+        print('Success: created new entry set in \"in\" dir')
+        return
+    if len(args) >= 2 and (args[1] == '-organize' or args[1] == '-org' or args[1] == '-o'):
+        organize_documents(category_group_def, ['20220103234519', '20220103235055'])
+        print('Success: move to dir')
+        return
 
 
 IS_DEBUG = False

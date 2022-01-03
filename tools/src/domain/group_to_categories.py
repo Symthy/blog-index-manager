@@ -5,7 +5,6 @@ from domain.blog_entry import BlogEntries, BlogEntry
 from domain.category_to_entries import CategoryToBlogEntriesMap, CategoryToBlogEntriesSet, NON_CATEGORY_NAME
 from domain.interface import IConvertibleMarkdownData
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import load_category_group_def_yaml
 
 
 class GroupToCategorizedEntriesSet(IConvertibleMarkdownData):
@@ -41,10 +40,9 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownData):
 
 
 class GroupToCategorizedEntriesMap(IConvertibleMarkdownData):
-    def __init__(self, category_to_entries_map: CategoryToBlogEntriesMap):
+    def __init__(self, category_to_entries_map: CategoryToBlogEntriesMap, category_group_def: CategoryGroupDef):
         self.__sorted_groups: List[str] = []
         self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}
-        category_group_def = load_category_group_def_yaml()
         self.__init_based_category_group_def(category_group_def, category_to_entries_map)
         self.__init_non_exist_category_in_definition(category_group_def, category_to_entries_map)
 
