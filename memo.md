@@ -76,3 +76,12 @@ document.getElementById('output').innerHTML = template({doesWhat: 'rocks!'})
 [python](https://note.nkmk.me/python/)
 
 [WordPressの記事をはてなブログに自動で連携【AtomPubを使う】](https://www.wegirls.tech/entry/2017/02/03/211023)
+
+## GitBook
+
+[Gitbook 環境 マイ・ベスト](https://qiita.com/HeRo/items/f9ef391fa005b5fa100c)
+
+[GitBookによるドキュメント作成](https://zenn.dev/mebiusbox/articles/703e934c78fa20)
+
+[Gitbook の環境を Dockerで作った](https://hero.hatenablog.jp/entry/2018/11/04/184650)
+

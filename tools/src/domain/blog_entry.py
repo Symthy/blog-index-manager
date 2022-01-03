@@ -80,6 +80,6 @@ class BlogEntries(IConvertibleMarkdownData):
 
         entries_json = load_json(BLOG_ENTRIES_JSON_PATH)
         for entry in self.__entries:
-            if not entry.id in entries_json and entry.id in exclude_ids:
+            if not entry.id in entries_json and not entry.id in exclude_ids:
                 entries_json[entry.id] = entry.title
         dump_json(BLOG_ENTRIES_JSON_PATH, entries_json)

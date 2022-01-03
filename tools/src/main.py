@@ -31,7 +31,7 @@ def update_hatena_entry_local_list(blog_config: BlogConfig) -> GroupToCategorize
     print(response_xml)
     blog_entries = parse_blog_entries_xml(response_xml)
     print_md_lines(blog_entries.convert_md_lines())
-    # breaking: blog_entries.update_all_entry_list_file()
+    blog_entries.update_all_entry_list_file()
     category_to_entries = CategoryToBlogEntriesMap(blog_entries)
     print_md_lines(category_to_entries.convert_md_lines())
     entries_index_map = GroupToCategorizedEntriesMap(category_to_entries)
@@ -53,7 +53,7 @@ def put_hatena_summary_page(blog_config, entries_index_map):
 def main(is_debug: bool):
     blog_config = read_blog_config(BLOG_CONF_PATH)
     entries_index_map = update_hatena_entry_local_list(blog_config)
-    put_hatena_summary_page(blog_config, entries_index_map)
+    # put_hatena_summary_page(blog_config, entries_index_map)
 
 
 IS_DEBUG = False

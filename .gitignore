@@ -1,3 +1,5 @@
-conf/blog.conf
 .idea
 __pycache__
+in/
+tools/conf/blog.conf
+tools/out/summary_entry_index_result.md
