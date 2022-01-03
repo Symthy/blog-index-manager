@@ -3,15 +3,17 @@ from typing import List, Optional
 
 from domain.interface import IConvertibleMarkdownData
 from file.file_accessor import read_text_file, dump_json, load_json
+from ltime.time_resolver import resolve_current_time, convert_datetime_to_str
 
 
 class BlogEntry:
-    def __init__(self, entry_id: str, title: str, content: str, url: str, last_updated: Optional[datetime],
-                 categories: List[str]):
+    def __init__(self, entry_id: str, title: str, content: str, url: str, api_url: str,
+                 last_updated: Optional[datetime], categories: List[str]):
         self.__id = entry_id
         self.__title = title
         self.__content = content
         self.__url = url
+        self.__api_url = api_url
         # Make it optional just in case
         self.__last_updated: Optional[datetime] = last_updated
         self.__categories = categories
@@ -32,6 +34,10 @@ class BlogEntry:
     def url(self):
         return self.__url
 
+    @property
+    def api_url(self):
+        return self.__api_url
+
     def get_updated_month_day(self) -> str:
         if self.__last_updated is None:
             return 'unknown'
@@ -48,6 +54,19 @@ class BlogEntry:
 
     def convert_md_line(self) -> str:
         return f'- [{self.title}]({self.url}) ({self.get_updated_month_day()})'
+
+    def build_dump_data(self) -> object:
+        return {
+            "id": self.__id,
+            "title": self.__title,
+            "category": self.top_category,
+            "categories": self.__categories,
+            "url": self.__url,
+            "api_url": self.__api_url,
+            "updated_time": convert_datetime_to_str(self.__last_updated),
+            "local_path": "",  # TODO
+            "pictures": {}  # TODO
+        }
 
 
 class BlogEntries(IConvertibleMarkdownData):
@@ -74,12 +93,27 @@ class BlogEntries(IConvertibleMarkdownData):
         return [entry.convert_md_line() for entry in self.__entries]
 
     def update_all_entry_list_file(self):
-        BLOG_ENTRIES_JSON_PATH = '../out/hatena_blog_entries.json'
+        HATENA_BLOG_ENTRY_DUMP_DIR = '../out/hatena_entry_data/'
+        HATENA_BLOG_ENTRY_LIST_PATH = '../out/hatena_entry_list.json'
         EXCLUDE_ENTRY_IDS_TXT_PATH = '../definitions/exclude_entry_ids.txt'
         exclude_ids = read_text_file(EXCLUDE_ENTRY_IDS_TXT_PATH)
 
-        entries_json = load_json(BLOG_ENTRIES_JSON_PATH)
+        json_data = load_json(HATENA_BLOG_ENTRY_LIST_PATH)
+        json_data['updated_time'] = resolve_current_time()
+        json_entries = {}
+        if 'entries' in json_data:
+            json_entries = json_data['entries']
         for entry in self.__entries:
-            if not entry.id in entries_json and not entry.id in exclude_ids:
-                entries_json[entry.id] = entry.title
-        dump_json(BLOG_ENTRIES_JSON_PATH, entries_json)
+            if not entry.id in json_entries and not entry.id in exclude_ids:
+                json_entries[entry.title] = entry.id
+                dump_json(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json', entry.build_dump_data())
+        # dump data format
+        # {
+        #   "updated_time": "2022-01-02T03:04:05",
+        #   "entries": {
+        #     "entry_id": "entry title"
+        #      :
+        #   }
+        # }
+        json_data['entries'] = json_entries
+        dump_json(HATENA_BLOG_ENTRY_LIST_PATH, json_data)

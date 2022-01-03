@@ -28,7 +28,6 @@ def join_lines(lines: List[str]) -> str:
 
 def update_hatena_entry_local_list(blog_config: BlogConfig) -> GroupToCategorizedEntriesMap:
     response_xml = execute_get_hatena_entry_list_api(blog_config)
-    print(response_xml)
     blog_entries = parse_blog_entries_xml(response_xml)
     print_md_lines(blog_entries.convert_md_lines())
     blog_entries.update_all_entry_list_file()

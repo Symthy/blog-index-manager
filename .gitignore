@@ -3,3 +3,4 @@ __pycache__
 in/
 tools/conf/blog.conf
 tools/out/summary_entry_index_result.md
+tools/out/hatena_entry_data
