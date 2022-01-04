@@ -97,6 +97,61 @@ shutil.copytree('./sample', './sample_backup')
 shutil.rmtree()
 ```
 
+[Pythonで文字列を置換（replace, translate, re.sub, re.subn）](https://note.nkmk.me/python-str-replace-translate-re-sub/)
+
+```python
+# 複数の文字を指定して置換
+s = 'one two one two one'
+print(s.translate(str.maketrans({'o': 'XXX', 't': None})))
+# XXXne wXXX XXXne wXXX XXXne
+```
+
+[Pythonで文字列の先頭と末尾から空白や文字列を削除する：strip()](https://uxmilk.jp/12804)
+
+```python
+# 先頭/末尾削除
+"Hello World World Hello".strip('Hello')  # " World World "
+# 先頭/末尾の空白/改行削除
+s = "  Hello World\n".strip()  # "Hello World"
+# 先頭のみ削除
+s = "  Hello World\n".lstrip()  # "Hello World\n"
+# 末尾のみ削除
+s = "  Hello World\n".rstrip()  # "  Hello World"
+```
+
+[【Python】 フォルダ内の特定のファイルを取得する](https://ni4muraano.hatenablog.com/entry/2017/01/30/184606)
+
+```python
+# フォルダ内の特定ファイル名のみ取得
+import os
+
+files = os.listdir('Folder\\')
+extension = '.txt'
+text_files = [file for file in files if extension in file]
+for file_name in text_files:
+    print(file_name)
+```
+
+```python
+# フォルダ内の特定ファイルフルパス取得
+import glob
+
+extension = '.txt'
+text_files = glob.glob('Folder\\*' + extension)
+for file_path in text_files:
+    print(file_path)
+```
+
+[Pythonで辞書を作成するdict()と波括弧、辞書内包表記](https://note.nkmk.me/python-dict-create/)
+
+```python
+# 辞書内包表記
+l = ['Alice', 'Bob', 'Charlie']
+d = {s: len(s) for s in l}
+```
+
+[ArgumentParserを使ってpythonのコマンドライン引数をとことん使ってみた](https://qiita.com/mimitaro/items/a845b45df35b39a59c95)
+
 ## GitBook
 
 [Gitbook 環境 マイ・ベスト](https://qiita.com/HeRo/items/f9ef391fa005b5fa100c)

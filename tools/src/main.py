@@ -3,8 +3,8 @@ from typing import List
 
 from api.hatena_api_executor import execute_get_hatena_all_entry_api, execute_get_hatena_specified_entry_api
 from api.hatena_api_executor import execute_put_hatena_summary_entry
-from docs.document_initializer import new_local_entry, initialize_docs_dir
-from docs.document_organizer import organize_documents
+from docs.document_initializer import new_local_document_set, initialize_docs_dir
+from docs.document_organizer import move_documents_to_docs_dir
 from domain.blog_entry import BlogEntries
 from domain.category_to_entries import CategoryToBlogEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
@@ -82,16 +82,18 @@ def main(args: List[str], is_debug: bool):
     # put_hatena_summary_page(blog_config, entries_index_map)
 
     # show_hatena_entry(blog_config, '26006613443907494')
+    # TODO: use argparse
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
         print('Success: created \"docs\" dir')
         return
     if len(args) >= 2 and (args[1] == '-new' or args[1] == '-n'):
-        new_local_entry(args)
-        print('Success: created new entry set in \"in\" dir')
+        title_value = new_local_document_set(args)
+        print(f'Success: created \"{title_value}\" dir in \"in\" dir')
         return
-    if len(args) >= 2 and (args[1] == '-organize' or args[1] == '-org' or args[1] == '-o'):
-        organize_documents(category_group_def, ['20220103234519', '20220103235055'])
+    if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
+        target_dirs = args[2:] if len(args) > 2 else []
+        move_documents_to_docs_dir(category_group_def, target_dirs)
         print('Success: move to dir')
         return
 

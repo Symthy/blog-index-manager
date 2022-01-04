@@ -1,37 +1,60 @@
 import os
-import shutil
-from typing import List
+from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_NAME, IN_DIR_PATH, DOCS_DIR_PATH
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import read_text_file
+from file.file_accessor import read_text_file, read_file_first_line
+from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
+    get_md_file_in_target_dir, translate_win_files_unusable_char, move_dir
 
 CATEGORY_FILE_NAME = 'category.txt'
 
 
-def organize_documents(category_group_def: CategoryGroupDef, dir_names: List[str] = None):
-    target_dirs = []
-    if dir_names is None:
-        files = os.listdir(IN_DIR_PATH)
-        target_dirs = [name for name in files if os.path.isdir(os.path.join(IN_DIR_PATH, name))]
-    else:
-        target_dirs = [d for d in dir_names if
-                       os.path.isdir(os.path.join(IN_DIR_PATH, d)) and os.path.exists(os.path.join(IN_DIR_PATH, d))]
+def move_documents_to_docs_dir(category_group_def: CategoryGroupDef, dir_names: List[str] = None):
+    target_dir_path_to_name_dict = __resolve_target_dir_names(dir_names)
+    for move_from_dir_path in target_dir_path_to_name_dict:
+        doc_md_file_path: Optional[str] = get_md_file_in_target_dir(move_from_dir_path)
+        if doc_md_file_path is None:
+            # skip when non exist md file in target dir
+            print(f'[Info] skip move dir: non exist md file (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
+            continue
+        doc_title: Optional[str] = __get_doc_title_from_md_file(doc_md_file_path)
+        if doc_title is None:
+            print(f'[Warning] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
+            continue
+        move_to_dir_path = __resolve_move_to_dir_name_and_path(category_group_def, move_from_dir_path, doc_title)
+        move_dir(move_from_dir_path, move_to_dir_path)
 
-    for target_dir in target_dirs:
-        move_from_dir_path = IN_DIR_PATH + target_dir + '/'
-        doc_category = __resolve_doc_category(move_from_dir_path)  # default: Others
-        if category_group_def.is_group(doc_category):
-            docs_group_dir_path = DOCS_DIR_PATH + doc_category
-            move_to_dir_path = docs_group_dir_path + '/' + target_dir
-            shutil.copytree(move_from_dir_path, move_to_dir_path)
-        else:
-            group = category_group_def.get_belongs_group(doc_category)
-            docs_group_category_dir_path = DOCS_DIR_PATH + group + '/' + doc_category
-            move_to_dir_path = docs_group_category_dir_path + '/' + target_dir
-            shutil.copytree(move_from_dir_path, move_to_dir_path)
-        # TODO: original dir delete ?
-        shutil.rmtree(move_from_dir_path)
+
+def __resolve_move_to_dir_name_and_path(category_group_def: CategoryGroupDef, move_from_dir_path: str,
+                                        doc_title: str) -> str:
+    doc_category = __resolve_doc_category(move_from_dir_path)  # default category: Others
+    group = ''
+    if not __category_is_group(doc_category, category_group_def):
+        group = category_group_def.get_belongs_group(doc_category)
+    # change dir name to doc title
+    move_to_dir_path = f'{DOCS_DIR_PATH}{group}/{doc_category}/{translate_win_files_unusable_char(doc_title)}/'
+    return move_to_dir_path
+
+
+def __category_is_group(doc_category: str, category_group_def: CategoryGroupDef) -> bool:
+    return category_group_def.has_group(doc_category)
+
+
+def __get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
+    doc_title = read_file_first_line(doc_md_file_path)
+    if len(doc_title) == 0:
+        return None
+    return doc_title
+
+
+def __resolve_target_dir_names(dir_names: List[str] = None) -> Dict[str, str]:
+    # return: key:dir_name value:dir_path
+    if dir_names is None:
+        target_dir_names = get_dir_names_in_target_dir(IN_DIR_PATH)
+    else:
+        target_dir_names = get_exist_dir_names_in_target_dir(IN_DIR_PATH, dir_names)
+    return {IN_DIR_PATH + dir_name + '/': dir_name for dir_name in target_dir_names}
 
 
 def __resolve_doc_category(target_dir_path: str) -> str:

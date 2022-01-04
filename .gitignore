@@ -1,4 +1,5 @@
-.idea
+.idea/
+.VSCodeCounter/
 __pycache__
 in/
 tools/conf/blog.conf

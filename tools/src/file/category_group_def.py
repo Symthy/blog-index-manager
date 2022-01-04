@@ -51,7 +51,7 @@ class CategoryGroupDef:
     def is_non_exist_group_or_category(self, name) -> bool:
         return not name in self.__all_group_and_category
 
-    def is_group(self, name):
+    def has_group(self, name):
         return name in self.__groups
 
     def get_categories(self, group: str) -> List[str]:
