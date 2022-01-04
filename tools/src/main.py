@@ -3,6 +3,7 @@ from typing import List
 
 from api.hatena_api_executor import execute_get_hatena_all_entry_api, execute_get_hatena_specified_entry_api
 from api.hatena_api_executor import execute_put_hatena_summary_entry
+from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, BLOG_CONF_PATH
 from docs.document_initializer import new_local_document_set, initialize_docs_dir
 from docs.document_organizer import move_documents_to_docs_dir
 from domain.blog_entry import BlogEntries
@@ -12,11 +13,6 @@ from domain.interface import IConvertibleMarkdownData
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_blog_config, write_text_file, load_category_group_def_yaml
-
-CONF_DIR_PATH = '../conf/'
-OUT_DIR_PATH = '../out/'
-BLOG_CONF_PATH = CONF_DIR_PATH + 'blog.conf'
-BLOG_ENTRIES_INDEX_PATH = OUT_DIR_PATH + 'summary_entry_index_result.md'
 
 
 # for debug
@@ -52,7 +48,7 @@ def update_hatena_entry_local_list(blog_config: BlogConfig,
     # print_md_lines(category_to_entries)
     entries_index_map = GroupToCategorizedEntriesMap(category_to_entries, category_group_def)
     print_md_lines(entries_index_map)
-    write_text_file(BLOG_ENTRIES_INDEX_PATH, entries_index_map.convert_md_lines())
+    write_text_file(HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, entries_index_map.convert_md_lines())
     return entries_index_map
 
 
@@ -78,7 +74,7 @@ def update_hatena_blog_entry(blog_config, dir_path):
 def main(args: List[str], is_debug: bool):
     blog_config = read_blog_config(BLOG_CONF_PATH)
     category_group_def = load_category_group_def_yaml()
-    # entries_index_map = update_hatena_entry_local_list(blog_config, category_group_def)
+    entries_index_map = update_hatena_entry_local_list(blog_config, category_group_def)
     # put_hatena_summary_page(blog_config, entries_index_map)
 
     # show_hatena_entry(blog_config, '26006613443907494')

@@ -25,8 +25,10 @@ def build_request_header(blog_config: BlogConfig):
     return {
         'Accept': 'application/xml',
         'Content-Type': 'application/xml',
-        'X-WSSE': f'UsernameToken Username={user_name}, PasswordDigest={base64.b64encode(b_password_digest).decode()}, ' +
-                  f'Nonce={base64.b64encode(b_nonce).decode()}, Created={created_time}'
+        'X-WSSE': f'UsernameToken Username={user_name}, ' +
+                  f'PasswordDigest={base64.b64encode(b_password_digest).decode()}, ' +
+                  f'Nonce={base64.b64encode(b_nonce).decode()}, ' +
+                  f'Created={created_time}'
     }
 
 
@@ -40,23 +42,20 @@ def execute_get_hatena_specified_entry_api(blog_config: BlogConfig, entry_id: st
     api_url = f'{build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
     request_headers = build_request_header(blog_config)
     xml_string = execute_get_api(api_url, request_headers)
-    root = ET.fromstring(xml_string)
-    return parse_blog_entry_xml(root)
+    return parse_blog_entry_xml(xml_string)
 
 
 def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> BlogEntries:
     api_url = build_hatena_AtomPub_api_base_url(blog_config)
     request_headers = build_request_header(blog_config)
     xml_string = execute_get_api(api_url, request_headers)
-    root = ET.fromstring(xml_string)
-    blog_entries = parse_blog_entries_xml(root, blog_config)
+    blog_entries = parse_blog_entries_xml(xml_string, blog_config)
 
-    next_url = get_next_page_url(root)
+    next_url = get_next_page_url(xml_string)
     while next_url is not None:
         next_xml_string = execute_get_api(next_url, request_headers)
-        next_root = ET.fromstring(next_xml_string)
-        next_blog_entries = parse_blog_entries_xml(next_root, blog_config)
-        next_url = get_next_page_url(next_root)
+        next_blog_entries = parse_blog_entries_xml(next_xml_string, blog_config)
+        next_url = get_next_page_url(next_xml_string)
         blog_entries.merge(next_blog_entries)
     return blog_entries
 

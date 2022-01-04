@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import List, Optional
 
+from common.constant import EXCLUDE_ENTRY_IDS_TXT_PATH
 from domain.blog_entry import BlogEntries, BlogEntry
 from file.blog_config import BlogConfig
 from file.file_accessor import read_text_file
@@ -20,8 +21,9 @@ def get_tag_head(root: ET.Element, root_tag: str = 'feed') -> str:
     return tag_head
 
 
-def get_next_page_url(root: ET.Element) -> Optional[str]:
+def get_next_page_url(xml_string: str) -> Optional[str]:
     url = None
+    root = ET.fromstring(xml_string)
     for link in root.iter(get_tag_head(root) + 'link'):
         if link.attrib['rel'] == 'next':
             url = link.attrib['href']
@@ -29,10 +31,8 @@ def get_next_page_url(root: ET.Element) -> Optional[str]:
     return url
 
 
-EXCLUDE_ENTRY_IDS_TXT_PATH = '../definitions/exclude_entry_ids.txt'
-
-
-def parse_blog_entries_xml(root: ET.Element, blog_config: BlogConfig) -> BlogEntries:
+def parse_blog_entries_xml(xml_string: str, blog_config: BlogConfig) -> BlogEntries:
+    root = ET.fromstring(xml_string)
     # print_xml_children(root)
     tag_head = get_tag_head(root)
     blog_entries = BlogEntries()
@@ -46,7 +46,8 @@ def parse_blog_entries_xml(root: ET.Element, blog_config: BlogConfig) -> BlogEnt
     return blog_entries
 
 
-def parse_blog_entry_xml(root: ET.Element) -> BlogEntry:
+def parse_blog_entry_xml(xml_string: str) -> BlogEntry:
+    root = ET.fromstring(xml_string)
     tag_head = get_tag_head(root, 'entry')
     return __parse_blog_entry_xml(root, tag_head, [])
 

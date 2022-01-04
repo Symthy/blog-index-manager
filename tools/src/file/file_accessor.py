@@ -5,6 +5,7 @@ from typing import List
 
 import yaml
 
+from common.constant import CATEGORY_GROUP_YAML_PATH
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 
@@ -54,7 +55,6 @@ def dump_json(file_path, dump_data):
 
 
 def load_category_group_def_yaml() -> CategoryGroupDef:
-    CATEGORY_GROUP_YAML_PATH = '../definitions/category_group.yml'
     json_data = load_yaml(CATEGORY_GROUP_YAML_PATH)  # return list
     return CategoryGroupDef(json_data)
 
