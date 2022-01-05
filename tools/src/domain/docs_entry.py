@@ -103,7 +103,9 @@ class DocsEntries(IEntries):
         json_entries = {}
         if 'entries' in json_data:
             json_entries = json_data['entries']
-        # Todo: grouping data dump
+        for entry in self.__entries:
+            if not entry.id in json_entries:
+                json_entries[entry.id] = entry.title
         # dump data format
         # {
         #   "updated_time": "2022-01-02T03:04:05",

@@ -1,7 +1,7 @@
 import os
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_NAME, IN_DIR_PATH, DOCS_DIR_PATH
+from common.constant import NON_CATEGORY_NAME, WORK_DIR_PATH, DOCS_DIR_PATH
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_text_file, read_file_first_line
 from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
@@ -51,10 +51,10 @@ def __get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
 def __resolve_target_dir_names(dir_names: List[str] = None) -> Dict[str, str]:
     # return: key:dir_name value:dir_path
     if dir_names is None:
-        target_dir_names = get_dir_names_in_target_dir(IN_DIR_PATH)
+        target_dir_names = get_dir_names_in_target_dir(WORK_DIR_PATH)
     else:
-        target_dir_names = get_exist_dir_names_in_target_dir(IN_DIR_PATH, dir_names)
-    return {IN_DIR_PATH + dir_name + '/': dir_name for dir_name in target_dir_names}
+        target_dir_names = get_exist_dir_names_in_target_dir(WORK_DIR_PATH, dir_names)
+    return {WORK_DIR_PATH + dir_name + '/': dir_name for dir_name in target_dir_names}
 
 
 def __resolve_doc_category(target_dir_path: str) -> str:

@@ -129,7 +129,7 @@ class BlogEntries(IEntries):
             json_entries = json_data['entries']
         for entry in self.__entries:
             if not entry.id in json_entries:
-                json_entries[entry.title] = entry.id
+                json_entries[entry.id] = entry.title
                 entry.dump_data(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json')
         # dump data format
         # {

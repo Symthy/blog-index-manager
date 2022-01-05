@@ -3,7 +3,7 @@ from typing import List
 
 from api.hatena_api_executor import execute_get_hatena_all_entry_api, execute_get_hatena_specified_entry_api
 from api.hatena_api_executor import execute_put_hatena_summary_entry
-from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, BLOG_CONF_PATH
+from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, BLOG_CONF_PATH, HATENA_BLOG_ENTRY_LIST_PATH
 from docs.document_initializer import new_local_document_set, initialize_docs_dir
 from docs.document_organizer import move_documents_to_docs_dir
 from domain.blog_entry import BlogEntries

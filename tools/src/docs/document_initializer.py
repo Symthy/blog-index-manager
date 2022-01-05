@@ -1,12 +1,10 @@
 import os
 from typing import Optional, List
 
-from common.constant import IN_DIR_PATH, DOCS_DIR_PATH
+from common.constant import WORK_DIR_PATH, DOCS_DIR_PATH, DOC_TITLE_MAX_LENGTH
 from file.category_group_def import CategoryGroupDef
 from file.files_operator import make_new_file, make_new_dir, translate_win_files_unusable_char
 from ltime.time_resolver import resolve_current_time_sequence
-
-TITLE_MAX_LENGTH = 50
 
 
 def new_local_document_set(cmd_args: List[str]) -> str:
@@ -31,8 +29,8 @@ def new_local_document_set(cmd_args: List[str]) -> str:
         return title, category
 
     title_value, category_value = resolve_option(cmd_args)
-    if len(title_value) > TITLE_MAX_LENGTH or len(title_value) <= 0:
-        raise Exception(f'[ERROR] title is too long ({TITLE_MAX_LENGTH} characters or less)')
+    if len(title_value) > DOC_TITLE_MAX_LENGTH or len(title_value) <= 0:
+        raise Exception(f'[ERROR] title is too long ({DOC_TITLE_MAX_LENGTH} characters or less)')
     __create_local_document_set(title_value, category_value)
     return title_value
 
@@ -43,7 +41,7 @@ def __create_local_document_set(title: Optional[str], category: Optional[str]):
     if category is None:
         category = ''  # default value
     current_time_sequence = resolve_current_time_sequence()
-    new_dir_path = IN_DIR_PATH + current_time_sequence
+    new_dir_path = WORK_DIR_PATH + current_time_sequence
     make_new_dir(new_dir_path)
     md_file_path = f'{new_dir_path}/{translate_win_files_unusable_char(title)}.md'
     make_new_file(md_file_path, f'# {title}\n')
