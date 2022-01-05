@@ -2,19 +2,19 @@ import copy
 from typing import List, Dict
 
 from domain.blog_entry import BlogEntries, BlogEntry
-from domain.category_to_entries import CategoryToBlogEntriesMap, CategoryToBlogEntriesSet, NON_CATEGORY_NAME
-from domain.interface import IConvertibleMarkdownData
+from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_NAME
+from domain.interface import IConvertibleMarkdownLines
 from file.category_group_def import CategoryGroupDef
 
 
-class GroupToCategorizedEntriesSet(IConvertibleMarkdownData):
+class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
     def __init__(self, group: str):
         self.__group = group
         self.__categories = []
-        self.__category_to_entries: List[CategoryToBlogEntriesSet] = []
+        self.__category_to_entries: List[CategoryToEntriesSet] = []
         self.__entries: BlogEntries = BlogEntries()
 
-    def add_category_to_entries(self, category_to_entries: CategoryToBlogEntriesSet):
+    def add_category_to_entries(self, category_to_entries: CategoryToEntriesSet):
         if category_to_entries.is_empty():
             return
         self.__categories.append(category_to_entries.category)
@@ -23,8 +23,8 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownData):
     def add_entries(self, entries: List[BlogEntry]):
         self.__entries.add_entries(entries)
 
-    def get_categorized_entries(self) -> List[IConvertibleMarkdownData]:
-        ret_list: List[IConvertibleMarkdownData] = copy.deepcopy(self.__category_to_entries)
+    def get_categorized_entries(self) -> List[IConvertibleMarkdownLines]:
+        ret_list: List[IConvertibleMarkdownLines] = copy.deepcopy(self.__category_to_entries)
         ret_list.append(self.__entries)
         return ret_list
 
@@ -39,15 +39,15 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownData):
         return lines
 
 
-class GroupToCategorizedEntriesMap(IConvertibleMarkdownData):
-    def __init__(self, category_to_entries_map: CategoryToBlogEntriesMap, category_group_def: CategoryGroupDef):
+class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
+    def __init__(self, category_to_entries_map: CategoryToEntriesMap, category_group_def: CategoryGroupDef):
         self.__sorted_groups: List[str] = []
         self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}
         self.__init_based_category_group_def(category_group_def, category_to_entries_map)
         self.__init_non_exist_category_in_definition(category_group_def, category_to_entries_map)
 
     def __init_based_category_group_def(self, category_group_def: CategoryGroupDef,
-                                        category_to_entries_map: CategoryToBlogEntriesMap):
+                                        category_to_entries_map: CategoryToEntriesMap):
         for grouping_categories in category_group_def.grouping_categories:
             def_group = grouping_categories.group_name
             def_categories = grouping_categories.categories
@@ -69,7 +69,7 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownData):
                 self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
 
     def __init_non_exist_category_in_definition(self, category_group_def: CategoryGroupDef,
-                                                category_to_entries_map: CategoryToBlogEntriesMap):
+                                                category_to_entries_map: CategoryToEntriesMap):
         # add entries that non exist category in category group definition
         for category in category_to_entries_map.categories:
             if category_group_def.is_non_exist_group_or_category(category):
@@ -79,7 +79,7 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownData):
     def has_group(self, group) -> bool:
         return group in self.__group_to_categorized_entries
 
-    def __get_entries_for_md(self, group) -> IConvertibleMarkdownData:
+    def __get_entries_for_md(self, group) -> IConvertibleMarkdownLines:
         return self.__group_to_categorized_entries[group]
 
     def convert_md_lines(self) -> List[str]:

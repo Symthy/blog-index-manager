@@ -3,6 +3,7 @@ OUT_DIR_PATH = '../out/'
 HATENA_BLOG_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'hatena_entry_data/'
 HATENA_BLOG_ENTRY_LIST_PATH = OUT_DIR_PATH + 'hatena_entry_list.json'
 HATENA_BLOG_ENTRY_INDEX_RESULT_PATH = OUT_DIR_PATH + 'summary_entry_index_result.md'
+LOACL_DOCS_ENTRY_LIST_PATH = OUT_DIR_PATH + 'local_docs_list.json'
 
 IN_DIR_PATH = '../../in/'
 

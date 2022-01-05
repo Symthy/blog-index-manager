@@ -7,16 +7,16 @@ from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, BLOG_CONF_PATH
 from docs.document_initializer import new_local_document_set, initialize_docs_dir
 from docs.document_organizer import move_documents_to_docs_dir
 from domain.blog_entry import BlogEntries
-from domain.category_to_entries import CategoryToBlogEntriesMap
+from domain.category_to_entries import CategoryToEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
-from domain.interface import IConvertibleMarkdownData
+from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_blog_config, write_text_file, load_category_group_def_yaml
 
 
 # for debug
-def print_md_lines(data: IConvertibleMarkdownData):
+def print_md_lines(data: IConvertibleMarkdownLines):
     print(join_lines(data.convert_md_lines()))
 
 
@@ -43,8 +43,8 @@ def update_hatena_entry_local_list(blog_config: BlogConfig,
     """
     blog_entries: BlogEntries = execute_get_hatena_all_entry_api(blog_config)
     # print_md_lines(blog_entries)
-    blog_entries.dump_all_entry()
-    category_to_entries = CategoryToBlogEntriesMap(blog_entries)
+    blog_entries.dump_all_data(HATENA_BLOG_ENTRY_LIST_PATH)
+    category_to_entries = CategoryToEntriesMap(blog_entries)
     # print_md_lines(category_to_entries)
     entries_index_map = GroupToCategorizedEntriesMap(category_to_entries, category_group_def)
     print_md_lines(entries_index_map)
@@ -78,7 +78,7 @@ def main(args: List[str], is_debug: bool):
     # put_hatena_summary_page(blog_config, entries_index_map)
 
     # show_hatena_entry(blog_config, '26006613443907494')
-    # TODO: use argparse
+    # TODO: use argparse? (no use docopt. because last update is old)
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
         print('Success: created \"docs\" dir')

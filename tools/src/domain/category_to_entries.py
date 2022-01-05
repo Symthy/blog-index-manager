@@ -2,10 +2,10 @@ from typing import List, Dict
 
 from common.constant import NON_CATEGORY_NAME
 from domain.blog_entry import BlogEntries, BlogEntry
-from domain.interface import IConvertibleMarkdownData
+from domain.interface import IConvertibleMarkdownLines
 
 
-class CategoryToBlogEntriesSet(IConvertibleMarkdownData):
+class CategoryToEntriesSet(IConvertibleMarkdownLines):
     def __init__(self, top_category: str):
         self.__category = top_category
         self.__blog_entries = BlogEntries()
@@ -16,7 +16,7 @@ class CategoryToBlogEntriesSet(IConvertibleMarkdownData):
 
     @property
     def blog_entry_list(self) -> List[BlogEntry]:
-        return self.__blog_entries.items
+        return self.__blog_entries.get_entries()
 
     def is_empty(self):
         return self.__blog_entries.is_empty()
@@ -27,19 +27,19 @@ class CategoryToBlogEntriesSet(IConvertibleMarkdownData):
     def convert_md_lines(self) -> List[str]:
         lines = [f'- {self.category}']
         entry_md_lines = list(
-            map(lambda entry: '  ' + entry.convert_md_line(), self.__blog_entries.items))
+            map(lambda entry: '  ' + entry.convert_md_line(), self.__blog_entries.get_entries()))
         lines = lines + entry_md_lines
         return lines
 
 
-class CategoryToBlogEntriesMap(IConvertibleMarkdownData):
+class CategoryToEntriesMap(IConvertibleMarkdownLines):
     def __init__(self, blog_entries: BlogEntries):
-        self.__category_to_entries: Dict[str, CategoryToBlogEntriesSet] = {}
+        self.__category_to_entries: Dict[str, CategoryToEntriesSet] = {}
         self.__sorted_categories: List[str] = []
-        for blog_entry in blog_entries.items:
+        for blog_entry in blog_entries.get_entries():
             category = NON_CATEGORY_NAME if blog_entry.is_non_category() else blog_entry.top_category
             if not category in self.__category_to_entries:
-                category_to_entries_set = CategoryToBlogEntriesSet(category)
+                category_to_entries_set = CategoryToEntriesSet(category)
                 category_to_entries_set.add_blog_entry(blog_entry)
                 self.__category_to_entries[category] = category_to_entries_set
                 if category != NON_CATEGORY_NAME:
@@ -58,7 +58,7 @@ class CategoryToBlogEntriesMap(IConvertibleMarkdownData):
     def is_exist_category(self, category) -> bool:
         return category in self.__category_to_entries
 
-    def get_category_to_entries(self, category) -> CategoryToBlogEntriesSet:
+    def get_category_to_entries(self, category) -> CategoryToEntriesSet:
         return self.__category_to_entries[category]
 
     def convert_md_lines(self) -> List[str]:

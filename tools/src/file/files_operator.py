@@ -53,3 +53,7 @@ def get_md_file_in_target_dir(target_dir_path: str) -> Optional[str]:
 def get_file_paths_in_target_dir(target_dir_path: str):
     files = os.listdir(target_dir_path)
     return [target_dir_path + d + '/' for d in files if os.path.isfile(os.path.join(target_dir_path, d))]
+
+
+def is_exist_file(file_path: str):
+    return os.path.exists(file_path) and os.path.isfile(file_path)
