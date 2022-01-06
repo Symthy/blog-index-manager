@@ -5,6 +5,7 @@ from domain.blog_entry import BlogEntries, BlogEntry
 from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_NAME
 from domain.interface import IConvertibleMarkdownLines
 from file.category_group_def import CategoryGroupDef
+from file.file_accessor import dump_json
 
 
 class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
@@ -13,6 +14,18 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         self.__categories = []
         self.__category_to_entries: List[CategoryToEntriesSet] = []
         self.__entries: BlogEntries = BlogEntries()
+
+    @property
+    def categories(self):
+        return self.__categories
+
+    @property
+    def category_to_entries(self):
+        return self.__category_to_entries
+
+    @property
+    def entries(self):
+        return self.__entries
 
     def add_category_to_entries(self, category_to_entries: CategoryToEntriesSet):
         if category_to_entries.is_empty():
@@ -56,7 +69,7 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
                 # group don't has category (group name equal category name) case
                 group_to_categorized_entries_set = GroupToCategorizedEntriesSet(def_group)
                 category_to_entries_set = category_to_entries_map.get_category_to_entries(def_group)
-                group_to_categorized_entries_set.add_entries(category_to_entries_set.blog_entry_list)
+                group_to_categorized_entries_set.add_entries(category_to_entries_set.entry_list)
                 self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
             else:
                 # group has category case
@@ -88,3 +101,23 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
             if self.has_group(group):
                 lines = lines + self.__get_entries_for_md(group).convert_md_lines()
         return lines
+
+    def dump_all_data(self, file_path):
+        dump_groups = {}
+        for group in self.__sorted_groups:
+            group_to_categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
+            category_to_entries_list: List[CategoryToEntriesSet] = group_to_categorized_entries.category_to_entries
+            dump_categories_and_entries = {}
+            for category_to_entries in category_to_entries_list:
+                entry_list: List[BlogEntry] = category_to_entries.entry_list
+                dump_entries = {}
+                for entry in entry_list:
+                    dump_entries[entry.id] = entry.title
+                dump_categories_and_entries[category_to_entries.category] = dump_entries
+            entry_list: List[BlogEntry] = group_to_categorized_entries.entries.get_entries()
+            dump_entries = {}
+            for entry in entry_list:
+                dump_entries[entry.id] = entry.title
+            dump_categories_and_entries['-'] = dump_entries
+            dump_groups[group] = dump_categories_and_entries
+        dump_json(file_path, dump_groups)

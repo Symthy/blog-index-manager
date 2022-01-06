@@ -15,7 +15,7 @@ class CategoryToEntriesSet(IConvertibleMarkdownLines):
         return self.__category
 
     @property
-    def blog_entry_list(self) -> List[BlogEntry]:
+    def entry_list(self) -> List[BlogEntry]:
         return self.__blog_entries.get_entries()
 
     def is_empty(self):

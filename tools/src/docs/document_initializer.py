@@ -29,6 +29,8 @@ def new_local_document_set(cmd_args: List[str]) -> str:
         return title, category
 
     title_value, category_value = resolve_option(cmd_args)
+    if title_value is None:
+        title_value = resolve_current_time_sequence()
     if len(title_value) > DOC_TITLE_MAX_LENGTH or len(title_value) <= 0:
         raise Exception(f'[ERROR] title is too long ({DOC_TITLE_MAX_LENGTH} characters or less)')
     __create_local_document_set(title_value, category_value)

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 ENTRY_DATE_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
-LOCAL_DATE_TIME_FORMAT = "%Y%m%d%H%M%S"
+LOCAL_DATE_TIME_FORMAT = "%Y%m%d-%H%M%S"
 
 
 def resolve_entry_current_time() -> str:

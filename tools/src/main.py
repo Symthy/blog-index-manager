@@ -74,7 +74,7 @@ def update_hatena_blog_entry(blog_config, dir_path):
 def main(args: List[str], is_debug: bool):
     blog_config = read_blog_config(BLOG_CONF_PATH)
     category_group_def = load_category_group_def_yaml()
-    entries_index_map = update_hatena_entry_local_list(blog_config, category_group_def)
+    # entries_index_map = update_hatena_entry_local_list(blog_config, category_group_def)
     # put_hatena_summary_page(blog_config, entries_index_map)
 
     # show_hatena_entry(blog_config, '26006613443907494')
