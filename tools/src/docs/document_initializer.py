@@ -1,10 +1,10 @@
 import os
 from typing import Optional, List
 
-from common.constant import WORK_DIR_PATH, DOCS_DIR_PATH, DOC_TITLE_MAX_LENGTH
+from common.constant import WORK_DIR_PATH, DOCS_DIR_PATH, DOC_TITLE_MAX_LENGTH, CATEGORY_FILE_NAME
 from file.category_group_def import CategoryGroupDef
 from file.files_operator import make_new_file, make_new_dir, translate_win_files_unusable_char
-from ltime.time_resolver import resolve_current_time_sequence
+from ltime.time_resolver import resolve_current_time_sequence, resolve_current_time_date_time
 
 
 def new_local_document_set(cmd_args: List[str]) -> str:
@@ -42,15 +42,14 @@ def __create_local_document_set(title: Optional[str], category: Optional[str]):
         title = 'doc'  # default value
     if category is None:
         category = ''  # default value
-    current_time_sequence = resolve_current_time_sequence()
-    new_dir_path = WORK_DIR_PATH + current_time_sequence
+    new_dir_path = WORK_DIR_PATH + resolve_current_time_date_time()
     make_new_dir(new_dir_path)
     md_file_path = f'{new_dir_path}/{translate_win_files_unusable_char(title)}.md'
     make_new_file(md_file_path, f'# {title}\n')
-    category_file_path = f'{new_dir_path}/category.txt'
+    category_file_path = f'{new_dir_path}/{CATEGORY_FILE_NAME}'
     make_new_file(category_file_path, category)
-    created_time_file = f'{new_dir_path}/{current_time_sequence}'
-    make_new_file(created_time_file)
+    # created_time_file = f'{new_dir_path}/.{resolve_current_time_sequence()}'
+    # make_new_file(created_time_file)
 
 
 def initialize_docs_dir(category_group_def: CategoryGroupDef):

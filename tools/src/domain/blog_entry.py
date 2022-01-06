@@ -7,7 +7,7 @@ from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
 from file.file_accessor import dump_json, load_json
-from ltime.time_resolver import resolve_entry_current_time, convert_entry_datetime_to_str, \
+from ltime.time_resolver import resolve_entry_current_time, convert_datetime_to_entry_time_str, \
     convert_datetime_to_month_day_str
 
 
@@ -45,7 +45,7 @@ class BlogEntry(IEntry):
 
     @property
     def last_updated(self) -> str:
-        return convert_entry_datetime_to_str(self.__last_updated)
+        return convert_datetime_to_entry_time_str(self.__last_updated)
 
     @property
     def last_updated_month_day(self) -> str:

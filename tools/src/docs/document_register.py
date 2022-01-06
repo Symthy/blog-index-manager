@@ -1,29 +1,47 @@
 import os
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_NAME, WORK_DIR_PATH, DOCS_DIR_PATH
+from common.constant import NON_CATEGORY_NAME, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME, \
+    LOCAL_DOCS_ENTRY_LIST_PATH
+from domain.docs_entry import new_docs_entries
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_text_file, read_file_first_line
 from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
-    get_md_file_in_target_dir, translate_win_files_unusable_char, move_dir
-
-CATEGORY_FILE_NAME = 'category.txt'
+    get_md_file_path_in_target_dir, translate_win_files_unusable_char, move_dir
 
 
-def move_documents_to_docs_dir(category_group_def: CategoryGroupDef, dir_names: List[str] = None):
-    target_dir_path_to_name_dict = __resolve_target_dir_names(dir_names)
+def push_documents_to_docs(category_group_def: CategoryGroupDef, target_dir_names: List[str] = None):
+    move_from_path_to_move_to_path_dict = __resolve_move_from_and_move_to_dir_path_dict(category_group_def,
+                                                                                        target_dir_names)
+    docs_entries = new_docs_entries(move_from_path_to_move_to_path_dict)
+    docs_entries.dump_all_data(LOCAL_DOCS_ENTRY_LIST_PATH)
+    # Todo: grouping and grouping data dump
+    move_documents_to_docs_dir(move_from_path_to_move_to_path_dict)
+
+
+def move_documents_to_docs_dir(move_from_to_path_dict: Dict[str, str]):
+    for move_from_dir_path, move_to_dir_path in move_from_to_path_dict:
+        move_dir(move_from_dir_path, move_to_dir_path)
+
+
+def __resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGroupDef, target_dir_names: List[str]) \
+        -> Dict[str, str]:
+    # return: key:move_from_path value: move_to_path
+    target_dir_path_to_name_dict = __resolve_target_dir_names(target_dir_names)
+    path_dict = {}
     for move_from_dir_path in target_dir_path_to_name_dict:
-        doc_md_file_path: Optional[str] = get_md_file_in_target_dir(move_from_dir_path)
+        doc_md_file_path: Optional[str] = get_md_file_path_in_target_dir(move_from_dir_path)
         if doc_md_file_path is None:
             # skip when non exist md file in target dir
             print(f'[Info] skip move dir: non exist md file (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
-        doc_title: Optional[str] = __get_doc_title_from_md_file(doc_md_file_path)
+        doc_title: Optional[str] = get_doc_title_from_md_file(doc_md_file_path)
         if doc_title is None:
             print(f'[Warning] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
         move_to_dir_path = __resolve_move_to_dir_name_and_path(category_group_def, move_from_dir_path, doc_title)
-        move_dir(move_from_dir_path, move_to_dir_path)
+        path_dict[move_from_dir_path] = move_to_dir_path
+    return path_dict
 
 
 def __resolve_move_to_dir_name_and_path(category_group_def: CategoryGroupDef, move_from_dir_path: str,
@@ -41,7 +59,7 @@ def __category_is_group(doc_category: str, category_group_def: CategoryGroupDef)
     return category_group_def.has_group(doc_category)
 
 
-def __get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
+def get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
     doc_title = read_file_first_line(doc_md_file_path)
     if len(doc_title) == 0:
         return None
@@ -49,7 +67,7 @@ def __get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
 
 
 def __resolve_target_dir_names(dir_names: List[str] = None) -> Dict[str, str]:
-    # return: key:dir_name value:dir_path
+    # return: key:dir_path value:dir_name
     if dir_names is None:
         target_dir_names = get_dir_names_in_target_dir(WORK_DIR_PATH)
     else:

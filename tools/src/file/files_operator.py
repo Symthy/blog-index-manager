@@ -44,7 +44,7 @@ def get_exist_dir_names_in_target_dir(target_dir_path: str, specified_dir_names:
             os.path.isdir(os.path.join(target_dir_path, d)) and os.path.exists(os.path.join(target_dir_path, d))]
 
 
-def get_md_file_in_target_dir(target_dir_path: str) -> Optional[str]:
+def get_md_file_path_in_target_dir(target_dir_path: str) -> Optional[str]:
     extension = '.md'
     files = glob.glob(f'{target_dir_path}/*' + extension)
     return files[0] if len(files) > 0 else None

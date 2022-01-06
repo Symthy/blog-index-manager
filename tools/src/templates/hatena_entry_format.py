@@ -42,3 +42,10 @@ def replace_xml_escape(content: str) -> str:
     #     '\'': '&apos;',
     # }
     return escape(content)  # escape: <, &, >,
+
+
+def get_blog_summary_index_content() -> str:
+    return """本ページは投稿記事一覧です。 (自動更新)
+
+{md_lines}
+    """
