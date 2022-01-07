@@ -3,7 +3,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_NAME, LOCAL_DOCS_ENTRY_LIST_PATH, CATEGORY_FILE_NAME, LOCAL_DOCS_ENTRY_DUMP_DIR
+from common.constant import NON_CATEGORY_OTHERS, LOCAL_DOCS_ENTRY_LIST_PATH, CATEGORY_FILE_NAME, \
+    LOCAL_DOCS_ENTRY_DUMP_DIR
 from docs.document_register import get_doc_title_from_md_file
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntry, IEntries
@@ -63,14 +64,13 @@ class DocsEntry(IEntry):
         return self.__dir_path
 
     @property
-    def top_category(self):
-        if len(self.__categories) == 0:
-            return NON_CATEGORY_NAME
-        return self.__categories[0]
-
-    @property
     def categories(self):
         return self.__categories
+
+    def resolve_category(self) -> str:
+        if len(self.__categories) == 0:
+            return NON_CATEGORY_OTHERS
+        return self.__categories[0]
 
     @property
     def created_at(self):
@@ -83,6 +83,9 @@ class DocsEntry(IEntry):
     @property
     def updated_at_month_day(self):
         return convert_datetime_to_month_day_str(self.__updated_at)
+
+    def build_id_to_title(self) -> Dict[str, str]:
+        return {self.id: self.title}
 
     def convert_md_line(self) -> str:
         return f'- [{self.title}]({self.dir_path})'

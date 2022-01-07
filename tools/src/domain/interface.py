@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 
 class IDumpDataBuilder(ABC):
@@ -22,6 +24,14 @@ class IConvertibleMarkdownLines(ABC):
 
 class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
     @abstractmethod
+    def resolve_category(self) -> str:
+        pass
+
+    @abstractmethod
+    def build_id_to_title(self) -> Dict[str, str]:
+        pass
+
+    @abstractmethod
     def dump_data(self, dump_file_path: str):
         pass
 
@@ -29,6 +39,18 @@ class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
 class IEntries(IConvertibleMarkdownLines, ABC):
     @abstractmethod
     def get_entries(self) -> List[IEntry]:
+        pass
+
+    @abstractmethod
+    def is_empty(self) -> bool:
+        pass
+
+    @abstractmethod
+    def add_entry(self, entry: IEntry):
+        pass
+
+    @abstractmethod
+    def merge(self, entries: IEntries):
         pass
 
     @abstractmethod

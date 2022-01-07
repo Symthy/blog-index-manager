@@ -5,7 +5,7 @@ from api.hatena_api_executor import execute_get_hatena_all_entry_api, execute_ge
 from api.hatena_api_executor import execute_put_hatena_summary_entry
 from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, BLOG_CONF_PATH, HATENA_BLOG_ENTRY_LIST_PATH
 from docs.document_initializer import new_local_document_set, initialize_docs_dir
-from docs.document_organizer import push_documents_to_docs
+from docs.document_register import push_documents_to_docs
 from domain.blog_entry import BlogEntries
 from domain.category_to_entries import CategoryToEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
@@ -37,7 +37,7 @@ def join_lines(lines: List[str]) -> str:
 def update_hatena_entry_local_list(blog_config: BlogConfig,
                                    category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
     """
-    はてなブログから全記事を取得し、各記事情報をダンプ＆カテゴリ毎に分類した一覧をmdファイルに出力
+    ブログから全記事を取得し、各記事情報をダンプ＆カテゴリ毎に分類した一覧をmdファイルに出力
     :param category_group_def:
     :param blog_config:
     :return:
@@ -55,7 +55,7 @@ def update_hatena_entry_local_list(blog_config: BlogConfig,
 
 def put_hatena_summary_page(blog_config, entries_index_map):
     """
-    はてなブログのトップページ(summary)を更新する
+    ブログのトップページ(summary)を更新する
     :param blog_config:
     :param entries_index_map:
     :return:

@@ -1,9 +1,11 @@
 import os
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_NAME, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME, \
+from common.constant import NON_CATEGORY_OTHERS, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME, \
     LOCAL_DOCS_ENTRY_LIST_PATH
+from domain.category_to_entries import CategoryToEntriesMap
 from domain.docs_entry import new_docs_entries
+from domain.group_to_categories import GroupToCategorizedEntriesMap
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_text_file, read_file_first_line
 from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
@@ -11,12 +13,15 @@ from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names
 
 
 def push_documents_to_docs(category_group_def: CategoryGroupDef, target_dir_names: List[str] = None):
-    move_from_path_to_move_to_path_dict = __resolve_move_from_and_move_to_dir_path_dict(category_group_def,
-                                                                                        target_dir_names)
+    move_from_path_to_move_to_path_dict = resolve_move_from_and_move_to_dir_path_dict(category_group_def,
+                                                                                      target_dir_names)
     docs_entries = new_docs_entries(move_from_path_to_move_to_path_dict)
     docs_entries.dump_all_data(LOCAL_DOCS_ENTRY_LIST_PATH)
-    # Todo: grouping and grouping data dump
-    move_documents_to_docs_dir(move_from_path_to_move_to_path_dict)
+    category_to_docs_entries = CategoryToEntriesMap(docs_entries)
+    group_to_categorized_docs_entries = GroupToCategorizedEntriesMap(category_to_docs_entries, category_group_def)
+    group_to_categorized_docs_entries.convert_md_lines()
+    group_to_categorized_docs_entries.dump_all_data()
+    # move_documents_to_docs_dir(move_from_path_to_move_to_path_dict)
 
 
 def move_documents_to_docs_dir(move_from_to_path_dict: Dict[str, str]):
@@ -24,7 +29,7 @@ def move_documents_to_docs_dir(move_from_to_path_dict: Dict[str, str]):
         move_dir(move_from_dir_path, move_to_dir_path)
 
 
-def __resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGroupDef, target_dir_names: List[str]) \
+def resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGroupDef, target_dir_names: List[str]) \
         -> Dict[str, str]:
     # return: key:move_from_path value: move_to_path
     target_dir_path_to_name_dict = __resolve_target_dir_names(target_dir_names)
@@ -37,7 +42,7 @@ def __resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGr
             continue
         doc_title: Optional[str] = get_doc_title_from_md_file(doc_md_file_path)
         if doc_title is None:
-            print(f'[Warning] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
+            print(f'[Warn] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
         move_to_dir_path = __resolve_move_to_dir_name_and_path(category_group_def, move_from_dir_path, doc_title)
         path_dict[move_from_dir_path] = move_to_dir_path
@@ -76,7 +81,7 @@ def __resolve_target_dir_names(dir_names: List[str] = None) -> Dict[str, str]:
 
 
 def __resolve_doc_category(target_dir_path: str) -> str:
-    doc_category = NON_CATEGORY_NAME
+    doc_category = NON_CATEGORY_OTHERS
     category_file_path = target_dir_path + CATEGORY_FILE_NAME
     if os.path.exists(category_file_path):
         doc_categories = read_text_file(category_file_path)

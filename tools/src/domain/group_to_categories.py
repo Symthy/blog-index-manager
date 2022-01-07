@@ -1,9 +1,7 @@
-import copy
 from typing import List, Dict
 
-from domain.blog_entry import BlogEntries, BlogEntry
-from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_NAME
-from domain.interface import IConvertibleMarkdownLines
+from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_OTHERS
+from domain.interface import IConvertibleMarkdownLines, IEntry
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import dump_json
 
@@ -13,7 +11,7 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         self.__group = group
         self.__categories = []
         self.__category_to_entries: List[CategoryToEntriesSet] = []
-        self.__entries: BlogEntries = BlogEntries()
+        self.__entries: List[IEntry] = []
 
     @property
     def categories(self):
@@ -33,22 +31,19 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         self.__categories.append(category_to_entries.category)
         self.__category_to_entries.append(category_to_entries)
 
-    def add_entries(self, entries: List[BlogEntry]):
-        self.__entries.add_entries(entries)
-
-    def get_categorized_entries(self) -> List[IConvertibleMarkdownLines]:
-        ret_list: List[IConvertibleMarkdownLines] = copy.deepcopy(self.__category_to_entries)
-        ret_list.append(self.__entries)
-        return ret_list
+    def add_entries(self, entries: List[IEntry]):
+        self.__entries.extend(entries)
 
     def is_empty(self) -> bool:
-        return len(self.__category_to_entries) == 0 and self.__entries.is_empty()
+        return len(self.__category_to_entries) == 0 and len(self.__entries) == 0
 
     def convert_md_lines(self) -> List[str]:
-        lines = [f'- {self.__group}']
-        for category_to_entries in self.get_categorized_entries():
+        lines: List[str] = [f'- {self.__group}']
+        for category_to_entries in self.__category_to_entries:
             category_to_entries_lines = list(map(lambda line: '  ' + line, category_to_entries.convert_md_lines()))
             lines = lines + category_to_entries_lines
+        for entry in self.__entries:
+            lines.append('  ' + entry.convert_md_line())
         return lines
 
 
@@ -68,8 +63,9 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
             if category_to_entries_map.is_exist_category(def_group):
                 # group don't has category (group name equal category name) case
                 group_to_categorized_entries_set = GroupToCategorizedEntriesSet(def_group)
-                category_to_entries_set = category_to_entries_map.get_category_to_entries(def_group)
-                group_to_categorized_entries_set.add_entries(category_to_entries_set.entry_list)
+                category_to_entries_set: CategoryToEntriesSet = category_to_entries_map.get_category_to_entries(
+                    def_group)
+                group_to_categorized_entries_set.add_entries(category_to_entries_set.entries)
                 self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
             else:
                 # group has category case
@@ -87,7 +83,8 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         for category in category_to_entries_map.categories:
             if category_group_def.is_non_exist_group_or_category(category):
                 category_to_entries_set = category_to_entries_map.get_category_to_entries(category)
-                self.__group_to_categorized_entries[NON_CATEGORY_NAME].add_category_to_entries(category_to_entries_set)
+                self.__group_to_categorized_entries[NON_CATEGORY_OTHERS].add_category_to_entries(
+                    category_to_entries_set)
 
     def has_group(self, group) -> bool:
         return group in self.__group_to_categorized_entries
@@ -108,16 +105,16 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
             group_to_categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
             category_to_entries_list: List[CategoryToEntriesSet] = group_to_categorized_entries.category_to_entries
             dump_categories_and_entries = {}
-            for category_to_entries in category_to_entries_list:
-                entry_list: List[BlogEntry] = category_to_entries.entry_list
+            for category_to_entries_set in category_to_entries_list:
+                entry_list: List[IEntry] = category_to_entries_set.entries
                 dump_entries = {}
                 for entry in entry_list:
-                    dump_entries[entry.id] = entry.title
-                dump_categories_and_entries[category_to_entries.category] = dump_entries
-            entry_list: List[BlogEntry] = group_to_categorized_entries.entries.get_entries()
+                    dump_entries |= entry.build_id_to_title()
+                dump_categories_and_entries[category_to_entries_set.category] = dump_entries
+            entry_list: List[IEntry] = group_to_categorized_entries.entries
             dump_entries = {}
             for entry in entry_list:
-                dump_entries[entry.id] = entry.title
+                dump_entries |= entry.build_id_to_title()
             dump_categories_and_entries['-'] = dump_entries
             dump_groups[group] = dump_categories_and_entries
         dump_json(file_path, dump_groups)

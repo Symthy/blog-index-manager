@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Dict
 
-from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR
+from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_OTHERS
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
 from file.file_accessor import dump_json, load_json
@@ -52,17 +52,13 @@ class BlogEntry(IEntry):
         return convert_datetime_to_month_day_str(self.__last_updated)
 
     @property
-    def top_category(self) -> str:
-        if self.is_non_category():
-            return 'Others'
-        return self.__categories[0]
-
-    @property
     def categories(self) -> List[str]:
         return self.__categories
 
-    def is_non_category(self) -> bool:
-        return len(self.__categories) == 0
+    def resolve_category(self) -> str:
+        if len(self.__categories) == 0:
+            return NON_CATEGORY_OTHERS
+        return self.__categories[0]
 
     @property
     def local_docs_id(self):
@@ -75,6 +71,9 @@ class BlogEntry(IEntry):
     @property
     def pictures(self):
         return {}  # TODO
+
+    def build_id_to_title(self) -> Dict[str, str]:
+        return {self.id: self.title}
 
     def convert_md_line(self) -> str:
         return f'- [{self.title}]({self.url}) ({self.last_updated_month_day})'
@@ -103,7 +102,8 @@ class BlogEntries(IEntries):
         if entries is not None:
             self.__entries: List[BlogEntry] = entries
 
-    def get_entries(self) -> List[BlogEntry]:
+    @property
+    def entries(self) -> List[BlogEntry]:
         return self.__entries
 
     def is_empty(self) -> bool:
@@ -112,11 +112,8 @@ class BlogEntries(IEntries):
     def add_entry(self, blog_entry: BlogEntry):
         self.__entries.append(blog_entry)
 
-    def add_entries(self, blog_entries: List[BlogEntry]):
-        self.__entries.extend(blog_entries)
-
     def merge(self, blog_entries: BlogEntries):
-        self.add_entries(blog_entries.get_entries())
+        self.__entries.extend(blog_entries.entries)
 
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]

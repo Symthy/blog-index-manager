@@ -150,6 +150,17 @@ l = ['Alice', 'Bob', 'Charlie']
 d = {s: len(s) for s in l}
 ```
 
+[Pythonで辞書に要素を追加、辞書同士を連結（結合）](https://note.nkmk.me/python-dict-add-update/)
+
+```python
+d1 = {'k1': 1, 'k2': 2}
+d2 = {'k1': 10, 'k3': 3, 'k4': 4}
+# 別オブジェクトで生成
+d = d1 | d2  # {'k1': 10, 'k2': 2, 'k3': 3, 'k4': 4}
+# 上書き
+d1 |= d2  # {'k1': 10, 'k2': 2, 'k3': 3, 'k4': 4}
+```
+
 [ArgumentParserを使ってpythonのコマンドライン引数をとことん使ってみた](https://qiita.com/mimitaro/items/a845b45df35b39a59c95)
 
 ## GitBook
