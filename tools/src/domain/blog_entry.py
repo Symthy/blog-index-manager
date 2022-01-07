@@ -20,6 +20,7 @@ class BlogEntry(IEntry):
         self.__url = url
         self.__api_url = api_url
         self.__last_updated: Optional[datetime] = last_updated  # Make it optional just in case
+        self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_OTHERS
         self.__categories = categories
         self.__local_docs_id = docs_id  # Todo
 
@@ -55,10 +56,9 @@ class BlogEntry(IEntry):
     def categories(self) -> List[str]:
         return self.__categories
 
-    def resolve_category(self) -> str:
-        if len(self.__categories) == 0:
-            return NON_CATEGORY_OTHERS
-        return self.__categories[0]
+    @property
+    def top_category(self) -> str:
+        return self.__top_category
 
     @property
     def local_docs_id(self):

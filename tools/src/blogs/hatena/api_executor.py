@@ -1,12 +1,11 @@
 import base64
 import hashlib
 import random
-import xml.etree.ElementTree as ET
 from datetime import datetime
 
 import requests
 
-from api.response_parser import parse_blog_entries_xml, get_next_page_url, parse_blog_entry_xml
+from blogs.hatena.response_parser import parse_blog_entries_xml, get_next_page_url, parse_blog_entry_xml
 from domain.blog_entry import BlogEntries, BlogEntry
 from file.blog_config import BlogConfig
 from templates.hatena_entry_format import build_hatena_entry_xml_body, get_summary_page_title

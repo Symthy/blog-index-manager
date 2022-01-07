@@ -36,7 +36,7 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         self.__category_to_entries: Dict[str, CategoryToEntriesSet] = {}
         self.__sorted_categories: List[str] = []
         for entry in entries.get_entries():
-            category = entry.resolve_category()
+            category = entry.top_category
             if not category in self.__category_to_entries:
                 category_to_entries_set = CategoryToEntriesSet(category)
                 category_to_entries_set.add_entry(entry)

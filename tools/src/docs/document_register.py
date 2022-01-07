@@ -1,27 +1,11 @@
 import os
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_OTHERS, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME, \
-    LOCAL_DOCS_ENTRY_LIST_PATH
-from domain.category_to_entries import CategoryToEntriesMap
-from domain.docs_entry import new_docs_entries
-from domain.group_to_categories import GroupToCategorizedEntriesMap
+from common.constant import NON_CATEGORY_OTHERS, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_text_file, read_file_first_line
 from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
     get_md_file_path_in_target_dir, translate_win_files_unusable_char, move_dir
-
-
-def push_documents_to_docs(category_group_def: CategoryGroupDef, target_dir_names: List[str] = None):
-    move_from_path_to_move_to_path_dict = resolve_move_from_and_move_to_dir_path_dict(category_group_def,
-                                                                                      target_dir_names)
-    docs_entries = new_docs_entries(move_from_path_to_move_to_path_dict)
-    docs_entries.dump_all_data(LOCAL_DOCS_ENTRY_LIST_PATH)
-    category_to_docs_entries = CategoryToEntriesMap(docs_entries)
-    group_to_categorized_docs_entries = GroupToCategorizedEntriesMap(category_to_docs_entries, category_group_def)
-    group_to_categorized_docs_entries.convert_md_lines()
-    group_to_categorized_docs_entries.dump_all_data()
-    # move_documents_to_docs_dir(move_from_path_to_move_to_path_dict)
 
 
 def move_documents_to_docs_dir(move_from_to_path_dict: Dict[str, str]):

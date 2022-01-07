@@ -1,28 +1,24 @@
 import sys
 from typing import List
 
-from api.hatena_api_executor import execute_get_hatena_all_entry_api, execute_get_hatena_specified_entry_api
-from api.hatena_api_executor import execute_put_hatena_summary_entry
-from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, BLOG_CONF_PATH, HATENA_BLOG_ENTRY_LIST_PATH
+from blogs.hatena.api_executor import execute_put_hatena_summary_entry, \
+    execute_get_hatena_specified_entry_api
+from common.constant import BLOG_CONF_PATH
 from docs.document_initializer import new_local_document_set, initialize_docs_dir
-from docs.document_register import push_documents_to_docs
-from domain.blog_entry import BlogEntries
-from domain.category_to_entries import CategoryToEntriesMap
-from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
-from file.category_group_def import CategoryGroupDef
-from file.file_accessor import read_blog_config, write_text_file, load_category_group_def_yaml
-# for debug
+from file.file_accessor import read_blog_config, load_category_group_def_yaml
+from service.local.local_entry_register import push_documents_to_docs
 from templates.hatena_entry_format import get_blog_summary_index_content
 
 
 def print_md_lines(data: IConvertibleMarkdownLines):
+    # for debug
     print(join_lines(data.convert_md_lines()))
 
 
-# for debug
 def show_hatena_entry(blog_config: BlogConfig, entry_id):
+    # for debug
     blog_entry = execute_get_hatena_specified_entry_api(blog_config, entry_id)
     print(blog_entry.content)
 
@@ -32,25 +28,6 @@ def join_lines(lines: List[str]) -> str:
     for line in lines:
         data = data + line + '\n'
     return data
-
-
-def update_hatena_entry_local_list(blog_config: BlogConfig,
-                                   category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
-    """
-    ブログから全記事を取得し、各記事情報をダンプ＆カテゴリ毎に分類した一覧をmdファイルに出力
-    :param category_group_def:
-    :param blog_config:
-    :return:
-    """
-    blog_entries: BlogEntries = execute_get_hatena_all_entry_api(blog_config)
-    # print_md_lines(blog_entries)
-    blog_entries.dump_all_data(HATENA_BLOG_ENTRY_LIST_PATH)
-    category_to_entries = CategoryToEntriesMap(blog_entries)
-    # print_md_lines(category_to_entries)
-    entries_index_map = GroupToCategorizedEntriesMap(category_to_entries, category_group_def)
-    print_md_lines(entries_index_map)
-    write_text_file(HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, entries_index_map.convert_md_lines())
-    return entries_index_map
 
 
 def put_hatena_summary_page(blog_config, entries_index_map):

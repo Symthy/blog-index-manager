@@ -23,9 +23,10 @@ class IConvertibleMarkdownLines(ABC):
 
 
 class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
-    @abstractmethod
-    def resolve_category(self) -> str:
-        pass
+    @property
+    def top_category(self) -> str:
+        # required override
+        return ''
 
     @abstractmethod
     def build_id_to_title(self) -> Dict[str, str]:

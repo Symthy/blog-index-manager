@@ -100,21 +100,31 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         return lines
 
     def dump_all_data(self, file_path):
-        dump_groups = {}
-        for group in self.__sorted_groups:
-            group_to_categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
-            category_to_entries_list: List[CategoryToEntriesSet] = group_to_categorized_entries.category_to_entries
-            dump_categories_and_entries = {}
-            for category_to_entries_set in category_to_entries_list:
-                entry_list: List[IEntry] = category_to_entries_set.entries
-                dump_entries = {}
-                for entry in entry_list:
-                    dump_entries |= entry.build_id_to_title()
-                dump_categories_and_entries[category_to_entries_set.category] = dump_entries
-            entry_list: List[IEntry] = group_to_categorized_entries.entries
+        def build_entries_dump_data(entry_list: List[IEntry]):
             dump_entries = {}
             for entry in entry_list:
                 dump_entries |= entry.build_id_to_title()
-            dump_categories_and_entries['-'] = dump_entries
-            dump_groups[group] = dump_categories_and_entries
-        dump_json(file_path, dump_groups)
+            return dump_entries
+
+        def build_category_to_entries_dump_data(category_to_entries_list: List[CategoryToEntriesSet]):
+            dump_category_to_entries = {}
+            for category_to_entries_set in category_to_entries_list:
+                dump_entries = build_entries_dump_data(category_to_entries_set.entries)
+                dump_category_to_entries[category_to_entries_set.category] = dump_entries
+            return dump_category_to_entries
+
+        def build_group_to_categorized_entries_dump_data():
+            dump_groups = {}
+            for group in self.__sorted_groups:
+                group_to_categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
+                dump_categories_and_entries = build_category_to_entries_dump_data(
+                    group_to_categorized_entries.category_to_entries)
+                # There is also entry directly under the group
+                dump_entries = build_entries_dump_data(group_to_categorized_entries.entries)
+                if len(dump_entries) > 0:
+                    dump_categories_and_entries['-'] = dump_entries
+                dump_groups[group] = dump_categories_and_entries
+            return dump_groups
+
+        dump_all_data = build_group_to_categorized_entries_dump_data()
+        dump_json(file_path, dump_all_data)

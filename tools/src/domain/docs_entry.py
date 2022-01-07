@@ -49,6 +49,7 @@ class DocsEntry(IEntry):
         self.__dir_path = dir_path
         self.__created_at: datetime = created_at
         self.__updated_at: Optional[datetime] = updated_at
+        self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_OTHERS
         self.__categories = categories
 
     @property
@@ -67,10 +68,9 @@ class DocsEntry(IEntry):
     def categories(self):
         return self.__categories
 
-    def resolve_category(self) -> str:
-        if len(self.__categories) == 0:
-            return NON_CATEGORY_OTHERS
-        return self.__categories[0]
+    @property
+    def top_category(self) -> str:
+        return self.__top_category
 
     @property
     def created_at(self):

@@ -2,9 +2,11 @@
 OUT_DIR_PATH = '../out/'
 HATENA_BLOG_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'hatena_entry_data/'
 HATENA_BLOG_ENTRY_LIST_PATH = OUT_DIR_PATH + 'hatena_entry_list.json'
-HATENA_BLOG_ENTRY_INDEX_RESULT_PATH = OUT_DIR_PATH + 'summary_entry_index_result.md'
-LOCAL_DOCS_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'local_docs_data/'
-LOCAL_DOCS_ENTRY_LIST_PATH = OUT_DIR_PATH + 'local_docs_list.json'
+HATENA_BLOG_ENTRY_INDEX_RESULT_PATH = OUT_DIR_PATH + 'hatena_entry_index_result.md'
+LOCAL_DOCS_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'local_entry_data/'
+LOCAL_DOCS_ENTRY_LIST_PATH = OUT_DIR_PATH + 'local_entry_list.json'
+LOCAL_DOCS_ENTRY_GROUPING_PATH = OUT_DIR_PATH + 'local_entry_grouping.json'
+LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH = OUT_DIR_PATH + 'local_entry_index_result.md'
 
 WORK_DIR_PATH = '../../work/'
 

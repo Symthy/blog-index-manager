@@ -1,8 +1,10 @@
 .idea/
 .VSCodeCounter/
-__pycache__
+__pycache__/
 work/
 conf/blog.conf
-tools/out/summary_entry_index_result.md
+
 tools/out/hatena_entry_list.json
-tools/out/hatena_entry_data
+tools/out/hatena_entry_data/
+
+tools/out/local_entry_data/
