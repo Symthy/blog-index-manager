@@ -10,7 +10,7 @@ from domain.interface import IConvertibleMarkdownLines, IEntries, IEntry
 class CategoryToEntriesSet(IConvertibleMarkdownLines):
     def __init__(self, top_category: str):
         self.__category = top_category
-        self.__entry_list: List[IEntry] = []
+        self.__entry_list: Dict[str, IEntry] = {}  # key: entry_id
 
     @property
     def category(self):
@@ -18,25 +18,29 @@ class CategoryToEntriesSet(IConvertibleMarkdownLines):
 
     @property
     def entry_list(self) -> List[IEntry]:
-        return self.__entry_list
+        return list(self.__entry_list.values())
 
     def is_empty(self):
         return len(self.__entry_list) == 0
 
     def add_entry(self, entry: IEntry):
-        self.__entry_list.append(entry)
+        self.__entry_list[entry.id] = entry
+
+    def __add_entries(self, entries: List[IEntry]):
+        for entry in entries:
+            self.__entry_list[entry.id] = entry
 
     def convert_md_lines(self) -> List[str]:
         lines = [f'- {self.category}']
         entry_md_lines = list(
-            map(lambda entry: '  ' + entry.convert_md_line(), self.__entry_list))
+            map(lambda entry: '  ' + entry.convert_md_line(), self.entry_list))
         lines = lines + entry_md_lines
         return lines
 
     @classmethod
     def __init_from_dump_data(cls, category: str, entries: IEntries) -> CategoryToEntriesSet:
         self = CategoryToEntriesSet(category)
-        self.__entry_list = entries.get_entries()
+        self.__add_entries(entries.get_entries())
         return self
 
     @classmethod
@@ -100,7 +104,7 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
     def deserialize_docs_grouping_data(cls, category_to_entries_obj: Dict[str, Dict[str, str]]) -> CategoryToEntriesMap:
         self = CategoryToEntriesMap()
         for category, entries in category_to_entries_obj.items():
-            doc_entries = DocEntries.deserialize_grouping_data(category, entries)
+            doc_entries = DocEntries.deserialize_grouping_data(entries)
             category_to_entries_set = CategoryToEntriesSet.deserialize_docs_grouping_data(category, doc_entries)
             self.__add_category_to_entries(category, category_to_entries_set)
         return self

@@ -3,6 +3,8 @@ import os
 import shutil
 from typing import List, Optional
 
+from common.constant import ID_FILE_NAME_HEADER
+
 
 def make_new_dir(new_dir_path: str):
     os.mkdir(new_dir_path)
@@ -62,3 +64,11 @@ def get_file_paths_in_target_dir(target_dir_path: str):
 
 def is_exist_file(file_path: str):
     return os.path.exists(file_path) and os.path.isfile(file_path)
+
+
+def get_id_from_id_file(target_dir_path: str) -> Optional[str]:
+    files = os.listdir(target_dir_path)
+    for file in files:
+        if os.path.isfile(os.path.join(target_dir_path, file)) and file.startswith(ID_FILE_NAME_HEADER):
+            return file[len(ID_FILE_NAME_HEADER):]
+    return None

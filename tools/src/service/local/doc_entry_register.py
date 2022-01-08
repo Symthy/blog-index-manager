@@ -21,7 +21,6 @@ def push_documents_to_docs(category_group_def: CategoryGroupDef, target_dir_name
     json_data = load_json(LOCAL_DOCS_ENTRY_GROUPING_PATH)
     entry_index_result_map = GroupToCategorizedEntriesMap.deserialize_docs_grouping_data(category_group_def, json_data)
     entry_index_result_map.add_entries(category_group_def, docs_entries)
-    # print(dump_data.convert_md_lines())
     entry_index_result_map.dump_all_data(LOCAL_DOCS_ENTRY_GROUPING_PATH)
     write_text_file(LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH, entry_index_result_map.convert_md_lines())
     # move_documents_to_docs_dir(move_from_path_to_move_to_path_dict)

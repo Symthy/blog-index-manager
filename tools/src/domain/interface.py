@@ -24,8 +24,15 @@ class IConvertibleMarkdownLines(ABC):
 
 class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
     @property
+    def id(self) -> str:
+        # required override
+        print('[Error] Unimplemented!! (IEntry.id)')
+        return ''
+
+    @property
     def top_category(self) -> str:
         # required override
+        print('[Error] Unimplemented!! (IEntry.top_category)')
         return ''
 
     @abstractmethod

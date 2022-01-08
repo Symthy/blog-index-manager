@@ -22,6 +22,7 @@ DEFINITIONS_DIR_PATH = './tools/definitions/'
 EXCLUDE_ENTRY_IDS_TXT_PATH = DEFINITIONS_DIR_PATH + 'exclude_entry_ids.txt'
 CATEGORY_GROUP_YAML_PATH = DEFINITIONS_DIR_PATH + 'category_group.yml'
 
+ID_FILE_NAME_HEADER = '.id_'
 CATEGORY_FILE_NAME = 'category.txt'
 
 NON_CATEGORY_GROUP_NAME = 'Others'

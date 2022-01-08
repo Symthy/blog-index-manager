@@ -5,7 +5,7 @@ from typing import List
 
 import yaml
 
-from common.constant import CATEGORY_GROUP_YAML_PATH
+from common.constant import CATEGORY_GROUP_YAML_PATH, LOCAL_DOCS_ENTRY_LIST_PATH
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 
@@ -64,4 +64,10 @@ def load_yaml(file_path):
         obj = yaml.safe_load(file)
     return obj
 
-# def write_md_file(file_path: str, lines: List[str]):
+
+def is_exist_in_local_entry_list(entry_id: str) -> bool:
+    local_entry_list = load_json(LOCAL_DOCS_ENTRY_LIST_PATH)
+    if not 'entries' in local_entry_list:
+        return False
+    entry_id_to_title = local_entry_list['entries']
+    return entry_id in entry_id_to_title
