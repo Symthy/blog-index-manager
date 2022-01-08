@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+from common.constant import NON_CATEGORY_OTHERS
+
 
 class GroupingCategories:
     def __init__(self, group_name, categories=None):
@@ -25,7 +27,7 @@ class CategoryGroupDef:
         self.__groups: List[str] = []
         self.__grouping_categories: Dict[str, GroupingCategories] = {}
         self.__all_group_and_category: List[str] = []
-        self.__category_to_group = {}
+        self.__category_to_group = {}  # key: category only. don't include group in key
         for json_field in json_data:
             if isinstance(json_field, str):
                 self.__groups.append(json_field)
@@ -48,8 +50,8 @@ class CategoryGroupDef:
     def grouping_categories(self) -> List[GroupingCategories]:
         return [self.__grouping_categories[group] for group in self.__groups]
 
-    def is_non_exist_group_or_category(self, name) -> bool:
-        return not name in self.__all_group_and_category
+    def has_group_or_category(self, name) -> bool:
+        return name in self.__all_group_and_category
 
     def has_group(self, name):
         return name in self.__groups
@@ -57,8 +59,12 @@ class CategoryGroupDef:
     def get_categories(self, group: str) -> List[str]:
         return self.__grouping_categories[group].categories
 
-    def get_belongs_group(self, category: str):
-        return self.__category_to_group[category]
+    def get_belongs_group(self, category: str) -> str:
+        if category in self.__category_to_group:
+            return self.__category_to_group[category]
+        if category in self.__groups:
+            return category
+        return NON_CATEGORY_OTHERS
 
     def print_data(self):
         # for debug
