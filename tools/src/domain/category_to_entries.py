@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import List, Dict, Optional
 
-from common.constant import NON_CATEGORY_OTHERS
+from common.constant import NON_CATEGORY_GROUP_NAME
 from domain.doc_entry import DocEntries
 from domain.interface import IConvertibleMarkdownLines, IEntries, IEntry
 
@@ -56,13 +56,13 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
                 category_to_entries_set = CategoryToEntriesSet(category)
                 category_to_entries_set.add_entry(entry)
                 self.__category_to_entries[category] = category_to_entries_set
-                if category != NON_CATEGORY_OTHERS:
+                if category != NON_CATEGORY_GROUP_NAME:
                     # because: Others is last in categories
                     self.__sorted_categories.append(category)
             else:
                 self.__category_to_entries[category].add_entry(entry)
         self.__sorted_categories.sort()
-        self.__sorted_categories.append(NON_CATEGORY_OTHERS)
+        self.__sorted_categories.append(NON_CATEGORY_GROUP_NAME)
 
     @property
     def categories(self) -> List[str]:

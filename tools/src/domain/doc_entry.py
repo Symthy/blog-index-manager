@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_OTHERS, LOCAL_DOCS_ENTRY_LIST_PATH, CATEGORY_FILE_NAME, \
+from common.constant import NON_CATEGORY_GROUP_NAME, LOCAL_DOCS_ENTRY_LIST_PATH, CATEGORY_FILE_NAME, \
     LOCAL_DOCS_ENTRY_DUMP_DIR
 from docs.document_register import get_doc_title_from_md_file
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
@@ -29,6 +29,7 @@ def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]
     id_file = f'{target_dir_path}/.{docs_id}'
     md_file_path = get_md_file_path_in_target_dir(target_dir_path)
     dir_name = target_dir_path.rsplit('/', 1)[1]
+    file_name = md_file_path.rsplit('/', 1)[1]
     if md_file_path is None:
         print(f'[Error] skip: non exist md file (dir: {dir_name})')
         return None
@@ -38,24 +39,26 @@ def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]
         return None
     make_new_file(id_file)
     categories = read_text_file(target_dir_path + CATEGORY_FILE_NAME)
-    return DocEntry(docs_id, doc_title, move_to_path, categories, created_datetime)
+    return DocEntry(docs_id, doc_title, move_to_path, file_name, categories, created_datetime)
 
 
 class DocEntry(IEntry):
     FIELD_ID = 'id'
     FIELD_TITLE = 'title'
     FIELD_DIR_PATH = 'dir_path'
+    FIELD_DOC_FILE = 'doc_file'
     FIELD_TOP_CATEGORY = 'top_category'
     FIELD_CATEGORIES = 'categories'
     FIELD_CREATED_AT = 'created_at'
     FIELD_UPDATED_AT = 'updated_at'
 
-    def __init__(self, docs_id: str, title: str, dir_path: str, categories: List[str], created_at: datetime = None,
-                 updated_at: Optional[datetime] = None):
+    def __init__(self, docs_id: str, title: str, dir_path: str, doc_file: str, categories: List[str],
+                 created_at: datetime = None, updated_at: Optional[datetime] = None):
         self.__id = docs_id
         self.__title = title
         self.__dir_path = dir_path
-        self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_OTHERS
+        self.__doc_file = doc_file
+        self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_GROUP_NAME
         self.__categories = categories
         self.__created_at: datetime = created_at
         self.__updated_at: Optional[datetime] = updated_at
@@ -71,6 +74,10 @@ class DocEntry(IEntry):
     @property
     def dir_path(self):
         return self.__dir_path
+
+    @property
+    def doc_file(self):
+        return self.__doc_file
 
     @property
     def categories(self):
@@ -96,13 +103,14 @@ class DocEntry(IEntry):
         return {self.id: self.title}
 
     def convert_md_line(self) -> str:
-        return f'- [{self.title}]({self.dir_path})'
+        return f'- [{self.title}]({self.dir_path}{self.doc_file})'
 
     def build_dump_data(self, json_data=None) -> object:
         return {
             DocEntry.FIELD_ID: resolve_dump_field_data(self, json_data, DocEntry.FIELD_ID),
             DocEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TITLE),
             DocEntry.FIELD_DIR_PATH: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DIR_PATH),
+            DocEntry.FIELD_DOC_FILE: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DOC_FILE),
             DocEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TOP_CATEGORY),
             DocEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CATEGORIES),
             DocEntry.FIELD_CREATED_AT: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CREATED_AT),
@@ -114,7 +122,7 @@ class DocEntry(IEntry):
 
     @classmethod
     def deserialize_grouping_data(cls, entry_id: str, title: str, category: str) -> DocEntry:
-        return DocEntry(entry_id, title, '', [category], None, None)
+        return DocEntry(entry_id, title, '', '', [category], None, None)
 
 
 class DocEntries(IEntries):

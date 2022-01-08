@@ -1,5 +1,4 @@
 import codecs
-import glob
 import os
 import shutil
 from typing import List, Optional
@@ -29,7 +28,8 @@ def translate_win_files_unusable_char(s: str):
         '<': '＜',
         '>': '＞',
         '*': '＊',
-        '|': '｜'
+        '|': '｜',
+        ' ': '_'  # Replace to avoid broken links in md files
     }
     return s.translate(str.maketrans(trans_dict))
 
@@ -45,9 +45,14 @@ def get_exist_dir_names_in_target_dir(target_dir_path: str, specified_dir_names:
 
 
 def get_md_file_path_in_target_dir(target_dir_path: str) -> Optional[str]:
+    files = os.listdir(target_dir_path)
     extension = '.md'
-    files = glob.glob(f'{target_dir_path}/*' + extension)
-    return files[0] if len(files) > 0 else None
+    for file in files:
+        if os.path.isfile(os.path.join(target_dir_path, file)) and file.endswith(extension):
+            return target_dir_path + file
+    return None
+    # files = glob.glob(f'{target_dir_path}/*' + extension)
+    # return files[0] if len(files) > 0 else None
 
 
 def get_file_paths_in_target_dir(target_dir_path: str):

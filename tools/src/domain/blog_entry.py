@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_OTHERS
+from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
 from file.file_accessor import dump_json, load_json
@@ -20,7 +20,7 @@ class BlogEntry(IEntry):
         self.__url = url
         self.__api_url = api_url
         self.__last_updated: Optional[datetime] = last_updated  # Make it optional just in case
-        self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_OTHERS
+        self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_GROUP_NAME
         self.__categories = categories
         self.__local_docs_id = docs_id  # Todo
 

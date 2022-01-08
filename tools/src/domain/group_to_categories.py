@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import List, Dict, Optional
 
-from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_OTHERS
+from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_GROUP_NAME
 from domain.interface import IConvertibleMarkdownLines, IEntry, IEntries
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import dump_json
@@ -111,7 +111,7 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         for category in category_to_entries_map.categories:
             if not category_group_def.has_group_or_category(category):
                 category_to_entries_set = category_to_entries_map.get_category_to_entries_set(category)
-                self.__group_to_categorized_entries[NON_CATEGORY_OTHERS].add_category_to_entries(
+                self.__group_to_categorized_entries[NON_CATEGORY_GROUP_NAME].add_category_to_entries(
                     category_to_entries_set)
 
     def has_group(self, group) -> bool:

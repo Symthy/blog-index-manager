@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from common.constant import NON_CATEGORY_OTHERS
+from common.constant import NON_CATEGORY_GROUP_NAME
 
 
 class GroupingCategories:
@@ -64,7 +64,7 @@ class CategoryGroupDef:
             return self.__category_to_group[category]
         if category in self.__groups:
             return category
-        return NON_CATEGORY_OTHERS
+        return NON_CATEGORY_GROUP_NAME
 
     def print_data(self):
         # for debug
