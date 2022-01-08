@@ -15,9 +15,17 @@ def make_new_file(new_file_path: str, write_data: str = ''):
         f.write(write_data)
 
 
+def copy_dir(target_dir_path: str, copy_to_dir_path: str):
+    shutil.copytree(target_dir_path, copy_to_dir_path)
+
+
+def delete_dir(target_dir_path: str):
+    shutil.rmtree(target_dir_path)
+
+
 def move_dir(move_from_dir_path: str, move_to_dir_path: str):
-    shutil.copytree(move_from_dir_path, move_to_dir_path)
-    shutil.rmtree(move_from_dir_path)
+    copy_dir(move_from_dir_path, move_to_dir_path)
+    delete_dir(move_from_dir_path)
 
 
 def translate_win_files_unusable_char(s: str):
@@ -72,3 +80,7 @@ def get_id_from_id_file(target_dir_path: str) -> Optional[str]:
         if os.path.isfile(os.path.join(target_dir_path, file)) and file.startswith(ID_FILE_NAME_HEADER):
             return file[len(ID_FILE_NAME_HEADER):]
     return None
+
+
+def get_files_name_from_path(dir_path: str) -> str:
+    return dir_path.rsplit('/', 1)[1]

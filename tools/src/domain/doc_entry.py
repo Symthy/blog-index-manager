@@ -8,8 +8,9 @@ from common.constant import NON_CATEGORY_GROUP_NAME, LOCAL_DOCS_ENTRY_LIST_PATH,
 from docs.document_register import get_doc_title_from_md_file
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntry, IEntries
-from file.file_accessor import load_json, dump_json, read_text_file, is_exist_in_local_entry_list
-from file.files_operator import make_new_file, get_md_file_path_in_target_dir, get_id_from_id_file
+from file.file_accessor import load_json, dump_json, read_text_file, is_exist_in_local_entry_list, write_text_line
+from file.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \
+    get_files_name_from_path
 from ltime.time_resolver import convert_datetime_to_month_day_str, convert_datetime_to_entry_time_str, \
     get_current_datetime, convert_datetime_to_time_sequence, \
     convert_entry_time_str_to_datetime
@@ -27,8 +28,8 @@ def new_doc_entries(move_from_path_to_move_to_path_dict: Dict[str, str]) -> DocE
 def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]:
     created_datetime: datetime = get_current_datetime()
     md_file_path = get_md_file_path_in_target_dir(target_dir_path)
-    dir_name = target_dir_path.rsplit('/', 1)[1]
-    file_name = md_file_path.rsplit('/', 1)[1]
+    dir_name = get_files_name_from_path(target_dir_path)
+    file_name = get_files_name_from_path(md_file_path)
     if md_file_path is None:
         print(f'[Error] skip: non exist md file (dir: {dir_name})')
         return None
@@ -36,11 +37,11 @@ def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]
     if doc_title is None:
         print(f'[Error] skip: empty doc title (dir: {dir_name})')
         return None
-    entry_id = get_id_from_id_file(target_dir_path)
+    entry_id: Optional[str] = get_id_from_id_file(target_dir_path)
     if entry_id is None:
         entry_id = convert_datetime_to_time_sequence(created_datetime)
-        id_file = f'{target_dir_path}/{ID_FILE_NAME_HEADER}{entry_id}'
-        make_new_file(id_file)
+        id_file_path = f'{target_dir_path}/{ID_FILE_NAME_HEADER}{entry_id}'
+        write_text_line(id_file_path, entry_id)
     categories = read_text_file(target_dir_path + CATEGORY_FILE_NAME)
     created_at = created_datetime
     updated_at = None

@@ -6,7 +6,7 @@ from docs.document_register import resolve_move_from_and_move_to_dir_path_dict
 from domain.doc_entry import new_doc_entries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import load_json, write_text_file
+from file.file_accessor import load_json, write_text_lines
 
 
 def push_documents_to_docs(category_group_def: CategoryGroupDef, target_dir_names: List[str] = None):
@@ -22,5 +22,5 @@ def push_documents_to_docs(category_group_def: CategoryGroupDef, target_dir_name
     entry_index_result_map = GroupToCategorizedEntriesMap.deserialize_docs_grouping_data(category_group_def, json_data)
     entry_index_result_map.add_entries(category_group_def, docs_entries)
     entry_index_result_map.dump_all_data(LOCAL_DOCS_ENTRY_GROUPING_PATH)
-    write_text_file(LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH, entry_index_result_map.convert_md_lines())
+    write_text_lines(LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH, entry_index_result_map.convert_md_lines())
     # move_documents_to_docs_dir(move_from_path_to_move_to_path_dict)

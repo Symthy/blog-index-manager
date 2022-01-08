@@ -5,7 +5,7 @@ from typing import List
 
 import yaml
 
-from common.constant import CATEGORY_GROUP_YAML_PATH, LOCAL_DOCS_ENTRY_LIST_PATH
+from common.constant import CATEGORY_GROUP_YAML_PATH, LOCAL_DOCS_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_DUMP_DIR
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 
@@ -34,13 +34,20 @@ def read_text_file(file_path: str) -> List[str]:
         return []
 
 
-def write_text_file(file_path, lines: List[str]):
+def __write_text_file(file_path, text: str):
     try:
         with codecs.open(file_path, mode='w', encoding='utf-8') as f:
-            f.write('\n'.join(lines))
+            f.write(text)
     except Exception as e:
         print(f'[Warning] Invalid {file_path}, write failure:', e)
-        return []
+
+
+def write_text_line(file_path, line: str):
+    __write_text_file(file_path, line)
+
+
+def write_text_lines(file_path, lines: List[str]):
+    __write_text_file(file_path, '\n'.join(lines))
 
 
 def load_json(file_path):
@@ -71,3 +78,10 @@ def is_exist_in_local_entry_list(entry_id: str) -> bool:
         return False
     entry_id_to_title = local_entry_list['entries']
     return entry_id in entry_id_to_title
+
+
+def get_dir_path_from_local_entry_data(entry_id: str) -> str:
+    entry_dump_file_path = f'{LOCAL_DOCS_ENTRY_DUMP_DIR}{entry_id}'
+    entry_dump_data = load_json(entry_dump_file_path)
+    target_entry_dir_path = entry_dump_data['dir_path']
+    return target_entry_dir_path

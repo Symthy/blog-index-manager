@@ -8,7 +8,8 @@ from docs.document_initializer import new_local_document_set, initialize_docs_di
 from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml
-from service.local.doc_entry_register import push_documents_to_docs
+from service.local.doc_entry_pusher import push_documents_to_docs
+from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
 from templates.hatena_entry_format import get_blog_summary_index_content
 
 
@@ -59,12 +60,28 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and (args[1] == '-new' or args[1] == '-n'):
         title_value = new_local_document_set(args)
-        print(f'Success: created \"{title_value}\" dir in \"in\" dir')
+        print(f'Success: created \"{title_value}\" dir in work dir')
         return
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
         push_documents_to_docs(category_group_def, target_dirs)
-        print('Success: move to dir')
+        print('Success: push doc data to docs dir')
+        return
+    if len(args) >= 2 and (args[1] == '-retrieve' or args[1] == '-ret' or args[1] == '-r'):
+        if len(args) >= 3 and (args[2] == '-cancel' or args[2] == '-c'):
+            cancel_retrieving_document(args[3:])
+        else:
+            retrieve_document_from_docs(args[2:])
+        print('Success: retrieve doc data to work dir')
+        return
+    if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
+        print('Unimplemented')
+        return
+    if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
+        print('Unimplemented')
+        return
+    if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):
+        print('Unimplemented')
         return
 
 

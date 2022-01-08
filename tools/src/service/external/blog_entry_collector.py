@@ -5,7 +5,7 @@ from domain.category_to_entries import CategoryToEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import write_text_file
+from file.file_accessor import write_text_lines
 from main import print_md_lines
 
 
@@ -24,5 +24,5 @@ def update_hatena_entry_local_list(blog_config: BlogConfig,
     # print_md_lines(category_to_entries)
     entries_index_map = GroupToCategorizedEntriesMap(category_group_def, category_to_entries)
     print_md_lines(entries_index_map)
-    write_text_file(HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, entries_index_map.convert_md_lines())
+    write_text_lines(HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, entries_index_map.convert_md_lines())
     return entries_index_map

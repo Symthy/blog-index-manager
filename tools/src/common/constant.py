@@ -15,6 +15,8 @@ WORK_DIR_PATH = './work/'
 
 DOCS_DIR_PATH = './docs/'
 
+BACKUP_DIR_PATH = './backup/'
+
 CONF_DIR_PATH = './conf/'
 BLOG_CONF_PATH = CONF_DIR_PATH + 'blog.conf'
 
