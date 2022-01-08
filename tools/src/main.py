@@ -8,7 +8,7 @@ from docs.document_initializer import new_local_document_set, initialize_docs_di
 from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml
-from service.local.local_entry_register import push_documents_to_docs
+from service.local.doc_entry_register import push_documents_to_docs
 from templates.hatena_entry_format import get_blog_summary_index_content
 
 

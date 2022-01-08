@@ -46,9 +46,9 @@ class IEntries(IConvertibleMarkdownLines, ABC):
     def is_empty(self) -> bool:
         pass
 
-    @abstractmethod
-    def add_entry(self, entry: IEntry):
-        pass
+    # @abstractmethod
+    # def add_entry(self, entry: IEntry):
+    #     pass
 
     @abstractmethod
     def merge(self, entries: IEntries):
