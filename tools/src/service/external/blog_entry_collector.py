@@ -3,10 +3,16 @@ from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_INDEX
 from domain.blog_entry import BlogEntries
 from domain.category_to_entries import CategoryToEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
+from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import write_text_lines
-from service.external.md_data_handler import print_md_lines
+from file.md_data_handler import join_lines
+
+
+def print_md_lines(data: IConvertibleMarkdownLines):
+    # for debug
+    print(join_lines(data.convert_md_lines()))
 
 
 def collect_hatena_entry_local_list(blog_config: BlogConfig,
@@ -25,4 +31,5 @@ def collect_hatena_entry_local_list(blog_config: BlogConfig,
     entries_index_map = GroupToCategorizedEntriesMap(category_group_def, category_to_entries)
     print_md_lines(entries_index_map)
     write_text_lines(HATENA_BLOG_ENTRY_INDEX_RESULT_PATH, entries_index_map.convert_md_lines())
+    # Todo: update blog to doc mapping
     return entries_index_map

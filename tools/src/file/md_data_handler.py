@@ -10,6 +10,4 @@ def join_lines(lines: List[str]) -> str:
     return data
 
 
-def print_md_lines(data: IConvertibleMarkdownLines):
-    # for debug
-    print(join_lines(data.convert_md_lines()))
+

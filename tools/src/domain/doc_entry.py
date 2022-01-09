@@ -8,7 +8,7 @@ from common.constant import NON_CATEGORY_GROUP_NAME, LOCAL_DOCS_ENTRY_LIST_PATH,
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntry, IEntries
 from file.file_accessor import load_json, dump_json, read_text_file, is_exist_in_local_entry_list, write_text_line, \
-    get_doc_title_from_md_file
+    get_doc_title_from_md_file, get_local_doc_entry_dump_data
 from file.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \
     get_files_name_from_path
 from ltime.time_resolver import convert_datetime_to_month_day_str, convert_datetime_to_entry_time_str, \
@@ -201,3 +201,12 @@ class DocEntries(IEntries):
         for entry_id in entry_id_to_title.keys():
             self.__add_entry(DocEntry.deserialize_entry_data(entry_id))
         return self
+
+    @classmethod
+    def init_by_entry_ids(cls, entry_ids: List[str]):
+        entries: List[DocEntry] = []
+        for entry_id in entry_ids:
+            entry_dump_data = get_local_doc_entry_dump_data(entry_id)
+            doc_entry = DocEntry.init_from_dump_data(entry_dump_data)
+            entries.append(doc_entry)
+        return DocEntries(entries)

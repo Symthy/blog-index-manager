@@ -6,6 +6,7 @@ from common.constant import BLOG_CONF_PATH
 from docs.docs_initializer import new_local_document_set, initialize_docs_dir
 from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml
+from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
 from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
@@ -23,7 +24,7 @@ def main(args: List[str], is_debug: bool):
     category_group_def = load_category_group_def_yaml()
 
     # show_hatena_entry(blog_config, '26006613443907494')
-    # TODO: use argparse? (no use docopt. because last commit is old)
+    # TODO: refactor. use argparse? (no use docopt. because last commit is old)
     # local
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
@@ -35,6 +36,9 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
+        if len(args) >= 3 and (args[2] == '-all' or args[2] == '-a'):
+            push_entry_to_docs_and_blog(blog_config, category_group_def, target_dirs)
+            return
         push_documents_to_docs(category_group_def, target_dirs)
         print('Success: push doc data to docs dir')
         return
@@ -57,7 +61,10 @@ def main(args: List[str], is_debug: bool):
         if len(args) >= 3 and (args[2] == '-collect' or args[2] == '-c'):
             entries_index_map = collect_hatena_entry_local_list(blog_config, category_group_def)
             # put_hatena_summary_page(blog_config, entries_index_map)
-        return
+            return
+        if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
+            push_entry_from_docs_to_blog(blog_config, args[3:])
+            return
 
 
 IS_DEBUG = False

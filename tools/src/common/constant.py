@@ -9,6 +9,7 @@ LOCAL_DOCS_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'local_entry_data/'
 LOCAL_DOCS_ENTRY_LIST_PATH = OUT_DIR_PATH + 'local_entry_list.json'
 LOCAL_DOCS_ENTRY_GROUPING_PATH = OUT_DIR_PATH + 'local_entry_grouping.json'
 
+HATENA_BLOG_TO_DOC_ENTRY_DICTIONARY_PATH = OUT_DIR_PATH + 'hatena_blog_to_doc_dict.json'
 LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH = './SUMMARY.md'
 
 WORK_DIR_PATH = './work/'

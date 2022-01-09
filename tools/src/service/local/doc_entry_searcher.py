@@ -4,11 +4,11 @@ from typing import List, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
-from domain.doc_entry import DocEntry
+from domain.doc_entry import DocEntries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
-from domain.interface import IEntry
+from domain.interface import IEntry, IEntries
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import load_docs_entries_json, get_local_entry_dump_data
+from file.file_accessor import load_docs_entries_json
 
 
 class EntrySearchResults:
@@ -36,9 +36,9 @@ class EntrySearchResults:
         return self
 
     @classmethod
-    def init_by_multi_groups(cls, category_group_def: CategoryGroupDef, entries: List[IEntry]) -> EntrySearchResults:
+    def init_by_multi_groups(cls, category_group_def: CategoryGroupDef, entries: IEntries) -> EntrySearchResults:
         self = EntrySearchResults()
-        for entry in entries:
+        for entry in entries.entry_list:
             group = category_group_def.get_belongs_group(entry.top_category)
             self.__results.append(
                 EntrySearchResults.EntrySearchResult(entry.id, entry.title, group, entry.top_category))
@@ -100,9 +100,5 @@ def search_doc_entry_by_title(category_group_def: CategoryGroupDef, word: str):
     entry_ids: List[str] = resolve_title_partial_match_doc_entry(word)
     if len(entry_ids) == 0:
         print(f'[Warn] Nothing partially matched doc title: {word}')
-    entries: List[DocEntry] = []
-    for entry_id in entry_ids:
-        entry_dump_data = get_local_entry_dump_data(entry_id)
-        doc_entry = DocEntry.init_from_dump_data(entry_dump_data)
-        entries.append(doc_entry)
+    entries = DocEntries.init_by_entry_ids(entry_ids)
     EntrySearchResults.init_by_multi_groups(category_group_def, entries).print_search_results()

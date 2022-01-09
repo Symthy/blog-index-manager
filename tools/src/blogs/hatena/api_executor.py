@@ -15,7 +15,7 @@ HATENA_BLOG_ENTRY_API = HATENA_BASEURL + '/{HATENA_ID}/{BLOG_ID}/atom/entry'
 
 
 # Todo: OAuth
-def build_request_header(blog_config: BlogConfig):
+def __build_request_header(blog_config: BlogConfig):
     user_name = blog_config.hatena_id
     api_key = blog_config.api_key
     created_time = datetime.now().isoformat() + "Z"
@@ -31,22 +31,22 @@ def build_request_header(blog_config: BlogConfig):
     }
 
 
-def build_hatena_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
+def __build_hatena_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
     api_url = HATENA_BLOG_ENTRY_API. \
         replace('{HATENA_ID}', blog_config.hatena_id).replace('{BLOG_ID}', blog_config.blog_id)
     return api_url
 
 
 def execute_get_hatena_specified_entry_api(blog_config: BlogConfig, entry_id: str) -> BlogEntry:
-    api_url = f'{build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
-    request_headers = build_request_header(blog_config)
+    api_url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
+    request_headers = __build_request_header(blog_config)
     xml_string = execute_get_api(api_url, request_headers)
     return parse_blog_entry_xml(xml_string)
 
 
 def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> BlogEntries:
-    api_url = build_hatena_AtomPub_api_base_url(blog_config)
-    request_headers = build_request_header(blog_config)
+    api_url = __build_hatena_AtomPub_api_base_url(blog_config)
+    request_headers = __build_request_header(blog_config)
     xml_string = execute_get_api(api_url, request_headers)
     blog_entries = parse_blog_entries_xml(xml_string, blog_config)
 
@@ -59,15 +59,27 @@ def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> BlogEntries:
     return blog_entries
 
 
-def execute_put_hatena_summary_entry(blog_config: BlogConfig, content):
-    url = build_hatena_AtomPub_api_base_url(blog_config) + '/' + blog_config.summary_entry_id
-    category = 'Summary'
-    execute_put_hatena_entry_update_api(blog_config, url, get_summary_page_title(), category, content)
-
-
-def execute_put_hatena_entry_update_api(blog_config: BlogConfig, url: str, title: str, category: str, content: str):
+def __execute_put_hatena_entry_update_api(blog_config: BlogConfig, url: str, title: str, category: str, content: str):
     body = build_hatena_entry_xml_body(blog_config, title, category, content)
-    execute_put_api(url, build_request_header(blog_config), body.encode(encoding='utf-8'))
+    execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
+
+
+def execute_put_hatena_summary_page(blog_config: BlogConfig, content):
+    url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{blog_config.summary_entry_id}'
+    category = 'Summary'
+    __execute_put_hatena_entry_update_api(blog_config, url, get_summary_page_title(), category, content)
+
+
+def execute_put_hatena_entry_update_api(blog_config: BlogConfig, entry_id: str, title: str, category: str,
+                                        content: str):
+    url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
+    __execute_put_hatena_entry_update_api(blog_config, url, title, category, content)
+
+
+def execute_post_hatena_entry_register_api(blog_config: BlogConfig, title: str, category: str, content: str):
+    url = __build_hatena_AtomPub_api_base_url(blog_config)
+    body = build_hatena_entry_xml_body(blog_config, title, category, content)
+    execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
 
 
 def execute_get_api(url: str, headers: object) -> str:

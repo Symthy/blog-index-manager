@@ -8,6 +8,7 @@ import yaml
 from common.constant import CATEGORY_GROUP_YAML_PATH, LOCAL_DOCS_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_DUMP_DIR
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
+from file.md_data_handler import join_lines
 
 
 def read_blog_config(config_path):
@@ -32,6 +33,12 @@ def read_text_file(file_path: str) -> List[str]:
     except Exception as e:
         print(f'[Warning] Invalid {file_path}, read failure:', e)
         return []
+
+
+def read_md_file(file_path: str) -> str:
+    with codecs.open(file_path, mode='r', encoding='utf-8') as f:
+        lines = f.readlines()
+    return join_lines(lines)
 
 
 def __write_text_file(file_path, text: str):
@@ -94,13 +101,13 @@ def get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
     return doc_title
 
 
-def get_local_entry_dump_data(entry_id: str) -> Dict[str, str]:
+def get_local_doc_entry_dump_data(entry_id: str) -> Dict[str, str]:
     entry_dump_file_path = f'{LOCAL_DOCS_ENTRY_DUMP_DIR}{entry_id}'
     entry_dump_data = load_json(entry_dump_file_path)
     return entry_dump_data
 
 
 def get_dir_path_from_local_entry_dump_data(entry_id: str) -> str:
-    entry_dump_data = get_local_entry_dump_data(entry_id)
+    entry_dump_data = get_local_doc_entry_dump_data(entry_id)
     target_entry_dir_path = entry_dump_data['dir_path']
     return target_entry_dir_path
