@@ -26,6 +26,7 @@ CATEGORY_GROUP_YAML_PATH = DEFINITIONS_DIR_PATH + 'category_group.yml'
 
 ID_FILE_NAME_HEADER = '.id_'
 CATEGORY_FILE_NAME = 'category.txt'
-
-NON_CATEGORY_GROUP_NAME = 'Others'
 DOC_TITLE_MAX_LENGTH = 50
+
+# category_group.yml に 定義していないCategory もしくは Category未設定 の doc/blog を紐づけるための Group
+NON_CATEGORY_GROUP_NAME = 'Others'

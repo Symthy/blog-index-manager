@@ -30,12 +30,19 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
     def entry_list_of_non_category(self) -> List[IEntry]:
         return list(self.__entries_of_non_category.values())
 
+    def __has_category(self, category: str) -> bool:
+        return category in self.__categories
+
     def get_entries(self, category: Optional[str] = None) -> List[IEntry]:
-        if category is not None:
+        if category is None:
+            # return all
+            inner_entries_list: List[List[IEntry]] = list(
+                map(lambda cte: cte.entry_list, self.category_to_entries_list))
+            return reduce(lambda base, entry: base + entry, inner_entries_list)
+        if self.__has_category(category):
             category_to_entries = self.__category_to_entries[category]
             return category_to_entries.entry_list
-        inner_entries_list: List[List[IEntry]] = list(map(lambda cte: cte.entry_list, self.category_to_entries_list))
-        return reduce(lambda base, entry: base + entry, inner_entries_list)
+        return []
 
     def add_category_to_entries_set(self, category_to_entries: CategoryToEntriesSet):
         if category_to_entries.is_empty():
@@ -134,6 +141,8 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         return group in self.__group_to_categorized_entries
 
     def get_entries(self, group: str, category: Optional[str] = None) -> List[IEntry]:
+        if not self.has_group(group):
+            return []
         categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
         return categorized_entries.get_entries(None if category is None else category)
 
