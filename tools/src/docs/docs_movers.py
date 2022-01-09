@@ -24,7 +24,7 @@ def resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGrou
             # skip when non exist md file in target dir
             print(f'[Info] skip move dir: non exist md file (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
-        doc_title: Optional[str] = get_doc_title_from_md_file(md_file_path)
+        doc_title: Optional[str] = __get_doc_title_from_md_file(md_file_path)
         if doc_title is None:
             print(f'[Warn] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
@@ -48,7 +48,7 @@ def __category_is_group(doc_category: str, category_group_def: CategoryGroupDef)
     return category_group_def.has_group(doc_category)
 
 
-def get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
+def __get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
     doc_title = read_file_first_line(doc_md_file_path)
     if len(doc_title) == 0:
         return None

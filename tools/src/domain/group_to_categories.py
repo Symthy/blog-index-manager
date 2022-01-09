@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import reduce
 from typing import List, Dict, Optional
 
 from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_GROUP_NAME
@@ -28,6 +29,13 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
     @property
     def entry_list_of_non_category(self) -> List[IEntry]:
         return list(self.__entries_of_non_category.values())
+
+    def get_entries(self, category: Optional[str] = None) -> List[IEntry]:
+        if category is not None:
+            category_to_entries = self.__category_to_entries[category]
+            return category_to_entries.entry_list
+        inner_entries_list: List[List[IEntry]] = list(map(lambda cte: cte.entry_list, self.category_to_entries_list))
+        return reduce(lambda base, entry: base + entry, inner_entries_list)
 
     def add_category_to_entries_set(self, category_to_entries: CategoryToEntriesSet):
         if category_to_entries.is_empty():
@@ -85,7 +93,7 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
 class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
     def __init__(self, category_group_def: CategoryGroupDef, category_to_entries_map: CategoryToEntriesMap = None):
         self.__sorted_groups: List[str] = []
-        self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}
+        self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}  # key: group
         # initialize process
         if category_to_entries_map is not None:
             self.__init_based_category_group_def(category_group_def, category_to_entries_map)
@@ -124,6 +132,10 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
 
     def has_group(self, group) -> bool:
         return group in self.__group_to_categorized_entries
+
+    def get_entries(self, group: str, category: Optional[str] = None) -> List[IEntry]:
+        categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
+        return categorized_entries.get_entries(None if category is None else category)
 
     def add_entries(self, category_group_def: CategoryGroupDef, entries: IEntries):
         for entry in entries.get_entries():

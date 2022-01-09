@@ -10,6 +10,7 @@ from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml
 from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
+from service.local.doc_entry_searcher import search_doc_entry_by_group
 from templates.hatena_entry_format import get_blog_summary_index_content
 
 
@@ -53,7 +54,7 @@ def main(args: List[str], is_debug: bool):
     # put_hatena_summary_page(blog_config, entries_index_map)
 
     # show_hatena_entry(blog_config, '26006613443907494')
-    # TODO: use argparse? (no use docopt. because last update is old)
+    # TODO: use argparse? (no use docopt. because last commit is old)
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
         print('Success: created \"docs\" dir')
@@ -75,7 +76,8 @@ def main(args: List[str], is_debug: bool):
         print('Success: retrieve doc data to work dir')
         return
     if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
-        print('Unimplemented')
+        if len(args) >= 3 and (args[2] == '-group' or args[2] == '-g'):
+            search_doc_entry_by_group(category_group_def, args[3])
         return
     if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
         print('Unimplemented')

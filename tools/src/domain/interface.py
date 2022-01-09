@@ -30,6 +30,12 @@ class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
         return ''
 
     @property
+    def title(self) -> str:
+        # required override
+        print('[Error] Unimplemented!! (IEntry.title)')
+        return ''
+
+    @property
     def top_category(self) -> str:
         # required override
         print('[Error] Unimplemented!! (IEntry.top_category)')
