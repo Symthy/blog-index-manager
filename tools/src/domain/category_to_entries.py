@@ -8,9 +8,11 @@ from domain.interface import IConvertibleMarkdownLines, IEntries, IEntry
 
 
 class CategoryToEntriesSet(IConvertibleMarkdownLines):
-    def __init__(self, top_category: str):
+    def __init__(self, top_category: str, entry: Optional[IEntry] = None):
         self.__category = top_category
         self.__entry_list: Dict[str, IEntry] = {}  # key: entry_id
+        if entry is not None:
+            self.__entry_list[entry.id] = entry
 
     @property
     def category(self):

@@ -61,12 +61,21 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         for entry in entries:
             self.__entries_of_non_category[entry.id] = entry
 
+    def __add_category(self, category: str):
+        self.__categories.append(category)
+        self.__categories.sort()
+
     def add_entry(self, entry: IEntry):
+        # if entry.top_category is None or len(entry.top_category) == 0:
+        if entry.top_category == NON_CATEGORY_GROUP_NAME:
+            self.__add_entry_to_non_category(entry)
+            return
         if entry.top_category in self.__categories:
             category_to_entries_set = self.__category_to_entries[entry.top_category]
             category_to_entries_set.add_entry(entry)
-            return
-        self.__add_entry_to_non_category(entry)
+        else:
+            self.__add_category(entry.top_category)
+            self.__category_to_entries[entry.top_category] = CategoryToEntriesSet(entry.top_category, entry)
 
     def is_empty(self) -> bool:
         return len(self.__category_to_entries) == 0 and len(self.__entries_of_non_category) == 0
@@ -147,7 +156,7 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         return categorized_entries.get_entries(None if category is None else category)
 
     def add_entries(self, category_group_def: CategoryGroupDef, entries: IEntries):
-        for entry in entries.get_entries():
+        for entry in entries.entry_list:
             group = category_group_def.get_belongs_group(entry.top_category)
             categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
             categorized_entries.add_entry(entry)
