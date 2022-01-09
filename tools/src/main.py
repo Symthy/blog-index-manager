@@ -61,7 +61,7 @@ def main(args: List[str], is_debug: bool):
     # external
     if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):
         if len(args) >= 3 and (args[2] == '-collect' or args[2] == '-c'):
-            entries_index_map = collect_hatena_entry_local_list(blog_config, category_group_def)
+            collect_hatena_entry_local_list(blog_config, category_group_def)
             # put_hatena_summary_page(blog_config, entries_index_map)
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
