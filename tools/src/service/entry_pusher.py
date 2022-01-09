@@ -1,5 +1,6 @@
 from typing import List
 
+from domain.blog_entry import BlogEntry
 from domain.doc_entry import DocEntries
 from file.blog_config import BlogConfig
 from file.blog_to_doc_mapping import BlogDocMapping
@@ -11,13 +12,17 @@ from service.local.doc_entry_pusher import push_documents_to_docs
 
 def __push_entry_from_docs_to_blog(blog_config: BlogConfig, doc_entries: DocEntries):
     blog_doc_mapping = BlogDocMapping()
+    blog_entries: List[BlogEntry] = []
     for doc_entry in doc_entries.entry_list:
         blog_entry_id_opt = blog_doc_mapping.get_blog_entry_id(doc_entry.id)
         md_file_name_opt = get_md_file_name_in_target_dir(doc_entry.dir_path)
         if md_file_name_opt is None:
             continue
-        push_hatena_blog_entry(blog_config, doc_entry.dir_path, md_file_name_opt, doc_entry.title,
-                               doc_entry.top_category, blog_entry_id_opt)
+        blog_entry_opt = push_hatena_blog_entry(blog_config, doc_entry.dir_path, md_file_name_opt, doc_entry.title,
+                                                doc_entry.top_category, blog_entry_id_opt)
+        if blog_entry_opt is None:
+            continue
+        blog_entries.append(blog_entry_opt)
         # Todo: response data dump
 
 

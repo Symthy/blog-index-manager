@@ -39,13 +39,17 @@ def __build_hatena_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
     return api_url
 
 
+def __resolve_response_xml_data(xml_string_opt: Optional[str]) -> Optional[BlogEntry]:
+    if xml_string_opt is None:
+        return None
+    return parse_blog_entry_xml(xml_string_opt)
+
+
 def execute_get_hatena_specified_entry_api(blog_config: BlogConfig, entry_id: str) -> Optional[BlogEntry]:
     api_url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
     request_headers = __build_request_header(blog_config)
     xml_string_opt = execute_get_api(api_url, request_headers)
-    if xml_string_opt is None:
-        return None
-    return parse_blog_entry_xml(xml_string_opt)
+    return __resolve_response_xml_data(xml_string_opt)
 
 
 def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> Optional[BlogEntries]:
@@ -67,27 +71,34 @@ def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> Optional[BlogEn
     return blog_entries
 
 
-def __execute_put_hatena_entry_update_api(blog_config: BlogConfig, url: str, title: str, category: str, content: str):
+def __execute_put_hatena_entry_update_api(blog_config: BlogConfig, url: str, title: str, category: str, content: str) \
+        -> Optional[str]:
     body = build_hatena_entry_xml_body(blog_config, title, category, content)
-    execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
+    return execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
 
 
-def execute_put_hatena_summary_page(blog_config: BlogConfig, content):
+def execute_put_hatena_summary_page(blog_config: BlogConfig, content: str) -> bool:
     url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{blog_config.summary_entry_id}'
     category = 'Summary'
-    __execute_put_hatena_entry_update_api(blog_config, url, get_summary_page_title(), category, content)
+    res = __execute_put_hatena_entry_update_api(blog_config, url, get_summary_page_title(), category, content)
+    if res is None:
+        return False
+    return True
 
 
 def execute_put_hatena_entry_update_api(blog_config: BlogConfig, entry_id: str, title: str, category: str,
-                                        content: str):
+                                        content: str) -> Optional[BlogEntry]:
     url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
-    __execute_put_hatena_entry_update_api(blog_config, url, title, category, content)
+    xml_string_opt = __execute_put_hatena_entry_update_api(blog_config, url, title, category, content)
+    return __resolve_response_xml_data(xml_string_opt)
 
 
-def execute_post_hatena_entry_register_api(blog_config: BlogConfig, title: str, category: str, content: str):
+def execute_post_hatena_entry_register_api(blog_config: BlogConfig, title: str, category: str, content: str) \
+        -> Optional[BlogEntry]:
     url = __build_hatena_AtomPub_api_base_url(blog_config)
     body = build_hatena_entry_xml_body(blog_config, title, category, content)
-    execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
+    xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
+    return __resolve_response_xml_data(xml_string_opt)
 
 
 def __resolve_api_response(http_method: str, response: Response, url: str, headers: object) -> Optional[str]:
