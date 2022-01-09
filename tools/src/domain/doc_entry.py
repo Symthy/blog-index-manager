@@ -7,7 +7,8 @@ from common.constant import NON_CATEGORY_GROUP_NAME, LOCAL_DOCS_ENTRY_LIST_PATH,
     LOCAL_DOCS_ENTRY_DUMP_DIR, ID_FILE_NAME_HEADER
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntry, IEntries
-from file.file_accessor import load_json, dump_json, read_text_file, is_exist_in_local_entry_list, write_text_line, \
+from file.dump.dump_entry_list import DumpEntryList
+from file.file_accessor import load_json, read_text_file, is_exist_in_local_entry_list, write_text_line, \
     get_doc_title_from_md_file, get_local_doc_entry_dump_data
 from file.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \
     get_files_name_from_path
@@ -165,32 +166,18 @@ class DocEntries(IEntries):
         self.__entries.extend(blog_entries)
 
     def merge(self, docs_entries: DocEntries):
-        self.__add_entries(docs_entries.get_entries())
+        self.__add_entries(docs_entries.entry_list)
 
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]
 
-    def dump_all_data(self, local_entry_list_file_path: str):
-        # Todo: refactor
-        json_data = load_json(local_entry_list_file_path)
-        json_entries = {}
-        if 'entries' in json_data:
-            json_entries = json_data['entries']
+    def dump_all_data(self):
+        dump_entry_list = DumpEntryList(LOCAL_DOCS_ENTRY_LIST_PATH)
         for entry in self.__entries:
-            # if not entry.id in json_entries:
             # update file when the entry json file already exists.
-            json_entries[entry.id] = entry.title
+            dump_entry_list.push_entry(entry)
             entry.dump_data(f'{LOCAL_DOCS_ENTRY_DUMP_DIR}/{entry.id}.json')
-        # dump data format
-        # {
-        #   "updated_time": "2022-01-02T03:04:05",
-        #   "entries": {
-        #     "id": "title"
-        #      :
-        #   }
-        # }
-        json_data['entries'] = json_entries
-        dump_json(LOCAL_DOCS_ENTRY_LIST_PATH, json_data)
+        dump_entry_list.dump_file()
 
     def __add_entry(self, blog_entry: DocEntry):
         self.__entries.append(blog_entry)

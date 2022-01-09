@@ -6,8 +6,8 @@ from typing import List, Optional, Dict
 from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
-from file.file_accessor import dump_json, load_json
-from ltime.time_resolver import resolve_entry_current_time, convert_datetime_to_entry_time_str, \
+from file.dump.dump_entry_list import DumpEntryList
+from ltime.time_resolver import convert_datetime_to_entry_time_str, \
     convert_datetime_to_month_day_str
 
 
@@ -118,23 +118,9 @@ class BlogEntries(IEntries):
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]
 
-    def dump_all_data(self, dump_file_path: str):
-        json_data = load_json(dump_file_path)
-        json_data['updated_time'] = resolve_entry_current_time()
-        json_entries = {}
-        if 'entries' in json_data:
-            json_entries = json_data['entries']
+    def dump_all_data(self):
+        dump_entry_list = DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
         for entry in self.__entries:
-            if not entry.id in json_entries:
-                json_entries[entry.id] = entry.title
-                entry.dump_data(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json')
-        # dump data format
-        # {
-        #   "updated_time": "2022-01-02T03:04:05",
-        #   "entries": {
-        #     "entry_id": "entry title"
-        #      :
-        #   }
-        # }
-        json_data['entries'] = json_entries
-        dump_json(HATENA_BLOG_ENTRY_LIST_PATH, json_data)
+            dump_entry_list.push_entry(entry)
+            entry.dump_data(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json')
+        dump_entry_list.dump_file()

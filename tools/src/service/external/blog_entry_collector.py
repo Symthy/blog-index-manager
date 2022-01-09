@@ -29,7 +29,7 @@ def collect_hatena_entry_local_list(blog_config: BlogConfig,
     if blog_entries_opt is None:
         return
     # print_md_lines(blog_entries)
-    blog_entries_opt.dump_all_data(HATENA_BLOG_ENTRY_LIST_PATH)
+    blog_entries_opt.dump_all_data()
     category_to_entries = CategoryToEntriesMap(blog_entries_opt)
     # print_md_lines(category_to_entries)
     entries_index_map = GroupToCategorizedEntriesMap(category_group_def, category_to_entries)

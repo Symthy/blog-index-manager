@@ -3,7 +3,7 @@ from typing import List
 from domain.blog_entry import BlogEntry
 from domain.doc_entry import DocEntries
 from file.blog_config import BlogConfig
-from file.blog_to_doc_mapping import BlogDocMapping
+from file.dump.blog_to_doc_mapping import BlogDocEntryMapping
 from file.category_group_def import CategoryGroupDef
 from file.files_operator import get_md_file_name_in_target_dir
 from service.external.blog_entry_updater import push_hatena_blog_entry
@@ -11,7 +11,7 @@ from service.local.doc_entry_pusher import push_documents_to_docs
 
 
 def __push_entry_from_docs_to_blog(blog_config: BlogConfig, doc_entries: DocEntries):
-    blog_doc_mapping = BlogDocMapping()
+    blog_doc_mapping = BlogDocEntryMapping()
     blog_entries: List[BlogEntry] = []
     for doc_entry in doc_entries.entry_list:
         blog_entry_id_opt = blog_doc_mapping.get_blog_entry_id(doc_entry.id)
@@ -23,7 +23,7 @@ def __push_entry_from_docs_to_blog(blog_config: BlogConfig, doc_entries: DocEntr
         if blog_entry_opt is None:
             continue
         blog_entries.append(blog_entry_opt)
-        # Todo: response data dump
+        blog_doc_mapping.push_entry_pair(blog_entry_opt.id, doc_entry.id)
 
 
 def push_entry_to_docs_and_blog(blog_config: BlogConfig, category_group_def: CategoryGroupDef,

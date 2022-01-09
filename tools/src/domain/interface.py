@@ -70,5 +70,5 @@ class IEntries(IConvertibleMarkdownLines, ABC):
         pass
 
     @abstractmethod
-    def dump_all_data(self, dump_file_path: str):
+    def dump_all_data(self):
         pass
