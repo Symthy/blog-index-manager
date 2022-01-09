@@ -18,6 +18,7 @@ def __push_entry_from_docs_to_blog(blog_config: BlogConfig, doc_entries: DocEntr
             continue
         push_hatena_blog_entry(blog_config, doc_entry.dir_path, md_file_name_opt, doc_entry.title,
                                doc_entry.top_category, blog_entry_id_opt)
+        # Todo: response data dump
 
 
 def push_entry_to_docs_and_blog(blog_config: BlogConfig, category_group_def: CategoryGroupDef,

@@ -15,8 +15,10 @@ from service.local.doc_entry_searcher import search_doc_entry_by_group
 
 def show_hatena_entry(blog_config: BlogConfig, entry_id):
     # for debug
-    blog_entry = execute_get_hatena_specified_entry_api(blog_config, entry_id)
-    print(blog_entry.content)
+    blog_entry_opt = execute_get_hatena_specified_entry_api(blog_config, entry_id)
+    if blog_entry_opt is None:
+        print('Nothing')
+    print(blog_entry_opt.content)
 
 
 def main(args: List[str], is_debug: bool):

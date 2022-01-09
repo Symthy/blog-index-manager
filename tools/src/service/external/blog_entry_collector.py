@@ -1,3 +1,5 @@
+from typing import Optional
+
 from blogs.hatena.api_executor import execute_get_hatena_all_entry_api
 from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_INDEX_RESULT_PATH
 from domain.blog_entry import BlogEntries
@@ -23,10 +25,12 @@ def collect_hatena_entry_local_list(blog_config: BlogConfig,
     :param blog_config:
     :return:
     """
-    blog_entries: BlogEntries = execute_get_hatena_all_entry_api(blog_config)
+    blog_entries_opt: Optional[BlogEntries] = execute_get_hatena_all_entry_api(blog_config)
+    if blog_entries_opt is None:
+        return
     # print_md_lines(blog_entries)
-    blog_entries.dump_all_data(HATENA_BLOG_ENTRY_LIST_PATH)
-    category_to_entries = CategoryToEntriesMap(blog_entries)
+    blog_entries_opt.dump_all_data(HATENA_BLOG_ENTRY_LIST_PATH)
+    category_to_entries = CategoryToEntriesMap(blog_entries_opt)
     # print_md_lines(category_to_entries)
     entries_index_map = GroupToCategorizedEntriesMap(category_group_def, category_to_entries)
     print_md_lines(entries_index_map)

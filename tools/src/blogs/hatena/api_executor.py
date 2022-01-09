@@ -2,8 +2,10 @@ import base64
 import hashlib
 import random
 from datetime import datetime
+from typing import Optional
 
 import requests
+from requests import Response
 
 from blogs.hatena.response_parser import parse_blog_entries_xml, get_next_page_url, parse_blog_entry_xml
 from domain.blog_entry import BlogEntries, BlogEntry
@@ -37,24 +39,30 @@ def __build_hatena_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
     return api_url
 
 
-def execute_get_hatena_specified_entry_api(blog_config: BlogConfig, entry_id: str) -> BlogEntry:
+def execute_get_hatena_specified_entry_api(blog_config: BlogConfig, entry_id: str) -> Optional[BlogEntry]:
     api_url = f'{__build_hatena_AtomPub_api_base_url(blog_config)}/{entry_id}'
     request_headers = __build_request_header(blog_config)
-    xml_string = execute_get_api(api_url, request_headers)
-    return parse_blog_entry_xml(xml_string)
+    xml_string_opt = execute_get_api(api_url, request_headers)
+    if xml_string_opt is None:
+        return None
+    return parse_blog_entry_xml(xml_string_opt)
 
 
-def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> BlogEntries:
+def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> Optional[BlogEntries]:
     api_url = __build_hatena_AtomPub_api_base_url(blog_config)
     request_headers = __build_request_header(blog_config)
-    xml_string = execute_get_api(api_url, request_headers)
-    blog_entries = parse_blog_entries_xml(xml_string, blog_config)
+    xml_string_opt = execute_get_api(api_url, request_headers)
+    if xml_string_opt is None:
+        return None
+    blog_entries = parse_blog_entries_xml(xml_string_opt, blog_config)
 
-    next_url = get_next_page_url(xml_string)
+    next_url = get_next_page_url(xml_string_opt)
     while next_url is not None:
-        next_xml_string = execute_get_api(next_url, request_headers)
-        next_blog_entries = parse_blog_entries_xml(next_xml_string, blog_config)
-        next_url = get_next_page_url(next_xml_string)
+        next_xml_string_opt = execute_get_api(next_url, request_headers)
+        if next_xml_string_opt is None:
+            break
+        next_blog_entries = parse_blog_entries_xml(next_xml_string_opt, blog_config)
+        next_url = get_next_page_url(next_xml_string_opt)
         blog_entries.merge(next_blog_entries)
     return blog_entries
 
@@ -82,28 +90,26 @@ def execute_post_hatena_entry_register_api(blog_config: BlogConfig, title: str, 
     execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
 
 
-def execute_get_api(url: str, headers: object) -> str:
-    response = requests.get(url, headers=headers)
-    print(response.status_code, response.reason, 'GET', url)
-    if response.status_code == 200:
+def __resolve_api_response(http_method: str, response: Response, url: str, headers: object) -> Optional[str]:
+    print(response.status_code, response.reason, http_method, url)
+    if response.status_code == 200 or response.status_code == 201:
+        print('SUCCESS')
         return response.text  # format: xml
     else:
-        raise Exception(f'api failure: url={url} headers={headers}')
+        print(f'[Error] API failure: body={response.text} url={url} headers={headers}')
+        return None
 
 
-def execute_put_api(url: str, headers: object, body):
+def execute_get_api(url: str, headers: object) -> Optional[str]:
+    response = requests.get(url, headers=headers)
+    return __resolve_api_response('GET', response, url, headers)
+
+
+def execute_put_api(url: str, headers: object, body) -> Optional[str]:
     response = requests.put(url, headers=headers, data=body)
-    print(response.status_code, response.reason, 'PUT', url)
-    if response.status_code != 200 and response.status_code != 201:
-        print('body: ' + response.text)
-    else:
-        print('SUCCESS')
+    return __resolve_api_response('PUT', response, url, headers)
 
 
-def execute_post_api(url: str, headers: object, body):
+def execute_post_api(url: str, headers: object, body) -> Optional[str]:
     response = requests.post(url, headers=headers, data=body)
-    print(response.status_code, response.reason, 'POST', url)
-    if response.status_code != 200 and response.status_code != 201:
-        print('body: ' + response.text)
-    else:
-        print('SUCCESS')
+    return __resolve_api_response('POST', response, url, headers)
