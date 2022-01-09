@@ -3,7 +3,7 @@ from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import read_file_first_line, read_text_file
+from file.file_accessor import read_file_first_line, read_text_file, get_doc_title_from_md_file
 from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
     get_md_file_path_in_target_dir, translate_win_files_unusable_char, move_dir
 
@@ -24,7 +24,7 @@ def resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGrou
             # skip when non exist md file in target dir
             print(f'[Info] skip move dir: non exist md file (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
-        doc_title: Optional[str] = __get_doc_title_from_md_file(md_file_path)
+        doc_title: Optional[str] = get_doc_title_from_md_file(md_file_path)
         if doc_title is None:
             print(f'[Warn] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
@@ -46,13 +46,6 @@ def __resolve_move_to_dir_name_and_path(category_group_def: CategoryGroupDef, mo
 
 def __category_is_group(doc_category: str, category_group_def: CategoryGroupDef) -> bool:
     return category_group_def.has_group(doc_category)
-
-
-def __get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
-    doc_title = read_file_first_line(doc_md_file_path)
-    if len(doc_title) == 0:
-        return None
-    return doc_title
 
 
 def __resolve_target_dir_names(dir_names: List[str]) -> Dict[str, str]:

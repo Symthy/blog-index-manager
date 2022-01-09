@@ -1,7 +1,7 @@
 from typing import List
 
 from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH
-from file.file_accessor import is_exist_in_local_entry_list, get_dir_path_from_local_entry_data, write_text_line, \
+from file.file_accessor import is_exist_in_local_entry_list, get_dir_path_from_local_entry_dump_data, write_text_line, \
     read_file_first_line
 from file.files_operator import copy_dir, move_dir, get_files_name_from_path, delete_dir
 
@@ -13,7 +13,7 @@ def retrieve_document_from_docs(entry_ids: List[str]):
         if not is_exist_in_local_entry_list(entry_id):
             print(f'[Error] Nothing specified document (id: {entry_id})')
             return
-        target_entry_in_docs_dir_path = get_dir_path_from_local_entry_data(entry_id)
+        target_entry_in_docs_dir_path = get_dir_path_from_local_entry_dump_data(entry_id)
         entry_backup_dir_path = f'{BACKUP_DIR_PATH}{entry_id}/'
         copy_dir(target_entry_in_docs_dir_path, entry_backup_dir_path)
         print(f'[Info] copy backup (path: {entry_backup_dir_path})')

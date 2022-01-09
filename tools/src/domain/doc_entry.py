@@ -5,10 +5,10 @@ from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME, LOCAL_DOCS_ENTRY_LIST_PATH, CATEGORY_FILE_NAME, \
     LOCAL_DOCS_ENTRY_DUMP_DIR, ID_FILE_NAME_HEADER
-from docs.document_register import get_doc_title_from_md_file
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntry, IEntries
-from file.file_accessor import load_json, dump_json, read_text_file, is_exist_in_local_entry_list, write_text_line
+from file.file_accessor import load_json, dump_json, read_text_file, is_exist_in_local_entry_list, write_text_line, \
+    get_doc_title_from_md_file
 from file.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \
     get_files_name_from_path
 from ltime.time_resolver import convert_datetime_to_month_day_str, convert_datetime_to_entry_time_str, \
@@ -130,7 +130,7 @@ class DocEntry(IEntry):
         dump_entry_data(self, dump_file_path)
 
     @classmethod
-    def __init_from_dump_data(cls, dump_data: Dict[str, any]) -> DocEntry:
+    def init_from_dump_data(cls, dump_data: Dict[str, any]) -> DocEntry:
         return DocEntry(
             dump_data[DocEntry.FIELD_ID],
             dump_data[DocEntry.FIELD_TITLE],
@@ -145,7 +145,7 @@ class DocEntry(IEntry):
     def deserialize_entry_data(cls, entry_id: str) -> DocEntry:
         dump_file_path = f'{LOCAL_DOCS_ENTRY_DUMP_DIR}{entry_id}.json'
         json_data = load_json(dump_file_path)
-        return DocEntry.__init_from_dump_data(json_data)
+        return DocEntry.init_from_dump_data(json_data)
 
 
 class DocEntries(IEntries):

@@ -1,7 +1,7 @@
 import codecs
 import configparser
 import json
-from typing import List
+from typing import List, Dict, Optional
 
 import yaml
 
@@ -72,16 +72,35 @@ def load_yaml(file_path):
     return obj
 
 
+def load_docs_entries_json() -> Dict[str, str]:
+    local_entry_list_json = load_json(LOCAL_DOCS_ENTRY_LIST_PATH)
+    if not 'entries' in local_entry_list_json:
+        return {}
+    return local_entry_list_json['entries']
+
+
 def is_exist_in_local_entry_list(entry_id: str) -> bool:
-    local_entry_list = load_json(LOCAL_DOCS_ENTRY_LIST_PATH)
-    if not 'entries' in local_entry_list:
+    local_entry_list_json = load_json(LOCAL_DOCS_ENTRY_LIST_PATH)
+    if not 'entries' in local_entry_list_json:
         return False
-    entry_id_to_title = local_entry_list['entries']
+    entry_id_to_title = local_entry_list_json['entries']
     return entry_id in entry_id_to_title
 
 
-def get_dir_path_from_local_entry_data(entry_id: str) -> str:
+def get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
+    doc_title = read_file_first_line(doc_md_file_path)
+    if len(doc_title) == 0:
+        return None
+    return doc_title
+
+
+def get_local_entry_dump_data(entry_id: str) -> Dict[str, str]:
     entry_dump_file_path = f'{LOCAL_DOCS_ENTRY_DUMP_DIR}{entry_id}'
     entry_dump_data = load_json(entry_dump_file_path)
+    return entry_dump_data
+
+
+def get_dir_path_from_local_entry_dump_data(entry_id: str) -> str:
+    entry_dump_data = get_local_entry_dump_data(entry_id)
     target_entry_dir_path = entry_dump_data['dir_path']
     return target_entry_dir_path

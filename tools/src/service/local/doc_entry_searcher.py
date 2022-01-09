@@ -1,10 +1,14 @@
-from typing import List
+from __future__ import annotations
+
+from typing import List, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
+from domain.doc_entry import DocEntry
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry
 from file.category_group_def import CategoryGroupDef
+from file.file_accessor import load_docs_entries_json, get_local_entry_dump_data
 
 
 class EntrySearchResults:
@@ -20,15 +24,25 @@ class EntrySearchResults:
         def print_entry_search_result(self):
             print(EntrySearchResults.LINE_FORMAT.format(self.__id, self.__title, self.__group, self.__category))
 
-    def __init__(self, entries: List[IEntry], group: str):
+    def __init__(self):
         self.__results = []
+
+    @classmethod
+    def init_by_single_group(cls, group: str, entries: List[IEntry]) -> EntrySearchResults:
+        self = EntrySearchResults()
         for entry in entries:
             self.__results.append(
                 EntrySearchResults.EntrySearchResult(entry.id, entry.title, group, entry.top_category))
+        return self
 
-    def print_entry_search_results(self):
-        for result in self.__results:
-            result.print_entry_search_result()
+    @classmethod
+    def init_by_multi_groups(cls, category_group_def: CategoryGroupDef, entries: List[IEntry]) -> EntrySearchResults:
+        self = EntrySearchResults()
+        for entry in entries:
+            group = category_group_def.get_belongs_group(entry.top_category)
+            self.__results.append(
+                EntrySearchResults.EntrySearchResult(entry.id, entry.title, group, entry.top_category))
+        return self
 
     @classmethod
     def print_header_line(cls):
@@ -36,10 +50,13 @@ class EntrySearchResults:
         print(EntrySearchResults.LINE_FORMAT.format('[Entry ID]', '[Entry Title]', '[Group]', '[Category]'))
         print(f'{hyphen:->16} {hyphen:->30} {hyphen:->15} {hyphen:->15}')
 
+    def __print_entry_search_results(self):
+        for result in self.__results:
+            result.print_entry_search_result()
 
-def __print_search_results(results: EntrySearchResults):
-    EntrySearchResults.print_header_line()
-    results.print_entry_search_results()
+    def print_search_results(self):
+        EntrySearchResults.print_header_line()
+        self.__print_entry_search_results()
 
 
 def search_doc_entry_by_group(category_group_def: CategoryGroupDef, group: str):
@@ -48,15 +65,15 @@ def search_doc_entry_by_group(category_group_def: CategoryGroupDef, group: str):
         print(f'[Warn] Nothing specified group: {group}')
         return
     entries: List[IEntry] = grouping_data.get_entries(group)
-    __print_search_results(EntrySearchResults(entries, group))
+    EntrySearchResults.init_by_single_group(group, entries).print_search_results()
 
 
 def search_doc_entry_by_category(category_group_def: CategoryGroupDef, category: str):
     def print_entries_in_category(group_name: str, category_name: str):
         entries: List[IEntry] = grouping_data.get_entries(group_name, category_name)
         if len(entries) == 0:
-            print(f'[Warn] Nothing docs of specified category: {category}')
-        __print_search_results(EntrySearchResults(entries, group))
+            print(f'[Warn] Nothing docs of specified category: {category_name}')
+        EntrySearchResults.init_by_single_group(group_name, entries).print_search_results()
 
     grouping_data: GroupToCategorizedEntriesMap = deserialize_doc_entry_grouping_data(category_group_def)
     is_exist_category = category_group_def.has_category(category)
@@ -69,3 +86,23 @@ def search_doc_entry_by_category(category_group_def: CategoryGroupDef, category:
         print_entries_in_category(group, category)
         return
     print(f'[Warn] Nothing specified category: {category}')
+
+
+def search_doc_entry_by_title(category_group_def: CategoryGroupDef, word: str):
+    def resolve_title_partial_match_doc_entry(search_word: str) -> List[str]:
+        entry_id_to_title: Dict[str, str] = load_docs_entries_json()
+        ids = []
+        for eid, title in entry_id_to_title.items():
+            if search_word in title:
+                ids.append(eid)
+        return ids
+
+    entry_ids: List[str] = resolve_title_partial_match_doc_entry(word)
+    if len(entry_ids) == 0:
+        print(f'[Warn] Nothing partially matched doc title: {word}')
+    entries: List[DocEntry] = []
+    for entry_id in entry_ids:
+        entry_dump_data = get_local_entry_dump_data(entry_id)
+        doc_entry = DocEntry.init_from_dump_data(entry_dump_data)
+        entries.append(doc_entry)
+    EntrySearchResults.init_by_multi_groups(category_group_def, entries).print_search_results()
