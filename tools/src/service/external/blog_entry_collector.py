@@ -6,11 +6,11 @@ from domain.group_to_categories import GroupToCategorizedEntriesMap
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import write_text_lines
-from main import print_md_lines
+from service.external.md_data_handler import print_md_lines
 
 
-def update_hatena_entry_local_list(blog_config: BlogConfig,
-                                   category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
+def collect_hatena_entry_local_list(blog_config: BlogConfig,
+                                    category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
     """
     ブログから全記事を取得し、各記事情報をダンプ＆カテゴリ毎に分類した一覧をmdファイルに出力
     :param category_group_def:

@@ -51,9 +51,11 @@ class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
 
 
 class IEntries(IConvertibleMarkdownLines, ABC):
-    @abstractmethod
-    def get_entries(self) -> List[IEntry]:
-        pass
+    @property
+    def entry_list(self) -> List[IEntry]:
+        # required override
+        print('[Error] Unimplemented!! (IEntries.entry_list')
+        return []
 
     @abstractmethod
     def is_empty(self) -> bool:

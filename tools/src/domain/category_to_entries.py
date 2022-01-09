@@ -40,7 +40,7 @@ class CategoryToEntriesSet(IConvertibleMarkdownLines):
     @classmethod
     def __init_from_dump_data(cls, category: str, entries: IEntries) -> CategoryToEntriesSet:
         self = CategoryToEntriesSet(category)
-        self.__add_entries(entries.get_entries())
+        self.__add_entries(entries.entry_list)
         return self
 
     @classmethod
@@ -54,7 +54,7 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         self.__category_to_entries: Dict[str, CategoryToEntriesSet] = {}
         if entries is None:
             return
-        for entry in entries.get_entries():
+        for entry in entries.entry_list:
             category = entry.top_category
             if not category in self.__category_to_entries:
                 category_to_entries_set = CategoryToEntriesSet(category)

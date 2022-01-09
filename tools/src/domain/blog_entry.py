@@ -103,7 +103,7 @@ class BlogEntries(IEntries):
             self.__entries: List[BlogEntry] = entries
 
     @property
-    def entries(self) -> List[BlogEntry]:
+    def entry_list(self) -> List[BlogEntry]:
         return self.__entries
 
     def is_empty(self) -> bool:
@@ -113,7 +113,7 @@ class BlogEntries(IEntries):
         self.__entries.append(blog_entry)
 
     def merge(self, blog_entries: BlogEntries):
-        self.__entries.extend(blog_entries.entries)
+        self.__entries.extend(blog_entries.entry_list)
 
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]

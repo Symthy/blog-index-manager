@@ -1,10 +1,9 @@
 from typing import List
 
-from docs.document_register import resolve_move_from_and_move_to_dir_path_dict
-
 from common.constant import LOCAL_DOCS_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_GROUPING_PATH, \
     LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
+from docs.docs_movers import resolve_move_from_and_move_to_dir_path_dict
 from domain.doc_entry import new_doc_entries
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import write_text_lines

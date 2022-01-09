@@ -24,10 +24,10 @@
     - id指定: 動確
     - title指定: 保留
     - キャンセル(backupから戻す): 動確
-- document検索＆コンソール出力: 途中
-    - group指定: 済
-    - category指定: 未
-    - title指定: 未
+- document検索＆コンソール出力: 動確
+    - group指定: 動確
+    - category指定: 動確
+    - title指定: 動確
 - docsから管理用データ更新: 保留
 
 ※ ひとまずローカル -> 某ブログへの一方通行

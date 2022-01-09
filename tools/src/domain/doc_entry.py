@@ -154,7 +154,8 @@ class DocEntries(IEntries):
         if entries is not None:
             self.__entries: List[DocEntry] = entries
 
-    def get_entries(self) -> List[DocEntry]:
+    @property
+    def entry_list(self) -> List[DocEntry]:
         return self.__entries
 
     def is_empty(self) -> bool:
