@@ -26,11 +26,11 @@ def show_hatena_blog_entry(blog_config: BlogConfig, entry_id):
 
 def show_hatena_photo_entry(blog_config: BlogConfig, entry_id):
     # for debug
-    blog_entry_opt = execute_get_hatena_specified_photo_entry_api(blog_config, entry_id)
-    if blog_entry_opt is None:
+    photo_entry_opt = execute_get_hatena_specified_photo_entry_api(blog_config, entry_id)
+    if photo_entry_opt is None:
         print('Nothing')
         return
-    print(blog_entry_opt.content)
+    print(photo_entry_opt.build_dump_data())
 
 
 def main(args: List[str], is_debug: bool):

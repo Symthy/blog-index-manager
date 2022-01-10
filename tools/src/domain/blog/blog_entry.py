@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Optional, Dict
 
 from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
+from domain.blog.photo_entry import PhotoEntries
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
 from file.dump.dump_entry_list import DumpEntryList
@@ -16,25 +17,23 @@ class BlogEntry(IEntry):
     FIELD_ID = 'id'
     FIELD_TITLE = 'title'
     FIELD_PAGE_URL = 'page_url'
-    FIELD_API_URL = 'api_url'
     FIELD_TOP_CATEGORY = 'top_category'
     FIELD_CATEGORIES = 'categories'
     FIELD_UPDATED_AT = 'updated_at'
     FIELD_ORIGINAL_DOC_ID = 'original_doc_id'
-    FIELD_PICTURES = 'pictures'
+    FIELD_DOC_IMAGES = 'doc_images'
 
-    def __init__(self, entry_id: str, title: str, content: str, page_url: str, api_url: str,
-                 last_updated: Optional[datetime], categories: List[str], doc_id: Optional[str] = None):
+    def __init__(self, entry_id: str, title: str, content: str, page_url: str, last_updated: Optional[datetime],
+                 categories: List[str], doc_id: Optional[str] = None, doc_images: Optional[PhotoEntries] = None):
         self.__id = entry_id
         self.__title = title
         self.__content = content  # No dump
         self.__page_url = page_url
-        self.__api_url = api_url
         self.__updated_at: Optional[datetime] = last_updated  # Make it optional just in case
         self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_GROUP_NAME
         self.__categories = categories
         self.__original_doc_id = doc_id  # Todo
-        self.__pictures = {}
+        self.__doc_images: PhotoEntries = PhotoEntries() if doc_images is None else doc_images
 
     @property
     def id(self):
@@ -51,10 +50,6 @@ class BlogEntry(IEntry):
     @property
     def page_url(self):
         return self.__page_url
-
-    @property
-    def api_url(self):
-        return self.__api_url
 
     @property
     def updated_at(self) -> str:
@@ -77,8 +72,8 @@ class BlogEntry(IEntry):
         return self.__original_doc_id
 
     @property
-    def pictures(self):
-        return self.__pictures
+    def doc_images(self):
+        return self.__doc_images
 
     def build_id_to_title(self) -> Dict[str, str]:
         return {self.id: self.title}
@@ -91,12 +86,11 @@ class BlogEntry(IEntry):
             BlogEntry.FIELD_ID: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_ID),
             BlogEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TITLE),
             BlogEntry.FIELD_PAGE_URL: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_PAGE_URL),
-            BlogEntry.FIELD_API_URL: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_API_URL),
             BlogEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TOP_CATEGORY),
             BlogEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_CATEGORIES),
             BlogEntry.FIELD_UPDATED_AT: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_UPDATED_AT),
             BlogEntry.FIELD_ORIGINAL_DOC_ID: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_ORIGINAL_DOC_ID),
-            BlogEntry.FIELD_PICTURES: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_PICTURES),
+            BlogEntry.FIELD_DOC_IMAGES: self.__doc_images.build_dump_data(),
         }
 
     def dump_data(self, dump_file_path: str):
@@ -108,11 +102,10 @@ class BlogEntry(IEntry):
             dump_data[BlogEntry.FIELD_ID],
             dump_data[BlogEntry.FIELD_TITLE],
             dump_data[BlogEntry.FIELD_PAGE_URL],
-            dump_data[BlogEntry.FIELD_API_URL],
             dump_data[BlogEntry.FIELD_TOP_CATEGORY],
             convert_entry_time_str_to_datetime(dump_data[BlogEntry.FIELD_UPDATED_AT]),
             dump_data[BlogEntry.FIELD_ORIGINAL_DOC_ID],
-            dump_data[BlogEntry.FIELD_PICTURES]
+            dump_data[BlogEntry.FIELD_DOC_IMAGES]
         )
 
     @classmethod

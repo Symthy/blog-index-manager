@@ -73,10 +73,10 @@ def __resolve_blog_entry_response_xml_data(xml_string_opt: Optional[str]) -> Opt
     return parse_blog_entry_xml(xml_string_opt)
 
 
-def __resolve_photo_entry_response_xml_data(xml_string_opt: Optional[str]) -> Optional[PhotoEntry]:
+def __resolve_photo_entry_response_xml_data(xml_string_opt: Optional[str], image_filename: str) -> Optional[PhotoEntry]:
     if xml_string_opt is None:
         return None
-    return parse_photo_entry_xml(xml_string_opt)
+    return parse_photo_entry_xml(xml_string_opt, image_filename)
 
 
 # GET Blog
@@ -107,11 +107,11 @@ def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> Optional[BlogEn
 
 
 # GET Photo
-def execute_get_hatena_specified_photo_entry_api(blog_config: BlogConfig, entry_id: str) -> Optional[BlogEntry]:
+def execute_get_hatena_specified_photo_entry_api(blog_config: BlogConfig, entry_id: str) -> Optional[PhotoEntry]:
     api_url = f'{HATENA_PHOTO_ENTRY_EDIT_API}/{entry_id}'
     request_headers = __build_request_header(blog_config)
     xml_string_opt = execute_get_api(api_url, request_headers)
-    return __resolve_photo_entry_response_xml_data(xml_string_opt)
+    return __resolve_photo_entry_response_xml_data(xml_string_opt, '')
 
 
 # PUT Blog
@@ -148,11 +148,11 @@ def execute_post_hatena_blog_entry_register_api(blog_config: BlogConfig, title: 
 
 
 # POST photo
-def execute_post_hatena_photo_entry_register_api(blog_config: BlogConfig, doc_dir_path: str, pic_file_name: str):
+def execute_post_hatena_photo_entry_register_api(blog_config: BlogConfig, doc_dir_path: str, image_filename: str):
     url = HATENA_PHOTO_ENTRY_POST_API
-    body = __build_hatena_photo_entry_body(doc_dir_path, pic_file_name)
+    body = __build_hatena_photo_entry_body(doc_dir_path, image_filename)
     xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
-    return __resolve_photo_entry_response_xml_data(xml_string_opt)
+    return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
 
 
 # common executor
