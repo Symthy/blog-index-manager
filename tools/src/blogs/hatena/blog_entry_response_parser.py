@@ -83,12 +83,12 @@ def __parse_blog_entry_xml(entry_node: ET.Element, tag_head: str, exclude_ids: L
         if link.attrib['rel'] == 'alternate':
             url = link.attrib['href']
             break
-    api_url = ''
-    for link in entry_node.iter(tag_head + 'link'):
-        if link.attrib['rel'] == 'edit':
-            api_url = link.attrib['href']
-            break
+    # api_url = ''
+    # for link in entry_node.iter(tag_head + 'link'):
+    #     if link.attrib['rel'] == 'edit':
+    #         api_url = link.attrib['href']
+    #         break
     categories = []
     for category in entry_node.iter(tag_head + 'category'):
         categories.append(category.attrib['term'])
-    return BlogEntry(entry_id, title, content, url, api_url, last_update_time, categories)
+    return BlogEntry(entry_id, title, content, url, last_update_time, categories)

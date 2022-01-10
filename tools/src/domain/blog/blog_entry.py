@@ -16,6 +16,7 @@ from ltime.time_resolver import convert_datetime_to_entry_time_str, \
 class BlogEntry(IEntry):
     FIELD_ID = 'id'
     FIELD_TITLE = 'title'
+    FIELD_CONTENT = 'content'
     FIELD_PAGE_URL = 'page_url'
     FIELD_TOP_CATEGORY = 'top_category'
     FIELD_CATEGORIES = 'categories'
@@ -72,8 +73,14 @@ class BlogEntry(IEntry):
         return self.__original_doc_id
 
     @property
-    def doc_images(self):
+    def doc_images(self) -> PhotoEntries:
         return self.__doc_images
+
+    def is_images_empty(self) -> bool:
+        return self.__doc_images.is_empty()
+
+    def add_photo_entries(self, photo_entries: PhotoEntries):
+        self.__doc_images.merge(photo_entries)
 
     def build_id_to_title(self) -> Dict[str, str]:
         return {self.id: self.title}
@@ -85,6 +92,7 @@ class BlogEntry(IEntry):
         return {
             BlogEntry.FIELD_ID: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_ID),
             BlogEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TITLE),
+            BlogEntry.FIELD_CONTENT: '',
             BlogEntry.FIELD_PAGE_URL: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_PAGE_URL),
             BlogEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TOP_CATEGORY),
             BlogEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_CATEGORIES),
@@ -101,9 +109,10 @@ class BlogEntry(IEntry):
         return BlogEntry(
             dump_data[BlogEntry.FIELD_ID],
             dump_data[BlogEntry.FIELD_TITLE],
+            '',
             dump_data[BlogEntry.FIELD_PAGE_URL],
-            dump_data[BlogEntry.FIELD_TOP_CATEGORY],
             convert_entry_time_str_to_datetime(dump_data[BlogEntry.FIELD_UPDATED_AT]),
+            dump_data[BlogEntry.FIELD_CATEGORIES],
             dump_data[BlogEntry.FIELD_ORIGINAL_DOC_ID],
             dump_data[BlogEntry.FIELD_DOC_IMAGES]
         )

@@ -1,6 +1,7 @@
 import codecs
 import os
 import shutil
+from datetime import datetime
 from typing import List, Optional
 
 from common.constant import ID_FILE_NAME_HEADER
@@ -44,6 +45,16 @@ def translate_win_files_unusable_char(s: str):
     return s.translate(str.maketrans(trans_dict))
 
 
+def is_exist_file(file_path: str):
+    return os.path.exists(file_path) and os.path.isfile(file_path)
+
+
+def get_updated_time_of_target_file(target_file_path) -> datetime:
+    # os.stat(target_file_path).st_mtime
+    return datetime.fromtimestamp(os.path.getmtime(target_file_path))
+
+
+# get path
 def get_dir_names_in_target_dir(target_dir_path: str) -> List[str]:
     files = os.listdir(target_dir_path)
     return [d for d in files if os.path.isdir(os.path.join(target_dir_path, d))]
@@ -54,6 +65,27 @@ def get_exist_dir_names_in_target_dir(target_dir_path: str, specified_dir_names:
             os.path.isdir(os.path.join(target_dir_path, d)) and os.path.exists(os.path.join(target_dir_path, d))]
 
 
+def get_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
+    files = os.listdir(target_dir_path)
+    return [target_dir_path + f for f in files if os.path.isfile(os.path.join(target_dir_path, f))]
+
+
+def get_image_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
+    # Todo: refactor
+    file_paths = get_file_paths_in_target_dir(target_dir_path)
+    image_file_paths = []
+    for file_path in file_paths:
+        if file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.bmp') or \
+                file_path.endswith('.svg'):
+            image_file_paths.append(file_path)
+    return image_file_paths
+
+
+def get_name_from_path(path: str) -> str:
+    return path.rsplit('/', 1)[1]
+
+
+# Specialized
 def get_md_file_name_in_target_dir(target_dir_path: str) -> Optional[str]:
     files = os.listdir(target_dir_path)
     extension = '.md'
@@ -70,22 +102,9 @@ def get_md_file_path_in_target_dir(target_dir_path: str) -> Optional[str]:
     # return files[0] if len(files) > 0 else None
 
 
-def get_file_paths_in_target_dir(target_dir_path: str):
-    files = os.listdir(target_dir_path)
-    return [target_dir_path + d + '/' for d in files if os.path.isfile(os.path.join(target_dir_path, d))]
-
-
-def is_exist_file(file_path: str):
-    return os.path.exists(file_path) and os.path.isfile(file_path)
-
-
 def get_id_from_id_file(target_dir_path: str) -> Optional[str]:
     files = os.listdir(target_dir_path)
     for file in files:
         if os.path.isfile(os.path.join(target_dir_path, file)) and file.startswith(ID_FILE_NAME_HEADER):
             return file[len(ID_FILE_NAME_HEADER):]
     return None
-
-
-def get_files_name_from_path(dir_path: str) -> str:
-    return dir_path.rsplit('/', 1)[1]

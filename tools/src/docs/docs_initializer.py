@@ -1,7 +1,7 @@
 import os
 from typing import Optional, List
 
-from common.constant import WORK_DIR_PATH, DOCS_DIR_PATH, DOC_TITLE_MAX_LENGTH, CATEGORY_FILE_NAME
+from common.constant import WORK_DIR_PATH, DOCS_DIR_PATH, DOC_TITLE_MAX_LENGTH, CATEGORY_FILE_NAME, DOC_IMAGES_DIR_NAME
 from file.category_group_def import CategoryGroupDef
 from file.files_operator import make_new_file, make_new_dir, translate_win_files_unusable_char
 from ltime.time_resolver import resolve_current_time_sequence, resolve_current_time_date_time
@@ -48,12 +48,13 @@ def __create_local_document_set(title: Optional[str], category: Optional[str]):
         title = 'Document'  # default value
     if category is None:
         category = ''  # default value
-    new_dir_path = WORK_DIR_PATH + resolve_current_time_date_time()
+    new_dir_path = f'{WORK_DIR_PATH}{resolve_current_time_date_time()}'
     make_new_dir(new_dir_path)
     md_file_path = f'{new_dir_path}/{translate_win_files_unusable_char(title)}.md'
     make_new_file(md_file_path, f'# {title}\n')
     category_file_path = f'{new_dir_path}/{CATEGORY_FILE_NAME}'
     make_new_file(category_file_path, category)
+    make_new_dir(f'{new_dir_path}/{DOC_IMAGES_DIR_NAME}')
 
 
 def initialize_docs_dir(category_group_def: CategoryGroupDef):

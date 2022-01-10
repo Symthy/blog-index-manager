@@ -44,11 +44,18 @@ def build_hatena_blog_entry_xml_body(blog_conf: BlogConfig, title: str, category
     return entry_xml
 
 
-def get_blog_summary_index_content() -> str:
+def get_blog_summary_index_template() -> str:
     return """本ページは投稿記事一覧です。 (自動更新)
 
 {md_lines}
     """
+
+
+def get_blog_entry_template() -> str:
+    return """[:contents]
+
+{content}
+"""
 
 
 __PHOTO_LIFE_ENTRY_TEMPLATE = """<entry xmlns="http://purl.org/atom/ns#">
