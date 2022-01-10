@@ -1,7 +1,8 @@
 import sys
 from typing import List
 
-from blogs.hatena.api_executor import execute_get_hatena_specified_entry_api, build_wsse
+from blogs.hatena.api_executor import execute_get_hatena_specified_blog_entry_api, build_wsse, \
+    execute_get_hatena_specified_photo_entry_api
 from common.constant import BLOG_CONF_PATH
 from docs.docs_initializer import new_local_document_set, initialize_docs_dir
 from file.blog_config import BlogConfig
@@ -14,11 +15,21 @@ from service.local.doc_entry_retriever import retrieve_document_from_docs, cance
 from service.local.doc_entry_searcher import search_doc_entry_by_group
 
 
-def show_hatena_entry(blog_config: BlogConfig, entry_id):
+def show_hatena_blog_entry(blog_config: BlogConfig, entry_id):
     # for debug
-    blog_entry_opt = execute_get_hatena_specified_entry_api(blog_config, entry_id)
+    blog_entry_opt = execute_get_hatena_specified_blog_entry_api(blog_config, entry_id)
     if blog_entry_opt is None:
         print('Nothing')
+        return
+    print(blog_entry_opt.content)
+
+
+def show_hatena_photo_entry(blog_config: BlogConfig, entry_id):
+    # for debug
+    blog_entry_opt = execute_get_hatena_specified_photo_entry_api(blog_config, entry_id)
+    if blog_entry_opt is None:
+        print('Nothing')
+        return
     print(blog_entry_opt.content)
 
 
@@ -26,7 +37,6 @@ def main(args: List[str], is_debug: bool):
     blog_config = read_blog_config(BLOG_CONF_PATH)
     category_group_def = load_category_group_def_yaml()
 
-    # show_hatena_entry(blog_config, '26006613443907494')
     # TODO: refactor. use argparse? (no use docopt. because last commit is old)
     # local
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
@@ -70,6 +80,12 @@ def main(args: List[str], is_debug: bool):
     # hidden option
     if len(args) >= 2 and args[1] == '-wsse':
         print('X-WSSE: ' + build_wsse(blog_config))
+        return
+    if len(args) >= 2 and args[1] == '-show-blog':
+        show_hatena_blog_entry(blog_config, '26006613443907494')
+        return
+    if len(args) >= 2 and args[1] == '-show-photo':
+        show_hatena_photo_entry(blog_config, '20191002233050')
         return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):
