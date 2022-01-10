@@ -2,7 +2,6 @@ from typing import Optional
 
 from blogs.hatena.api_executor import execute_get_hatena_all_entry_api
 from domain.blog_entry import BlogEntries
-from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
@@ -16,7 +15,7 @@ def print_md_lines(data: IConvertibleMarkdownLines):
 
 
 def collect_hatena_entry_local_list(blog_config: BlogConfig,
-                                    category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
+                                    category_group_def: CategoryGroupDef):
     """
     ブログから全記事を取得し、各記事情報をダンプ＆カテゴリ毎に分類した一覧をmdファイルに出力
     :param category_group_def:
@@ -29,4 +28,4 @@ def collect_hatena_entry_local_list(blog_config: BlogConfig,
     # print_md_lines(blog_entries)
     blog_entries_opt.dump_all_data()
     update_blog_entry_index(category_group_def, blog_entries_opt)
-    # Todo: update blog to doc mapping
+    # Todo: reflection of deleted blog entry

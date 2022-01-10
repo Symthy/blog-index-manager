@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from domain.interface import IEntry
 from file.file_accessor import load_json, dump_json
@@ -19,6 +19,10 @@ class DumpEntryList:
 
     def push_entry(self, entry: IEntry):
         self.__entry_id_to_title[entry.id] = entry.title
+
+    @property
+    def entry_ids(self) -> List[str]:
+        return list(self.__entry_id_to_title.keys())
 
     def dump_file(self):
         dump_data = {

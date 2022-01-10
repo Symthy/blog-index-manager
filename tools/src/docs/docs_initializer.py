@@ -48,8 +48,6 @@ def __create_local_document_set(title: Optional[str], category: Optional[str]):
     make_new_file(md_file_path, f'# {title}\n')
     category_file_path = f'{new_dir_path}/{CATEGORY_FILE_NAME}'
     make_new_file(category_file_path, category)
-    # created_time_file = f'{new_dir_path}/.{resolve_current_time_sequence()}'
-    # make_new_file(created_time_file)
 
 
 def initialize_docs_dir(category_group_def: CategoryGroupDef):

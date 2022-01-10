@@ -8,14 +8,16 @@ from file.category_group_def import CategoryGroupDef
 from file.dump.blog_to_doc_mapping import BlogDocEntryMapping
 from file.dump.dump_entry_list import DumpEntryList
 from file.files_operator import get_md_file_name_in_target_dir
+from service.external.blog_entry_index_updater import update_blog_entry_index
 from service.external.blog_entry_pusher import push_hatena_blog_entry
 from service.local.doc_entry_pusher import push_documents_to_docs
 
 
-def __push_entry_from_docs_to_blog(blog_config: BlogConfig, doc_entries: DocEntries):
+def __push_entry_from_docs_to_blog(blog_config: BlogConfig, category_group_def: CategoryGroupDef,
+                                   doc_entries: DocEntries):
     blog_doc_mapping = BlogDocEntryMapping()
     dump_blog_entry_list = DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
-    blog_entries: List[BlogEntry] = []
+    blog_entry_list: List[BlogEntry] = []
     for doc_entry in doc_entries.entry_list:
         blog_entry_id_opt = blog_doc_mapping.get_blog_entry_id(doc_entry.id)
         md_file_name_opt = get_md_file_name_in_target_dir(doc_entry.dir_path)
@@ -27,22 +29,24 @@ def __push_entry_from_docs_to_blog(blog_config: BlogConfig, doc_entries: DocEntr
         if blog_entry_opt is None:
             print(f'[Info] blog push skip. (dir: {doc_entry.dir_path})')
             continue
-        blog_entries.append(blog_entry_opt)
+        blog_entry_list.append(blog_entry_opt)
         dump_blog_entry_list.push_entry(blog_entry_opt)
         blog_doc_mapping.push_entry_pair(blog_entry_opt.id, doc_entry.id)
     # dump to file
-    BlogEntries(blog_entries).dump_all_data()
+    blog_entries = BlogEntries(blog_entry_list)
+    blog_entries.dump_all_data()
     dump_blog_entry_list.dump_file()
     blog_doc_mapping.dump_file()
-    # Todo: update_blog_entry_index(category_group_def, blog_entries)
+    update_blog_entry_index(category_group_def, blog_entries)
 
 
 def push_entry_to_docs_and_blog(blog_config: BlogConfig, category_group_def: CategoryGroupDef,
                                 target_dir_names: List[str] = None):
     doc_entries = push_documents_to_docs(category_group_def, target_dir_names)
-    __push_entry_from_docs_to_blog(blog_config, doc_entries)
+    __push_entry_from_docs_to_blog(blog_config, category_group_def, doc_entries)
 
 
-def push_entry_from_docs_to_blog(blog_config: BlogConfig, target_doc_entry_ids: List[str]):
+def push_entry_from_docs_to_blog(blog_config: BlogConfig, category_group_def: CategoryGroupDef,
+                                 target_doc_entry_ids: List[str]):
     doc_entries = DocEntries.init_by_entry_ids(target_doc_entry_ids)
-    __push_entry_from_docs_to_blog(blog_config, doc_entries)
+    __push_entry_from_docs_to_blog(blog_config, category_group_def, doc_entries)

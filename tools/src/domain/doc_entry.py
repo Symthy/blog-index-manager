@@ -190,7 +190,7 @@ class DocEntries(IEntries):
         return self
 
     @classmethod
-    def init_by_entry_ids(cls, entry_ids: List[str]):
+    def init_by_entry_ids(cls, entry_ids: List[str]) -> DocEntries:
         entries: List[DocEntry] = []
         for entry_id in entry_ids:
             entry_dump_data = get_local_doc_entry_dump_data(entry_id)
