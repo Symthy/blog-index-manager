@@ -1,3 +1,4 @@
+import base64
 import codecs
 import configparser
 import json
@@ -39,6 +40,12 @@ def read_md_file(file_path: str) -> str:
     with codecs.open(file_path, mode='r', encoding='utf-8') as f:
         lines = f.readlines()
     return join_lines(lines)
+
+
+def read_pic_file_b64(pic_file_path: str) -> str:
+    with open(pic_file_path, 'rb') as f:
+        pic_data = f.read()
+    return base64.b64encode(pic_data).decode('utf-8')
 
 
 def __write_text_file(file_path, text: str):

@@ -1,7 +1,7 @@
 from typing import List
 
 from docs.docs_movers import resolve_move_from_and_move_to_dir_path_dict
-from domain.doc_entry import new_doc_entries, DocEntries
+from domain.doc.doc_entry import new_doc_entries, DocEntries
 from file.category_group_def import CategoryGroupDef
 from service.local.doc_entry_index_updater import update_entry_grouping_and_index
 

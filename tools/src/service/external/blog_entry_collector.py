@@ -1,7 +1,7 @@
 from typing import Optional
 
 from blogs.hatena.api_executor import execute_get_hatena_all_entry_api
-from domain.blog_entry import BlogEntries
+from domain.blog.blog_entry import BlogEntries
 from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef

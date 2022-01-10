@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from common.constant import EXCLUDE_ENTRY_IDS_TXT_PATH
-from domain.blog_entry import BlogEntries, BlogEntry
+from domain.blog.blog_entry import BlogEntries, BlogEntry
 from file.blog_config import BlogConfig
 from file.file_accessor import read_text_file
 

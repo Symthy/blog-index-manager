@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import List, Dict, Optional
 
 from common.constant import NON_CATEGORY_GROUP_NAME
-from domain.doc_entry import DocEntries
+from domain.doc.doc_entry import DocEntries
 from domain.interface import IConvertibleMarkdownLines, IEntries, IEntry
 
 

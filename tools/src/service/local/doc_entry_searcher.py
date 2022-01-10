@@ -4,7 +4,7 @@ from typing import List, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
-from domain.doc_entry import DocEntries
+from domain.doc.doc_entry import DocEntries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry, IEntries
 from file.category_group_def import CategoryGroupDef

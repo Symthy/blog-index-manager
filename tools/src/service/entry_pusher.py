@@ -1,8 +1,8 @@
 from typing import List
 
 from common.constant import HATENA_BLOG_ENTRY_LIST_PATH
-from domain.blog_entry import BlogEntry, BlogEntries
-from domain.doc_entry import DocEntries
+from domain.blog.blog_entry import BlogEntry, BlogEntries
+from domain.doc.doc_entry import DocEntries
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.dump.blog_to_doc_mapping import BlogDocEntryMapping

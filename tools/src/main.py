@@ -1,7 +1,7 @@
 import sys
 from typing import List
 
-from blogs.hatena.api_executor import execute_get_hatena_specified_entry_api
+from blogs.hatena.api_executor import execute_get_hatena_specified_entry_api, build_wsse
 from common.constant import BLOG_CONF_PATH
 from docs.docs_initializer import new_local_document_set, initialize_docs_dir
 from file.blog_config import BlogConfig
@@ -67,6 +67,10 @@ def main(args: List[str], is_debug: bool):
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
             push_entry_from_docs_to_blog(blog_config, category_group_def, args[3:])
             return
+    # hidden option
+    if len(args) >= 2 and args[1] == '-wsse':
+        print('X-WSSE: ' + build_wsse(blog_config))
+        return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):
         print_usage()
