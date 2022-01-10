@@ -5,10 +5,10 @@ work/
 conf/blog.conf
 
 tools/out/hatena_entry_data/
-tools/out/hatena_entry_list.json
-tools/out/hatena_entry_index_result.md
-
 tools/out/local_entry_data/
-tools/out/local_entry_list.json
 
-tools/out/local_entry_grouping.json
+!tools/out/hatena_blog_to_doc_dict.json
+!tools/out/hatena_entry_list.json
+!tools/out/hatena_entry_index_result.md
+!tools/out/local_entry_list.json
+!tools/out/local_entry_grouping.json
