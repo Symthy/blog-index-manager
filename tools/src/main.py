@@ -6,6 +6,7 @@ from common.constant import BLOG_CONF_PATH
 from docs.docs_initializer import new_local_document_set, initialize_docs_dir
 from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml
+from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
 from service.local.doc_entry_pusher import push_documents_to_docs
@@ -66,6 +67,11 @@ def main(args: List[str], is_debug: bool):
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
             push_entry_from_docs_to_blog(blog_config, category_group_def, args[3:])
             return
+    # usage
+    if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):
+        print_usage()
+        return
+    print_usage()
 
 
 IS_DEBUG = False

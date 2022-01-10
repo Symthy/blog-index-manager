@@ -17,15 +17,21 @@ def new_local_document_set(cmd_args: List[str]) -> str:
     def resolve_option(args: List[str]):
         title = None
         category = None
+        t_index = -1
+        c_index = -1
+        # Todo: refactor
         if '-t' in args:
             t_index = args.index('-t')
-            if t_index != -1 and len(args) > t_index + 1:
-                title = args[t_index + 1]
-                args = args[t_index + 1:]
+        if '-title' in args:
+            t_index = args.index('-title')
+        if t_index != -1 and len(args) > t_index + 1 and not args[t_index + 1].startswith('-'):
+            title = args[t_index + 1]
         if '-c' in args:
             c_index = args.index('-c')
-            if c_index != -1 and len(args) > c_index + 1:
-                category = args[c_index + 1]
+        if '-category' in args:
+            c_index = args.index('-category')
+        if c_index != -1 and len(args) > c_index + 1 and not args[c_index + 1].startswith('-'):
+            category = args[c_index + 1]
         return title, category
 
     title_value, category_value = resolve_option(cmd_args)
@@ -39,7 +45,7 @@ def new_local_document_set(cmd_args: List[str]) -> str:
 
 def __create_local_document_set(title: Optional[str], category: Optional[str]):
     if title is None:
-        title = 'doc'  # default value
+        title = 'Document'  # default value
     if category is None:
         category = ''  # default value
     new_dir_path = WORK_DIR_PATH + resolve_current_time_date_time()

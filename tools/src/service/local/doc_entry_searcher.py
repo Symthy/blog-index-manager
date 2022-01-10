@@ -47,8 +47,9 @@ class EntrySearchResults:
     @classmethod
     def print_header_line(cls):
         hyphen = '-'
-        print(EntrySearchResults.LINE_FORMAT.format('[Entry ID]', '[Entry Title]', '[Group]', '[Category]'))
-        print(f'{hyphen:->16} {hyphen:->30} {hyphen:->15} {hyphen:->15}')
+        print(EntrySearchResults.LINE_FORMAT
+              .format('[Doc Entry ID]', '[Doc Entry Title]', '[Group Name]', '[Category Name]'))
+        print(f'{hyphen:->16} {hyphen:->32} {hyphen:->15} {hyphen:->15}')
 
     def __print_entry_search_results(self):
         for result in self.__results:
