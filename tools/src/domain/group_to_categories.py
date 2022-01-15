@@ -50,6 +50,12 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         self.__categories.append(category_to_entries.category)
         self.__category_to_entries[category_to_entries.category] = category_to_entries
 
+    def remove_entry(self, category, entry_id):
+        category_to_entries_set: CategoryToEntriesSet = self.__category_to_entries[category]
+        category_to_entries_set.remove_entry(entry_id)
+        if category_to_entries_set.is_empty():
+            self.__category_to_entries.pop(category)
+
     def __add_category_to_entries_set_list(self, category_to_entries_set_list: List[CategoryToEntriesSet]):
         for category_to_entries_set in category_to_entries_set_list:
             self.add_category_to_entries_set(category_to_entries_set)
@@ -155,11 +161,19 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
         return categorized_entries.get_entries(None if category is None else category)
 
+    def add_entry(self, category_group_def: CategoryGroupDef, entry: IEntry):
+        group = category_group_def.get_belongs_group(entry.top_category)
+        categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
+        categorized_entries.add_entry(entry)
+
     def add_entries(self, category_group_def: CategoryGroupDef, entries: IEntries):
         for entry in entries.entry_list:
-            group = category_group_def.get_belongs_group(entry.top_category)
-            categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
-            categorized_entries.add_entry(entry)
+            self.add_entry(category_group_def, entry)
+
+    def remove_entry(self, category_group_def: CategoryGroupDef, entry: IEntry):
+        group = category_group_def.get_belongs_group(entry.top_category)
+        categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
+        categorized_entries.remove_entry(entry.top_category, entry.id)
 
     def convert_md_lines(self) -> List[str]:
         def __get_entries_for_md() -> IConvertibleMarkdownLines:

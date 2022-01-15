@@ -32,6 +32,9 @@ class CategoryToEntriesSet(IConvertibleMarkdownLines):
         for entry in entries:
             self.__entry_list[entry.id] = entry
 
+    def remove_entry(self, entry_id):
+        self.__entry_list.pop(entry_id)
+
     def convert_md_lines(self) -> List[str]:
         lines = [f'- {self.category}']
         entry_md_lines = list(

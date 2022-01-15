@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -91,6 +93,10 @@ class PhotoEntries:
         if entry is None:
             return None
         return entry.syntax
+
+    def merge(self, photo_entries: PhotoEntries):
+        # overwrite
+        self.__filename_to_photo_entry |= photo_entries.__filename_to_photo_entry
 
     def build_dump_data(self) -> Dict[str, Dict[str, str]]:
         dump_data = {}

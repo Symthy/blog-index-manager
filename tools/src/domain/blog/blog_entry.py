@@ -69,7 +69,7 @@ class BlogEntry(IEntry):
         return self.__top_category
 
     @property
-    def local_docs_id(self):
+    def original_doc_id(self):
         return self.__original_doc_id
 
     @property

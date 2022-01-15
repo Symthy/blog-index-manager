@@ -61,10 +61,10 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and (args[1] == '-retrieve' or args[1] == '-ret' or args[1] == '-r'):
         if len(args) >= 3 and (args[2] == '-cancel' or args[2] == '-c'):
-            cancel_retrieving_document(args[3:])
+            cancel_retrieving_document(category_group_def, args[3:])
             print('Success: retrieve cancel.')
         else:
-            retrieve_document_from_docs(args[2:])
+            retrieve_document_from_docs(category_group_def, args[2:])
             print('Success: retrieve doc data to work dir.')
         return
     if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
@@ -78,6 +78,7 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):
         if len(args) >= 3 and (args[2] == '-collect' or args[2] == '-c'):
             collect_hatena_entry_local_list(blog_config, category_group_def)
+            print('Success: blog entry collect')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
             push_entry_from_docs_to_blog(blog_config, category_group_def, args[3:])
@@ -102,7 +103,7 @@ def main(args: List[str], is_debug: bool):
         push_photo_entries(blog_config, DocEntry.deserialize_entry_data(doc_id))
         return
     if len(args) >= 2 and args[1] == '-put-blog':
-        doc_id = ''
+        doc_id = args[2]
         push_blog_entry(blog_config, DocEntry.deserialize_entry_data(doc_id))
         return
     # usage
