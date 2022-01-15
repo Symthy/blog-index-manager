@@ -5,11 +5,13 @@ from blogs.hatena.api_executor import execute_get_hatena_specified_blog_entry_ap
     execute_get_hatena_specified_photo_entry_api
 from common.constant import BLOG_CONF_PATH
 from docs.docs_initializer import new_local_document_set, initialize_docs_dir
+from domain.doc.doc_entry import DocEntry
 from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
+from service.external.blog_entry_pusher import put_hatena_summary_page, push_photo_entries, push_blog_entry
 from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
 from service.local.doc_entry_searcher import search_doc_entry_by_group
@@ -34,6 +36,8 @@ def show_hatena_photo_entry(blog_config: BlogConfig, entry_id):
 
 
 def main(args: List[str], is_debug: bool):
+    arg_str = ' '.join(args[1:])
+    print(f'tool run. (specified options: {arg_str})')
     blog_config = read_blog_config(BLOG_CONF_PATH)
     category_group_def = load_category_group_def_yaml()
 
@@ -77,15 +81,28 @@ def main(args: List[str], is_debug: bool):
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
             push_entry_from_docs_to_blog(blog_config, category_group_def, args[3:])
             return
-    # hidden option
+    # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':
         print('X-WSSE: ' + build_wsse(blog_config))
         return
-    if len(args) >= 2 and args[1] == '-show-blog':
-        show_hatena_blog_entry(blog_config, '26006613443907494')
+    if len(args) >= 2 and args[1] == '-get-blog':
+        hatena_blog_entry_id = '26006613443907494'
+        show_hatena_blog_entry(blog_config, hatena_blog_entry_id)
         return
-    if len(args) >= 2 and args[1] == '-show-photo':
-        show_hatena_photo_entry(blog_config, '20191002233050')
+    if len(args) >= 2 and args[1] == '-get-photo':
+        hatena_photo_entry_id = '20191002233050'
+        show_hatena_photo_entry(blog_config, hatena_photo_entry_id)
+        return
+    if len(args) >= 2 and args[1] == '-put-summary':
+        put_hatena_summary_page(blog_config, category_group_def)
+        return
+    if len(args) >= 2 and args[1] == '-put-photo':
+        doc_id = ''
+        push_photo_entries(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        return
+    if len(args) >= 2 and args[1] == '-put-blog':
+        doc_id = ''
+        push_blog_entry(blog_config, DocEntry.deserialize_entry_data(doc_id))
         return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):

@@ -28,9 +28,8 @@ def new_doc_entries(move_from_path_to_move_to_path_dict: Dict[str, str]) -> DocE
 
 def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]:
     created_datetime: datetime = get_current_datetime()
-    md_file_path = get_md_file_path_in_target_dir(target_dir_path)
+    md_file_path: Optional[str] = get_md_file_path_in_target_dir(target_dir_path)
     dir_name = get_name_from_path(target_dir_path)
-    file_name = get_name_from_path(md_file_path)
     if md_file_path is None:
         print(f'[Error] skip: non exist md file (dir: {dir_name})')
         return None
@@ -43,31 +42,32 @@ def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]
         entry_id = convert_datetime_to_time_sequence(created_datetime)
         id_file_path = f'{target_dir_path}/{ID_FILE_NAME_HEADER}{entry_id}'
         write_text_line(id_file_path, entry_id)
+    doc_file_name = get_name_from_path(md_file_path)
     categories = read_text_file(target_dir_path + CATEGORY_FILE_NAME)
     created_at = created_datetime
     updated_at = None
     if is_exist_in_local_entry_list(entry_id):
-        created_at = None  # use time in dump file
+        created_at = None  # use existed time in dump file
         updated_at = get_current_datetime()
-    return DocEntry(entry_id, doc_title, move_to_path, file_name, categories, created_at, updated_at)
+    return DocEntry(entry_id, doc_title, move_to_path, doc_file_name, categories, created_at, updated_at)
 
 
 class DocEntry(IEntry):
     FIELD_ID = 'id'
     FIELD_TITLE = 'title'
     FIELD_DIR_PATH = 'dir_path'
-    FIELD_DOC_FILE = 'doc_file'
+    FIELD_DOC_FILE_NAME = 'doc_file_name'
     FIELD_TOP_CATEGORY = 'top_category'
     FIELD_CATEGORIES = 'categories'
     FIELD_CREATED_AT = 'created_at'
     FIELD_UPDATED_AT = 'updated_at'
 
-    def __init__(self, docs_id: str, title: str, dir_path: str, doc_file: str, categories: List[str],
+    def __init__(self, docs_id: str, title: str, dir_path: str, doc_file_name: str, categories: List[str],
                  created_at: Optional[datetime], updated_at: Optional[datetime] = None):
         self.__id = docs_id
         self.__title = title
         self.__dir_path = dir_path
-        self.__doc_file = doc_file
+        self.__doc_file_name = doc_file_name
         self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_GROUP_NAME
         self.__categories = categories
         self.__created_at: Optional[datetime] = created_at
@@ -86,8 +86,8 @@ class DocEntry(IEntry):
         return self.__dir_path
 
     @property
-    def doc_file(self):
-        return self.__doc_file
+    def doc_file_name(self):
+        return self.__doc_file_name
 
     @property
     def categories(self):
@@ -113,14 +113,14 @@ class DocEntry(IEntry):
         return {self.id: self.title}
 
     def convert_md_line(self) -> str:
-        return f'- [{self.title}]({self.dir_path}{self.doc_file})'
+        return f'- [{self.title}]({self.dir_path}{self.doc_file_name})'
 
     def build_dump_data(self, json_data=None) -> object:
         return {
             DocEntry.FIELD_ID: resolve_dump_field_data(self, json_data, DocEntry.FIELD_ID),
             DocEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TITLE),
             DocEntry.FIELD_DIR_PATH: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DIR_PATH),
-            DocEntry.FIELD_DOC_FILE: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DOC_FILE),
+            DocEntry.FIELD_DOC_FILE_NAME: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DOC_FILE_NAME),
             DocEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TOP_CATEGORY),
             DocEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CATEGORIES),
             DocEntry.FIELD_CREATED_AT: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CREATED_AT),
@@ -136,7 +136,7 @@ class DocEntry(IEntry):
             dump_data[DocEntry.FIELD_ID],
             dump_data[DocEntry.FIELD_TITLE],
             dump_data[DocEntry.FIELD_DIR_PATH],
-            dump_data[DocEntry.FIELD_DOC_FILE],
+            dump_data[DocEntry.FIELD_DOC_FILE_NAME],
             dump_data[DocEntry.FIELD_CATEGORIES],
             convert_entry_time_str_to_datetime(dump_data[DocEntry.FIELD_CREATED_AT]),
             convert_entry_time_str_to_datetime(dump_data[DocEntry.FIELD_UPDATED_AT])
