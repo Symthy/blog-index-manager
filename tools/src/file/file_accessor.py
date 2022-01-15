@@ -114,7 +114,7 @@ def get_local_doc_entry_dump_data(entry_id: str) -> Dict[str, str]:
     return entry_dump_data
 
 
-def get_dir_path_from_local_entry_dump_data(entry_id: str) -> str:
-    entry_dump_data = get_local_doc_entry_dump_data(entry_id)
-    target_entry_dir_path = entry_dump_data['dir_path']
-    return target_entry_dir_path
+# def get_dir_path_from_local_entry_dump_data(entry_id: str) -> str:
+#     entry_dump_data = get_local_doc_entry_dump_data(entry_id)
+#     target_entry_dir_path = entry_dump_data['dir_path']
+#     return target_entry_dir_path

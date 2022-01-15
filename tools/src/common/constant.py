@@ -27,6 +27,7 @@ CATEGORY_GROUP_YAML_PATH = DEFINITIONS_DIR_PATH + 'category_group.yml'
 
 ID_FILE_NAME_HEADER = '.id_'
 CATEGORY_FILE_NAME = 'category.txt'
+DOCS_DIR_PATH_TEMP_FILE = 'master_path_temp'
 DOC_IMAGES_DIR_NAME = 'images'
 DOC_TITLE_MAX_LENGTH = 50
 

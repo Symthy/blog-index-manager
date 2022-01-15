@@ -135,6 +135,12 @@ OPTIONS:
 
 ※ ひとまずローカル -> 某ブログへの一方通行
 
+追加機能メモ
+
+- push時、id指定
+- push時、指定directory存在チェック
+- docs フォルダからダンプデータ更新
+
 ## used third party tools
 
 - GitBook (予定)

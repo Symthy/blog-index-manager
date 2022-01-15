@@ -1,14 +1,13 @@
 from typing import List
 
-from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, LOCAL_DOCS_ENTRY_GROUPING_PATH
+from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, LOCAL_DOCS_ENTRY_GROUPING_PATH, DOCS_DIR_PATH_TEMP_FILE
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntry, new_doc_entry
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import is_exist_in_local_entry_list, write_text_line, \
     read_file_first_line
-from file.files_operator import copy_dir, move_dir, delete_dir, get_dir_name_from_dir_path, resolve_target_dir_in_work
-
-DOCS_DIR_PATH_TEMP_FILE = 'master_path_temp'
+from file.files_operator import copy_dir, move_dir, delete_dir, get_dir_name_from_dir_path, \
+    resolve_target_entry_dir_path_in_work, delete_file
 
 
 def retrieve_document_from_docs(category_group_def: CategoryGroupDef, entry_ids: List[str]):
@@ -34,10 +33,13 @@ def cancel_retrieving_document(category_group_def: CategoryGroupDef, entry_ids: 
     group_to_categorized_entries = deserialize_doc_entry_grouping_data(category_group_def)
     for doc_entry_id in entry_ids:
         target_dir_path = f'{BACKUP_DIR_PATH}{doc_entry_id}/'
-        master_dir_path = read_file_first_line(f'{target_dir_path}{DOCS_DIR_PATH_TEMP_FILE}')
+        master_path_temp_file = f'{target_dir_path}{DOCS_DIR_PATH_TEMP_FILE}'
+        master_dir_path = read_file_first_line(master_path_temp_file)
+        delete_file(master_path_temp_file)
         doc_entry = new_doc_entry(target_dir_path, master_dir_path)
         move_dir(target_dir_path, master_dir_path)
-        dir_path_in_work_opt = resolve_target_dir_in_work(doc_entry_id)
+        # delete entry dir during retrieve in work dir
+        dir_path_in_work_opt = resolve_target_entry_dir_path_in_work(doc_entry_id)
         if dir_path_in_work_opt is None:
             continue
         delete_dir(dir_path_in_work_opt)

@@ -33,7 +33,7 @@ class BlogEntry(IEntry):
         self.__updated_at: Optional[datetime] = last_updated  # Make it optional just in case
         self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_GROUP_NAME
         self.__categories = categories
-        self.__original_doc_id = doc_id  # Todo
+        self.__original_doc_id = doc_id
         self.__doc_images: PhotoEntries = PhotoEntries() if doc_images is None else doc_images
 
     @property

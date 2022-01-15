@@ -24,6 +24,10 @@ def delete_dir(target_dir_path: str):
     shutil.rmtree(target_dir_path)
 
 
+def delete_file(target_file_path: str):
+    os.remove(target_file_path)
+
+
 def move_dir(move_from_dir_path: str, move_to_dir_path: str):
     copy_dir(move_from_dir_path, move_to_dir_path)
     delete_dir(move_from_dir_path)
@@ -45,8 +49,12 @@ def translate_win_files_unusable_char(s: str):
     return s.translate(str.maketrans(trans_dict))
 
 
-def is_exist_file(file_path: str):
-    return os.path.exists(file_path) and os.path.isfile(file_path)
+def is_exist_file(target_dir_path: str):
+    return os.path.exists(target_dir_path) and os.path.isfile(target_dir_path)
+
+
+def is_exist_dir(target_dir_path: str) -> bool:
+    return os.path.exists(target_dir_path) and os.path.isdir(target_dir_path)
 
 
 def get_updated_time_of_target_file(target_file_path) -> datetime:
@@ -65,14 +73,14 @@ def get_exist_dir_names_in_target_dir(target_dir_path: str, specified_dir_names:
             os.path.isdir(os.path.join(target_dir_path, d)) and os.path.exists(os.path.join(target_dir_path, d))]
 
 
-def get_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
+def __get_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
     files = os.listdir(target_dir_path)
     return [target_dir_path + f for f in files if os.path.isfile(os.path.join(target_dir_path, f))]
 
 
 def get_image_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
     # Todo: refactor
-    file_paths = get_file_paths_in_target_dir(target_dir_path)
+    file_paths = __get_file_paths_in_target_dir(target_dir_path)
     image_file_paths = []
     for file_path in file_paths:
         if file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.bmp') or \
@@ -117,7 +125,7 @@ def get_id_from_id_file(target_dir_path: str) -> Optional[str]:
     return None
 
 
-def resolve_target_dir_in_work(entry_id: str) -> Optional[str]:
+def resolve_target_entry_dir_path_in_work(entry_id: str) -> Optional[str]:
     files = os.listdir(WORK_DIR_PATH)
     for dir_name in files:
         dir_path = f'{WORK_DIR_PATH}{dir_name}'
