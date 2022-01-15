@@ -99,8 +99,9 @@ def main(args: List[str], is_debug: bool):
         put_hatena_summary_page(blog_config, category_group_def)
         return
     if len(args) >= 2 and args[1] == '-put-photo':
-        doc_id = ''
-        push_photo_entries(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        doc_id = args[2]
+        result = push_photo_entries(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        print(result.build_dump_data())
         return
     if len(args) >= 2 and args[1] == '-put-blog':
         doc_id = args[2]

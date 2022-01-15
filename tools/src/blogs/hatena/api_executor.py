@@ -16,10 +16,11 @@ from domain.blog.photo_entry import PhotoEntry
 from file.blog_config import BlogConfig
 from file.file_accessor import read_pic_file_b64
 from file.files_operator import get_file_name_from_file_path
+from ltime.time_resolver import resolve_current_time_sequence
 
 HATENA_BLOG_ENTRY_API = 'https://blog.hatena.ne.jp/{HATENA_ID}/{BLOG_ID}/atom/entry'
-HATENA_PHOTO_ENTRY_POST_API = 'http://f.hatena.ne.jp/atom/post'
-HATENA_PHOTO_ENTRY_EDIT_API = 'http://f.hatena.ne.jp/atom/edit'
+HATENA_PHOTO_ENTRY_POST_API = 'https://f.hatena.ne.jp/atom/post'
+HATENA_PHOTO_ENTRY_EDIT_API = 'https://f.hatena.ne.jp/atom/edit'
 
 
 def build_wsse(blog_config: BlogConfig):
@@ -37,9 +38,9 @@ def build_wsse(blog_config: BlogConfig):
 
 # Todo: OAuth
 def __build_request_header(blog_config: BlogConfig):
+    # 'Accept': 'application/xml',
+    # 'Content-Type': 'application/xml',
     return {
-        'Accept': 'application/xml',
-        'Content-Type': 'application/xml',
         'X-WSSE': build_wsse(blog_config)
     }
 
@@ -60,9 +61,9 @@ def __build_hatena_photo_entry_body(image_file_path: str) -> Optional[str]:
         'svg': 'image/svg+xml',
     }
     split_str = image_file_path.rsplit('.', 1)
-    title = split_str[0]
-    extension = split_str[1]
-    if not extension.lower() in __PIC_EXTENSION_TO_CONTENT_TYPE:
+    title = f'{resolve_current_time_sequence()}_{get_file_name_from_file_path(split_str[0])}'
+    extension = split_str[1].lower()
+    if not extension in __PIC_EXTENSION_TO_CONTENT_TYPE:
         return None
     b64_pic_data = read_pic_file_b64(image_file_path)
     return build_hatena_photo_entry_xml_body(title, __PIC_EXTENSION_TO_CONTENT_TYPE[extension], b64_pic_data)
@@ -168,7 +169,7 @@ def execute_post_hatena_blog_register_api(blog_config: BlogConfig, title: str, c
 def execute_post_hatena_photo_register_api(blog_config: BlogConfig, image_file_path: str):
     url = HATENA_PHOTO_ENTRY_POST_API
     body = __build_hatena_photo_entry_body(image_file_path)
-    xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
+    xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body)
     image_filename = get_file_name_from_file_path(image_file_path)
     return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
 

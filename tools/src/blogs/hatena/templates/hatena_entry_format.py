@@ -58,8 +58,9 @@ def get_blog_entry_template() -> str:
 """
 
 
-__PHOTO_LIFE_ENTRY_TEMPLATE = """<entry xmlns="http://purl.org/atom/ns#">
-  <title>#{title}</title>
+__PHOTO_LIFE_ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
+<entry xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title>{title}</title>
   <content mode="base64" type="{content_type}">{content}</content>
   <dc:subject>Hatena Blog</dc:subject>
 </entry>
