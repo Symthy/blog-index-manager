@@ -57,14 +57,15 @@ def main(args: List[str], is_debug: bool):
             push_entry_to_docs_and_blog(blog_config, category_group_def, target_dirs)
             return
         push_documents_to_docs(category_group_def, target_dirs)
-        print('Success: push doc data to docs dir')
+        print('Success: push doc data to docs dir.')
         return
     if len(args) >= 2 and (args[1] == '-retrieve' or args[1] == '-ret' or args[1] == '-r'):
         if len(args) >= 3 and (args[2] == '-cancel' or args[2] == '-c'):
             cancel_retrieving_document(args[3:])
+            print('Success: retrieve cancel.')
         else:
             retrieve_document_from_docs(args[2:])
-        print('Success: retrieve doc data to work dir')
+            print('Success: retrieve doc data to work dir.')
         return
     if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
         if len(args) >= 3 and (args[2] == '-group' or args[2] == '-g'):

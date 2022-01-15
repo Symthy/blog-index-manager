@@ -3,13 +3,13 @@ from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import read_file_first_line, read_text_file, get_doc_title_from_md_file
+from file.file_accessor import read_text_file, get_doc_title_from_md_file
 from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
     get_md_file_path_in_target_dir, translate_win_files_unusable_char, move_dir
 
 
 def move_documents_to_docs_dir(move_from_to_path_dict: Dict[str, str]):
-    for move_from_dir_path, move_to_dir_path in move_from_to_path_dict:
+    for move_from_dir_path, move_to_dir_path in move_from_to_path_dict.items():
         move_dir(move_from_dir_path, move_to_dir_path)
 
 

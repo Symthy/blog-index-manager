@@ -109,7 +109,7 @@ def get_doc_title_from_md_file(doc_md_file_path: str) -> Optional[str]:
 
 
 def get_local_doc_entry_dump_data(entry_id: str) -> Dict[str, str]:
-    entry_dump_file_path = f'{LOCAL_DOCS_ENTRY_DUMP_DIR}{entry_id}'
+    entry_dump_file_path = f'{LOCAL_DOCS_ENTRY_DUMP_DIR}{entry_id}.json'
     entry_dump_data = load_json(entry_dump_file_path)
     return entry_dump_data
 

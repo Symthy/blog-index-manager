@@ -15,7 +15,7 @@ from domain.blog.blog_entry import BlogEntries, BlogEntry
 from domain.blog.photo_entry import PhotoEntry
 from file.blog_config import BlogConfig
 from file.file_accessor import read_pic_file_b64
-from file.files_operator import get_name_from_path
+from file.files_operator import get_file_name_from_file_path
 
 HATENA_BLOG_ENTRY_API = 'https://blog.hatena.ne.jp/{HATENA_ID}/{BLOG_ID}/atom/entry'
 HATENA_PHOTO_ENTRY_POST_API = 'http://f.hatena.ne.jp/atom/post'
@@ -151,7 +151,7 @@ def execute_put_hatena_photo_update_api(blog_config: BlogConfig, image_file_path
     url = HATENA_PHOTO_ENTRY_EDIT_API
     body = __build_hatena_photo_entry_body(image_file_path)
     xml_string_opt = execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
-    image_filename = get_name_from_path(image_file_path)
+    image_filename = get_file_name_from_file_path(image_file_path)
     return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
 
 
@@ -169,7 +169,7 @@ def execute_post_hatena_photo_register_api(blog_config: BlogConfig, image_file_p
     url = HATENA_PHOTO_ENTRY_POST_API
     body = __build_hatena_photo_entry_body(image_file_path)
     xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
-    image_filename = get_name_from_path(image_file_path)
+    image_filename = get_file_name_from_file_path(image_file_path)
     return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
 
 

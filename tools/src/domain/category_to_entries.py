@@ -103,8 +103,11 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         self.__category_to_entries[category] = category_to_entries
 
     @classmethod
-    def deserialize_docs_grouping_data(cls, category_to_entries_obj: Dict[str, Dict[str, str]]) -> CategoryToEntriesMap:
+    def deserialize_docs_grouping_data(cls, category_to_entries_obj: Optional[Dict[str, Dict[str, str]]] = None) \
+            -> CategoryToEntriesMap:
         self = CategoryToEntriesMap()
+        if category_to_entries_obj is None:
+            return self
         for category, entries in category_to_entries_obj.items():
             doc_entries = DocEntries.deserialize_grouping_data(entries)
             category_to_entries_set = CategoryToEntriesSet.deserialize_docs_grouping_data(category, doc_entries)

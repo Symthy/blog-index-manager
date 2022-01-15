@@ -212,8 +212,8 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
             -> GroupToCategorizedEntriesMap:
         self = GroupToCategorizedEntriesMap(category_group_def)
         for group in category_group_def.groups:
-            category_to_entries_map = CategoryToEntriesMap.deserialize_docs_grouping_data(
-                group_to_categorized_entries[group])
+            category_to_entries = group_to_categorized_entries[group] if group in group_to_categorized_entries else None
+            category_to_entries_map = CategoryToEntriesMap.deserialize_docs_grouping_data(category_to_entries)
             group_to_categorized_entries_set = \
                 GroupToCategorizedEntriesSet.deserialize_docs_grouping_data(group, category_to_entries_map)
             self.__add_group_to_categorized_entries(group, group_to_categorized_entries_set)

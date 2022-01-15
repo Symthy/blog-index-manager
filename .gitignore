@@ -2,6 +2,7 @@
 .VSCodeCounter/
 __pycache__/
 work/
+backup/
 conf/blog.conf
 
 tools/out/hatena_entry_data/

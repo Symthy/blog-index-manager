@@ -11,7 +11,7 @@ from domain.doc.doc_entry import DocEntry
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.file_accessor import read_md_file
-from file.files_operator import get_updated_time_of_target_file, get_name_from_path, \
+from file.files_operator import get_updated_time_of_target_file, get_file_name_from_file_path, \
     get_image_file_paths_in_target_dir
 from file.md_data_handler import join_lines, replace_image_link_in_md_data
 
@@ -80,7 +80,7 @@ def push_photo_entries(blog_config, doc_entry: DocEntry, old_photo_entries: Opti
         photo_entry_opt = __push_photo_entry(blog_config, image_file_path, old_photo_entries)
         if photo_entry_opt is None:
             continue
-        image_filename = get_name_from_path(image_file_path)
+        image_filename = get_file_name_from_file_path(image_file_path)
         photo_entry_dict[image_filename] = photo_entry_opt
     return PhotoEntries(photo_entry_dict)
 
@@ -88,7 +88,7 @@ def push_photo_entries(blog_config, doc_entry: DocEntry, old_photo_entries: Opti
 def __push_photo_entry(blog_config, image_file_path: str, old_photo_entries: Optional[PhotoEntries] = None) \
         -> Optional[PhotoEntry]:
     if old_photo_entries is not None and old_photo_entries.is_exist(image_file_path):
-        image_filename = get_name_from_path(image_file_path)
+        image_filename = get_file_name_from_file_path(image_file_path)
         image_last_updated = get_updated_time_of_target_file(image_file_path)
         if old_photo_entries.get_entry(image_filename).is_after_updated_time(image_last_updated):
             return execute_put_hatena_photo_update_api(blog_config, image_file_path)
