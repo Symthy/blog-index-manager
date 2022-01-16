@@ -13,8 +13,9 @@
     - TypeScript
     - Python
     - Shell
-    - regexp
+    - Regexp
 - Web
+- Git
 - BackEnd:
     - DB
     - SQL
@@ -42,7 +43,8 @@
 - Roadmap
 - Management
 - Job Relation:
-    - Job Memo
-    - Job Change
+    - JobMemo
+    - JobChange
+- Career
 - Portfolio
 - Others

@@ -1,6 +1,5 @@
 from typing import List
 
-from common.constant import HATENA_BLOG_ENTRY_LIST_PATH
 from domain.blog.blog_entry import BlogEntry, BlogEntries
 from domain.doc.doc_entry import DocEntries
 from file.blog_config import BlogConfig
@@ -27,7 +26,7 @@ def push_entry_from_docs_to_blog(blog_config: BlogConfig, category_group_def: Ca
 def __push_entry_from_docs_to_blog(blog_config: BlogConfig, category_group_def: CategoryGroupDef,
                                    doc_entries: DocEntries):
     blog_doc_mapping = BlogDocEntryMapping()
-    dump_blog_entry_list = DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
+    dump_blog_entry_list = DumpEntryList.init_blog_entry_list()
     updated_blog_entry_list: List[BlogEntry] = []
     for doc_entry in doc_entries.entry_list:
         blog_entry_id_opt = blog_doc_mapping.get_blog_entry_id(doc_entry.id)

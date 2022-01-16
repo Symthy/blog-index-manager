@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
+from common.constant import HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
 from domain.blog.photo_entry import PhotoEntries
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
@@ -149,7 +149,7 @@ class BlogEntries(IEntries):
         return [entry.convert_md_line() for entry in self.__entries]
 
     def dump_all_data(self):
-        dump_entry_list = DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
+        dump_entry_list = DumpEntryList.init_blog_entry_list()
         for entry in self.__entries:
             dump_entry_list.push_entry(entry)
             entry.dump_data(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json')
@@ -157,7 +157,7 @@ class BlogEntries(IEntries):
 
     @classmethod
     def deserialize_all_data(cls) -> BlogEntries:
-        dump_entry_list = DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
+        dump_entry_list = DumpEntryList.init_blog_entry_list()
         self = BlogEntries()
         for entry_id in dump_entry_list.entry_ids:
             self.add_entry(BlogEntry.deserialize_entry_data(entry_id))

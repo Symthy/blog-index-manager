@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from typing import Dict, List
 
+from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_LIST_PATH
 from domain.interface import IEntry
 from file.file_accessor import load_json, dump_json
 from ltime.time_resolver import resolve_entry_current_time
@@ -17,12 +20,20 @@ class DumpEntryList:
         self.__entry_id_to_title: Dict[str, str] = dump_data[DumpEntryList.FIELD_ENTRIES] \
             if DumpEntryList.FIELD_ENTRIES in dump_data else {}
 
-    def push_entry(self, entry: IEntry):
-        self.__entry_id_to_title[entry.id] = entry.title
+    @classmethod
+    def init_blog_entry_list(cls) -> DumpEntryList:
+        return DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
+
+    @classmethod
+    def init_doc_entry_list(cls) -> DumpEntryList:
+        return DumpEntryList(LOCAL_DOCS_ENTRY_LIST_PATH)
 
     @property
     def entry_ids(self) -> List[str]:
         return list(self.__entry_id_to_title.keys())
+
+    def push_entry(self, entry: IEntry):
+        self.__entry_id_to_title[entry.id] = entry.title
 
     def dump_file(self):
         dump_data = {

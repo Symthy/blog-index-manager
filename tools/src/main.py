@@ -16,7 +16,8 @@ from service.external.blog_entry_collector import collect_hatena_entry_local_lis
 from service.external.blog_entry_pusher import put_hatena_summary_page, push_photo_entries, push_blog_entry
 from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
-from service.local.doc_entry_searcher import search_doc_entry_by_group
+from service.local.doc_entry_searcher import search_doc_entry_by_group, search_doc_entry_by_category, \
+    search_doc_entry_by_title
 
 
 def show_hatena_blog_entry(blog_config: BlogConfig, entry_id):
@@ -72,7 +73,13 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
         if len(args) >= 3 and (args[2] == '-group' or args[2] == '-g'):
             search_doc_entry_by_group(category_group_def, args[3])
-        return
+            return
+        if len(args) >= 3 and (args[2] == '-category' or args[2] == '-c'):
+            search_doc_entry_by_category(category_group_def, args[3])
+            return
+        if len(args) >= 3 and (args[2] == '-title' or args[2] == '-t'):
+            search_doc_entry_by_title(category_group_def, args[3])
+            return
     if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
         print('Unimplemented')
         return

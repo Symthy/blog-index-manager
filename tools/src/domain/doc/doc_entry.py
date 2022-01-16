@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_GROUP_NAME, LOCAL_DOCS_ENTRY_LIST_PATH, CATEGORY_FILE_NAME, \
+from common.constant import NON_CATEGORY_GROUP_NAME, CATEGORY_FILE_NAME, \
     LOCAL_DOCS_ENTRY_DUMP_DIR, ID_FILE_NAME_HEADER
 from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntry, IEntries
@@ -172,7 +172,7 @@ class DocEntries(IEntries):
         return [entry.convert_md_line() for entry in self.__entries]
 
     def dump_all_data(self):
-        dump_entry_list = DumpEntryList(LOCAL_DOCS_ENTRY_LIST_PATH)
+        dump_entry_list = DumpEntryList.init_blog_entry_list()
         for entry in self.__entries:
             # update file when the entry json file already exists.
             dump_entry_list.push_entry(entry)
