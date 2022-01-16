@@ -51,8 +51,9 @@ def main(args: List[str], is_debug: bool):
         print('Success: created \"docs\" dir')
         return
     if len(args) >= 2 and (args[1] == '-new' or args[1] == '-n'):
-        title_value = new_local_document_set(args)
-        print(f'Success: created \"{title_value}\" dir in work dir')
+        created_dir_name_opt = new_local_document_set(args)
+        if created_dir_name_opt is not None:
+            print(f'Success: created \"{created_dir_name_opt}\" dir in work dir')
         return
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
