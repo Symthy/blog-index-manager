@@ -5,9 +5,11 @@ from blogs.hatena.api_executor import execute_get_hatena_specified_blog_entry_ap
     execute_get_hatena_specified_photo_entry_api
 from common.constant import BLOG_CONF_PATH
 from docs.docs_initializer import new_local_document_set, initialize_docs_dir
+from domain.blog.blog_entry import BlogEntry
 from domain.doc.doc_entry import DocEntry
 from file.blog_config import BlogConfig
-from file.file_accessor import read_blog_config, load_category_group_def_yaml
+from file.file_accessor import read_blog_config, load_category_group_def_yaml, read_md_file
+from file.md_data_handler import replace_image_link_in_md_data
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
@@ -107,6 +109,11 @@ def main(args: List[str], is_debug: bool):
         doc_id = args[2]
         result = push_blog_entry(blog_config, DocEntry.deserialize_entry_data(doc_id))
         print(result.build_dump_data())
+        return
+    if len(args) >= 2 and args[1] == '-replace-md':
+        md_data = read_md_file('./docs/Program/Golang/Golang_Generics/doc.md')
+        blog_entry = BlogEntry.deserialize_entry_data('13574176438053271362')
+        print(replace_image_link_in_md_data(md_data, blog_entry.doc_images))
         return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):

@@ -41,25 +41,30 @@ def push_blog_and_photo_entry(blog_config, doc_entry: DocEntry,
     if old_blog_entry is None:
         # new post
         new_photo_entries_opt = push_photo_entries(blog_config, doc_entry)
-        new_blog_entry_opt = push_blog_entry(blog_config, doc_entry)
+        new_blog_entry_opt = push_blog_entry(blog_config, doc_entry, new_photo_entries_opt)
+        use_photo_entries = new_photo_entries_opt
     else:
         # Overwrite post
         old_photo_entries = None if old_blog_entry.is_images_empty() else old_blog_entry.doc_images
         new_photo_entries_opt: Optional[PhotoEntries] = push_photo_entries(blog_config, doc_entry, old_photo_entries)
-        new_blog_entry_opt = push_blog_entry(blog_config, doc_entry, old_blog_entry.id, new_photo_entries_opt)
+        use_photo_entries = old_photo_entries
+        if new_photo_entries_opt is not None and not new_photo_entries_opt.is_empty():
+            use_photo_entries = new_photo_entries_opt
+        new_blog_entry_opt = push_blog_entry(blog_config, doc_entry, use_photo_entries, old_blog_entry.id)
     if new_blog_entry_opt is None:
         return None
-    new_blog_entry_opt.add_photo_entries(new_photo_entries_opt)
+    # inherit old image when photo not updated
+    new_blog_entry_opt.add_photo_entries(use_photo_entries)
     return new_blog_entry_opt
 
 
 # public: for testing
-def push_blog_entry(blog_config, doc_entry: DocEntry, old_blog_id_opt: Optional[str] = None,
-                    updated_photo_entries_opt: Optional[PhotoEntries] = None) -> Optional[BlogEntry]:
+def push_blog_entry(blog_config, doc_entry: DocEntry, photo_entries_opt: Optional[PhotoEntries] = None,
+                    old_blog_id_opt: Optional[str] = None) -> Optional[BlogEntry]:
     md_file_path = __build_md_file_path(doc_entry.dir_path, doc_entry.doc_file_name)
     md_file_data = read_md_file(md_file_path)
-    if updated_photo_entries_opt is not None:
-        md_file_data = replace_image_link_in_md_data(md_file_data, updated_photo_entries_opt)
+    if photo_entries_opt is not None:
+        md_file_data = replace_image_link_in_md_data(md_file_data, photo_entries_opt)
     title = doc_entry.title
     category = doc_entry.top_category
     content = get_blog_entry_template().format(content=md_file_data)
