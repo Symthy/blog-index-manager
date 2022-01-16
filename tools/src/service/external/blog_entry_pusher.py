@@ -1,7 +1,7 @@
 from typing import Optional, Dict, List
 
 from blogs.hatena.api_executor import execute_put_hatena_summary_page, execute_post_hatena_blog_register_api, \
-    execute_put_hatena_blog_update_api, execute_post_hatena_photo_register_api, execute_put_hatena_photo_update_api
+    execute_put_hatena_blog_update_api, execute_post_hatena_photo_register_api, execute_update_hatena_photo_api
 from blogs.hatena.templates.hatena_entry_format import get_blog_summary_index_template, get_blog_entry_template
 from common.constant import DOC_IMAGES_DIR_NAME
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
@@ -40,13 +40,13 @@ def push_blog_and_photo_entry(blog_config, doc_entry: DocEntry,
                               old_blog_entry: Optional[BlogEntry] = None) -> Optional[BlogEntry]:
     if old_blog_entry is None:
         # new post
-        push_photo_entries(blog_config, doc_entry)
-        push_blog_entry(blog_config, doc_entry)
-        return None
-    # Overwrite post
-    old_photo_entries = None if old_blog_entry.is_images_empty() else old_blog_entry.doc_images
-    new_photo_entries_opt: Optional[PhotoEntries] = push_photo_entries(blog_config, doc_entry, old_photo_entries)
-    new_blog_entry_opt = push_blog_entry(blog_config, doc_entry, old_blog_entry.id, new_photo_entries_opt)
+        new_photo_entries_opt = push_photo_entries(blog_config, doc_entry)
+        new_blog_entry_opt = push_blog_entry(blog_config, doc_entry)
+    else:
+        # Overwrite post
+        old_photo_entries = None if old_blog_entry.is_images_empty() else old_blog_entry.doc_images
+        new_photo_entries_opt: Optional[PhotoEntries] = push_photo_entries(blog_config, doc_entry, old_photo_entries)
+        new_blog_entry_opt = push_blog_entry(blog_config, doc_entry, old_blog_entry.id, new_photo_entries_opt)
     if new_blog_entry_opt is None:
         return None
     new_blog_entry_opt.add_photo_entries(new_photo_entries_opt)
@@ -54,7 +54,7 @@ def push_blog_and_photo_entry(blog_config, doc_entry: DocEntry,
 
 
 # public: for testing
-def push_blog_entry(blog_config, doc_entry: DocEntry, old_blog_entry_id_opt: Optional[str] = None,
+def push_blog_entry(blog_config, doc_entry: DocEntry, old_blog_id_opt: Optional[str] = None,
                     updated_photo_entries_opt: Optional[PhotoEntries] = None) -> Optional[BlogEntry]:
     md_file_path = __build_md_file_path(doc_entry.dir_path, doc_entry.doc_file_name)
     md_file_data = read_md_file(md_file_path)
@@ -63,10 +63,15 @@ def push_blog_entry(blog_config, doc_entry: DocEntry, old_blog_entry_id_opt: Opt
     title = doc_entry.title
     category = doc_entry.top_category
     content = get_blog_entry_template().format(content=md_file_data)
-    if old_blog_entry_id_opt is None:
-        return execute_post_hatena_blog_register_api(blog_config, title, category, content)
+    # Todo: refactor
+    if old_blog_id_opt is None:
+        blog_entry_opt = execute_post_hatena_blog_register_api(blog_config, title, category, content)
     else:
-        return execute_put_hatena_blog_update_api(blog_config, old_blog_entry_id_opt, title, category, content)
+        blog_entry_opt = execute_put_hatena_blog_update_api(blog_config, old_blog_id_opt, title, category, content)
+    if blog_entry_opt is None:
+        return None
+    blog_entry_opt.register_doc_id(doc_entry.id)
+    return blog_entry_opt
 
 
 # public: for testing
@@ -87,11 +92,12 @@ def push_photo_entries(blog_config, doc_entry: DocEntry, old_photo_entries: Opti
 
 def __push_photo_entry(blog_config, image_file_path: str, old_photo_entries: Optional[PhotoEntries] = None) \
         -> Optional[PhotoEntry]:
-    if old_photo_entries is not None and old_photo_entries.is_exist(image_file_path):
-        image_filename = get_file_name_from_file_path(image_file_path)
+    image_filename = get_file_name_from_file_path(image_file_path)
+    if old_photo_entries is not None and old_photo_entries.is_exist(image_filename):
         image_last_updated = get_updated_time_of_target_file(image_file_path)
-        if old_photo_entries.get_entry(image_filename).is_after_updated_time(image_last_updated):
-            return execute_put_hatena_photo_update_api(blog_config, image_file_path)
+        photo_entry = old_photo_entries.get_entry(image_filename)
+        if photo_entry.is_after_updated_time(image_last_updated):
+            return execute_update_hatena_photo_api(blog_config, image_file_path, photo_entry)
         # If don't updated, don't put.
         return
     return execute_post_hatena_photo_register_api(blog_config, image_file_path)

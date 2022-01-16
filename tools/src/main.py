@@ -105,7 +105,8 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and args[1] == '-put-blog':
         doc_id = args[2]
-        push_blog_entry(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        result = push_blog_entry(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        print(result.build_dump_data())
         return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):

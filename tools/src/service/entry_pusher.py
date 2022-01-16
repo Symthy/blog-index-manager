@@ -7,8 +7,7 @@ from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.dump.blog_to_doc_mapping import BlogDocEntryMapping
 from file.dump.dump_entry_list import DumpEntryList
-from file.files_operator import get_md_file_name_in_target_dir
-from service.external.blog_entry_index_updater import update_blog_entry_index
+from service.external.blog_entry_index_updater import update_blog_entry_summary_index_file
 from service.external.blog_entry_pusher import push_blog_and_photo_entry
 from service.local.doc_entry_pusher import push_documents_to_docs
 
@@ -45,4 +44,4 @@ def __push_entry_from_docs_to_blog(blog_config: BlogConfig, category_group_def: 
     updated_blog_entries.dump_all_data()
     dump_blog_entry_list.dump_file()
     blog_doc_mapping.dump_file()
-    update_blog_entry_index(category_group_def, updated_blog_entries)
+    update_blog_entry_summary_index_file(category_group_def, updated_blog_entries)

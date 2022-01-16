@@ -3,10 +3,11 @@ from __future__ import annotations
 from functools import reduce
 from typing import List, Dict, Optional
 
+from common.constant import LOCAL_DOCS_ENTRY_GROUPING_PATH
 from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_GROUP_NAME
 from domain.interface import IConvertibleMarkdownLines, IEntry, IEntries
 from file.category_group_def import CategoryGroupDef
-from file.file_accessor import dump_json
+from file.file_accessor import dump_json, load_json
 
 DUMP_NON_CATEGORY_KEY = '-'
 
@@ -185,6 +186,9 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
                 lines = lines + __get_entries_for_md().convert_md_lines()
         return lines
 
+    def dump_docs_data(self):
+        self.dump_all_data(LOCAL_DOCS_ENTRY_GROUPING_PATH)
+
     def dump_all_data(self, file_path):
         def build_entries_dump_data(entry_list: List[IEntry]):
             dump_entries = {}
@@ -221,9 +225,8 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         self.__group_to_categorized_entries[group] = group_to_categorized_entries
 
     @classmethod
-    def deserialize_docs_grouping_data(cls, category_group_def: CategoryGroupDef,
-                                       group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]]) \
-            -> GroupToCategorizedEntriesMap:
+    def deserialize_docs_grouping_data(cls, category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
+        group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]] = load_json(LOCAL_DOCS_ENTRY_GROUPING_PATH)
         self = GroupToCategorizedEntriesMap(category_group_def)
         for group in category_group_def.groups:
             category_to_entries = group_to_categorized_entries[group] if group in group_to_categorized_entries else None

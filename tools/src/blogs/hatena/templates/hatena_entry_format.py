@@ -58,7 +58,7 @@ def get_blog_entry_template() -> str:
 """
 
 
-__PHOTO_LIFE_ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
+__PHOTO_LIFE_POST_ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
 <entry xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title>{title}</title>
   <content mode="base64" type="{content_type}">{content}</content>
@@ -67,8 +67,8 @@ __PHOTO_LIFE_ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
 """
 
 
-def build_hatena_photo_entry_xml_body(title: str, content_type: str, b64_pic_data: str) -> str:
-    entry_xml = __PHOTO_LIFE_ENTRY_TEMPLATE.format(
+def build_hatena_photo_entry_post_xml_body(title: str, content_type: str, b64_pic_data: str) -> str:
+    entry_xml = __PHOTO_LIFE_POST_ENTRY_TEMPLATE.format(
         title=title,
         content_type=content_type,
         content=b64_pic_data

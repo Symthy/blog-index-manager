@@ -10,7 +10,7 @@ from requests import Response
 from blogs.hatena.blog_entry_response_parser import parse_blog_entries_xml, get_next_page_url, parse_blog_entry_xml
 from blogs.hatena.photo_entry_response_parser import parse_photo_entry_xml
 from blogs.hatena.templates.hatena_entry_format import build_hatena_blog_entry_xml_body, get_summary_page_title, \
-    build_hatena_photo_entry_xml_body
+    build_hatena_photo_entry_post_xml_body
 from domain.blog.blog_entry import BlogEntries, BlogEntry
 from domain.blog.photo_entry import PhotoEntry
 from file.blog_config import BlogConfig
@@ -52,6 +52,7 @@ def __build_hatena_blog_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
 
 
 def __build_hatena_photo_entry_body(image_file_path: str) -> Optional[str]:
+    # Todo: refactor use library
     __PIC_EXTENSION_TO_CONTENT_TYPE = {
         'jpg': 'image/jpeg',
         'jpeg': 'image/jpeg',
@@ -66,7 +67,7 @@ def __build_hatena_photo_entry_body(image_file_path: str) -> Optional[str]:
     if not extension in __PIC_EXTENSION_TO_CONTENT_TYPE:
         return None
     b64_pic_data = read_pic_file_b64(image_file_path)
-    return build_hatena_photo_entry_xml_body(title, __PIC_EXTENSION_TO_CONTENT_TYPE[extension], b64_pic_data)
+    return build_hatena_photo_entry_post_xml_body(title, __PIC_EXTENSION_TO_CONTENT_TYPE[extension], b64_pic_data)
 
 
 def __resolve_blog_entry_response_xml_data(xml_string_opt: Optional[str]) -> Optional[BlogEntry]:
@@ -122,6 +123,7 @@ def __execute_put_hatena_blog_entry_update_api(blog_config: BlogConfig, url: str
                                                content: str) \
         -> Optional[str]:
     body = build_hatena_blog_entry_xml_body(blog_config, title, category, content)
+    print('[Info] API execute: PUT Blog')
     return execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
 
 
@@ -141,19 +143,19 @@ def execute_put_hatena_blog_update_api(blog_config: BlogConfig, entry_id: str, t
     return __resolve_blog_entry_response_xml_data(xml_string_opt)
 
 
-# PUT photo
-def execute_put_hatena_photo_update_api(blog_config: BlogConfig, image_file_path: str):
-    """
-    画像更新API実行。このAPIを実行するとローカルで管理している画像の更新時間も更新される
-    :param blog_config:
-    :param image_file_path:
-    :return:
-    """
-    url = HATENA_PHOTO_ENTRY_EDIT_API
-    body = __build_hatena_photo_entry_body(image_file_path)
-    xml_string_opt = execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
-    image_filename = get_file_name_from_file_path(image_file_path)
-    return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
+# def execute_put_hatena_photo_update_api(blog_config: BlogConfig, image_file_path: str):
+#     """
+#     PUT では、画像のタイトルしか変更不可。画像自体の更新は DELETE+POSTで行うこと
+#     :param blog_config:
+#     :param image_file_path:
+#     :return:
+#     """
+#     url = HATENA_PHOTO_ENTRY_EDIT_API
+#     body = __build_hatena_photo_entry_body(image_file_path)
+#     print('[Info] API execute: PUT Photo')
+#     xml_string_opt = execute_put_api(url, __build_request_header(blog_config), body)
+#     image_filename = get_file_name_from_file_path(image_file_path)
+#     return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
 
 
 # POST blog
@@ -161,6 +163,7 @@ def execute_post_hatena_blog_register_api(blog_config: BlogConfig, title: str, c
         -> Optional[BlogEntry]:
     url = __build_hatena_blog_AtomPub_api_base_url(blog_config)
     body = build_hatena_blog_entry_xml_body(blog_config, title, category, content)
+    print('[Info] API execute: POST Blog')
     xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
     return __resolve_blog_entry_response_xml_data(xml_string_opt)
 
@@ -169,9 +172,20 @@ def execute_post_hatena_blog_register_api(blog_config: BlogConfig, title: str, c
 def execute_post_hatena_photo_register_api(blog_config: BlogConfig, image_file_path: str):
     url = HATENA_PHOTO_ENTRY_POST_API
     body = __build_hatena_photo_entry_body(image_file_path)
+    print('[Info] API execute: POST Photo')
     xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body)
     image_filename = get_file_name_from_file_path(image_file_path)
     return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
+
+
+# UPDATE(DELETE+POST) photo
+def execute_update_hatena_photo_api(blog_config: BlogConfig, image_file_path: str, photo_entry: PhotoEntry) \
+        -> Optional[PhotoEntry]:
+    headers = __build_request_header(blog_config)
+    print('[Info] API execute: DELETE Photo')
+    url = f'{HATENA_PHOTO_ENTRY_EDIT_API}/{photo_entry.id}'
+    execute_delete_api(url, headers)
+    return execute_post_hatena_photo_register_api(blog_config, image_file_path)
 
 
 # common executor
@@ -198,3 +212,8 @@ def execute_put_api(url: str, headers: object, body) -> Optional[str]:
 def execute_post_api(url: str, headers: object, body) -> Optional[str]:
     response = requests.post(url, headers=headers, data=body)
     return __resolve_api_response('POST', response, url, headers)
+
+
+def execute_delete_api(url: str, headers: object) -> Optional[str]:
+    response = requests.delete(url, headers=headers)
+    return __resolve_api_response('DELETE', response, url, headers)

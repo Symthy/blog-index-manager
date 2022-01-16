@@ -6,7 +6,7 @@ from domain.interface import IConvertibleMarkdownLines
 from file.blog_config import BlogConfig
 from file.category_group_def import CategoryGroupDef
 from file.md_data_handler import join_lines
-from service.external.blog_entry_index_updater import update_blog_entry_index
+from service.external.blog_entry_index_updater import update_blog_entry_summary_index_file
 
 
 def print_md_lines(data: IConvertibleMarkdownLines):
@@ -27,5 +27,5 @@ def collect_hatena_entry_local_list(blog_config: BlogConfig,
         return
     # print_md_lines(blog_entries)
     blog_entries_opt.dump_all_data()
-    update_blog_entry_index(category_group_def, blog_entries_opt)
+    update_blog_entry_summary_index_file(category_group_def, blog_entries_opt)
     # Todo: reflection of deleted blog entry

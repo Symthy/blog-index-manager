@@ -6,9 +6,9 @@ from file.category_group_def import CategoryGroupDef
 from file.file_accessor import write_text_lines
 
 
-def update_blog_entry_index(category_group_def: CategoryGroupDef,
-                            add_blog_entries: BlogEntries) -> GroupToCategorizedEntriesMap:
-    blog_entries = BlogEntries.deserialize_data()
+def update_blog_entry_summary_index_file(category_group_def: CategoryGroupDef,
+                                         add_blog_entries: BlogEntries) -> GroupToCategorizedEntriesMap:
+    blog_entries = BlogEntries.deserialize_all_data()
     blog_entries.merge(add_blog_entries)
     category_to_entries = CategoryToEntriesMap(blog_entries)
     # print_md_lines(category_to_entries)

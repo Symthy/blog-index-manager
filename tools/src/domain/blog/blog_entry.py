@@ -72,6 +72,9 @@ class BlogEntry(IEntry):
     def original_doc_id(self):
         return self.__original_doc_id
 
+    def register_doc_id(self, doc_entry_id: str):
+        self.__original_doc_id = doc_entry_id
+
     @property
     def doc_images(self) -> PhotoEntries:
         return self.__doc_images
@@ -92,7 +95,6 @@ class BlogEntry(IEntry):
         return {
             BlogEntry.FIELD_ID: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_ID),
             BlogEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TITLE),
-            BlogEntry.FIELD_CONTENT: '',
             BlogEntry.FIELD_PAGE_URL: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_PAGE_URL),
             BlogEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TOP_CATEGORY),
             BlogEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_CATEGORIES),
@@ -114,7 +116,7 @@ class BlogEntry(IEntry):
             convert_entry_time_str_to_datetime(dump_data[BlogEntry.FIELD_UPDATED_AT]),
             dump_data[BlogEntry.FIELD_CATEGORIES],
             dump_data[BlogEntry.FIELD_ORIGINAL_DOC_ID],
-            dump_data[BlogEntry.FIELD_DOC_IMAGES]
+            PhotoEntries.init_from_dump_data(dump_data[BlogEntry.FIELD_DOC_IMAGES])
         )
 
     @classmethod
@@ -154,7 +156,7 @@ class BlogEntries(IEntries):
         dump_entry_list.dump_file()
 
     @classmethod
-    def deserialize_data(cls) -> BlogEntries:
+    def deserialize_all_data(cls) -> BlogEntries:
         dump_entry_list = DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
         self = BlogEntries()
         for entry_id in dump_entry_list.entry_ids:

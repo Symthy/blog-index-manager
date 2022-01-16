@@ -1,6 +1,6 @@
 from typing import List
 
-from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, LOCAL_DOCS_ENTRY_GROUPING_PATH, DOCS_DIR_PATH_TEMP_FILE
+from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, DOCS_DIR_PATH_TEMP_FILE
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntry, new_doc_entry
 from file.category_group_def import CategoryGroupDef
@@ -26,7 +26,7 @@ def retrieve_document_from_docs(category_group_def: CategoryGroupDef, entry_ids:
         dir_name = get_dir_name_from_dir_path(target_entry_docs_dir_path)
         move_dir(target_entry_docs_dir_path, f'{WORK_DIR_PATH}{dir_name}/')
         group_to_categorized_entries.remove_entry(category_group_def, doc_entry)
-    group_to_categorized_entries.dump_all_data(LOCAL_DOCS_ENTRY_GROUPING_PATH)
+    group_to_categorized_entries.dump_docs_data()
 
 
 def cancel_retrieving_document(category_group_def: CategoryGroupDef, entry_ids: List[str]):
@@ -44,4 +44,4 @@ def cancel_retrieving_document(category_group_def: CategoryGroupDef, entry_ids: 
             continue
         delete_dir(dir_path_in_work_opt)
         group_to_categorized_entries.add_entry(category_group_def, doc_entry)
-    group_to_categorized_entries.dump_all_data(LOCAL_DOCS_ENTRY_GROUPING_PATH)
+    group_to_categorized_entries.dump_docs_data()
