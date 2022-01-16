@@ -40,7 +40,7 @@ def show_hatena_photo_entry(blog_config: BlogConfig, entry_id):
 
 def main(args: List[str], is_debug: bool):
     arg_str = ' '.join(args[1:])
-    print(f'tool run. (specified options: {arg_str})')
+    print(f'tool run. (specified options: {arg_str})\n')
     blog_config = read_blog_config(BLOG_CONF_PATH)
     category_group_def = load_category_group_def_yaml()
 
