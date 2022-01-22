@@ -4,7 +4,6 @@ from typing import List, Optional
 
 from common.constant import EXCLUDE_ENTRY_IDS_TXT_PATH
 from domain.blog.blog_entry import BlogEntries, BlogEntry
-from file.blog_config import BlogConfig
 from file.file_accessor import read_text_file
 
 
@@ -16,7 +15,7 @@ def print_xml_children(root: ET.Element):
         print(child.tag)
 
 
-def get_tag_head(root: ET.Element, root_tag: str = 'feed') -> str:
+def __get_tag_head(root: ET.Element, root_tag: str = 'feed') -> str:
     tag_head = root.tag[:-len(root_tag)]  # tag example: {http://www.w3.org/2005/Atom}feed
     return tag_head
 
@@ -24,20 +23,20 @@ def get_tag_head(root: ET.Element, root_tag: str = 'feed') -> str:
 def get_next_page_url(xml_string: str) -> Optional[str]:
     url = None
     root = ET.fromstring(xml_string)
-    for link in root.iter(get_tag_head(root) + 'link'):
+    for link in root.iter(__get_tag_head(root) + 'link'):
         if link.attrib['rel'] == 'next':
             url = link.attrib['href']
             break
     return url
 
 
-def parse_blog_entries_xml(xml_string: str, blog_config: BlogConfig) -> BlogEntries:
+def parse_blog_entries_xml(xml_string: str, summary_entry_id: str) -> BlogEntries:
     root = ET.fromstring(xml_string)
     # print_xml_children(root)
-    tag_head = get_tag_head(root)
+    tag_head = __get_tag_head(root)
     blog_entries = BlogEntries()
     exclude_ids = read_text_file(EXCLUDE_ENTRY_IDS_TXT_PATH)
-    exclude_ids.append(blog_config.summary_entry_id)  # exclude summary entry index page
+    exclude_ids.append(summary_entry_id)  # exclude summary entry index page
     for entry in root.iter(tag_head + 'entry'):
         # print_xml_children(entry)
         blog_entry = __parse_blog_entry_xml(entry, tag_head, exclude_ids)
@@ -46,9 +45,11 @@ def parse_blog_entries_xml(xml_string: str, blog_config: BlogConfig) -> BlogEntr
     return blog_entries
 
 
-def parse_blog_entry_xml(xml_string: str) -> BlogEntry:
-    root = ET.fromstring(xml_string)
-    tag_head = get_tag_head(root, 'entry')
+def parse_blog_entry_xml(xml_string_opt: str) -> Optional[BlogEntry]:
+    if xml_string_opt is None:
+        return None
+    root = ET.fromstring(xml_string_opt)
+    tag_head = __get_tag_head(root, 'entry')
     return __parse_blog_entry_xml(root, tag_head, [])
 
 

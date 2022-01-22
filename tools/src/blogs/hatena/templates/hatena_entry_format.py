@@ -1,6 +1,5 @@
 from xml.sax.saxutils import escape
 
-from file.blog_config import BlogConfig
 from ltime.time_resolver import resolve_entry_current_time
 
 SUMMARY_PAGE_TITLE = "Knowledge Index (記事一覧)"
@@ -32,10 +31,10 @@ def __replace_xml_escape(content: str) -> str:
     return escape(content)  # escape: <, &, >,
 
 
-def build_hatena_blog_entry_xml_body(blog_conf: BlogConfig, title: str, category: str, content: str) -> str:
+def build_hatena_blog_entry_xml_body(hatena_id: str, title: str, category: str, content: str) -> str:
     entry_xml = __BLOG_ENTRY_TEMPLATE.format(
         title=title,
-        author=blog_conf.hatena_id,
+        author=hatena_id,
         content=__replace_xml_escape(content),
         update_time=resolve_entry_current_time(),
         category=category,

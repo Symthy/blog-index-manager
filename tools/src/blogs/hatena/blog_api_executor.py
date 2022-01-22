@@ -4,9 +4,10 @@ import random
 from datetime import datetime
 from typing import Optional
 
-import requests
 from requests import Response
 
+from blogs.api.api_executor import execute_get_api, execute_put_api, execute_post_api, execute_delete_api
+from blogs.api.interface import IBlogApiExecutor
 from blogs.hatena.blog_entry_response_parser import parse_blog_entries_xml, get_next_page_url, parse_blog_entry_xml
 from blogs.hatena.photo_entry_response_parser import parse_photo_entry_xml
 from blogs.hatena.templates.hatena_entry_format import build_hatena_blog_entry_xml_body, get_summary_page_title, \
@@ -23,197 +24,143 @@ HATENA_PHOTO_ENTRY_POST_API = 'https://f.hatena.ne.jp/atom/post'
 HATENA_PHOTO_ENTRY_EDIT_API = 'https://f.hatena.ne.jp/atom/edit'
 
 
-def build_wsse(blog_config: BlogConfig):
-    user_name = blog_config.hatena_id
-    api_key = blog_config.api_key
-    created_time = datetime.now().isoformat() + "Z"
-    b_nonce = hashlib.sha1(str(random.random()).encode()).digest()
-    b_password_digest = hashlib.sha1(b_nonce + created_time.encode() + api_key.encode()).digest()
-    wsse = f'UsernameToken Username={user_name}, ' + \
-           f'PasswordDigest={base64.b64encode(b_password_digest).decode()}, ' + \
-           f'Nonce={base64.b64encode(b_nonce).decode()}, ' + \
-           f'Created={created_time}'
-    return wsse
+class HatenaBlogApiExecutor(IBlogApiExecutor):
+    def __init__(self, blog_config: BlogConfig):
+        self.__blog_conf = blog_config
 
+    def __build_hatena_blog_AtomPub_api_base_url(self) -> str:
+        api_url = HATENA_BLOG_ENTRY_API. \
+            replace('{HATENA_ID}', self.__blog_conf.hatena_id).replace('{BLOG_ID}', self.__blog_conf.blog_id)
+        return api_url
 
-# Todo: OAuth
-def __build_request_header(blog_config: BlogConfig):
-    # 'Accept': 'application/xml',
-    # 'Content-Type': 'application/xml',
-    return {
-        'X-WSSE': build_wsse(blog_config)
-    }
+    # Todo: OAuth
+    # public: for testing
+    def build_request_header(self):
+        def __build_wsse(blog_config: BlogConfig):
+            user_name = blog_config.hatena_id
+            api_key = blog_config.api_key
+            created_time = datetime.now().isoformat() + "Z"
+            b_nonce = hashlib.sha1(str(random.random()).encode()).digest()
+            b_password_digest = hashlib.sha1(b_nonce + created_time.encode() + api_key.encode()).digest()
+            wsse = f'UsernameToken Username={user_name}, ' + \
+                   f'PasswordDigest={base64.b64encode(b_password_digest).decode()}, ' + \
+                   f'Nonce={base64.b64encode(b_nonce).decode()}, ' + \
+                   f'Created={created_time}'
+            return wsse
 
+        # 'Accept': 'application/xml',
+        # 'Content-Type': 'application/xml',
+        return {
+            'X-WSSE': __build_wsse(self.__blog_conf)
+        }
 
-def __build_hatena_blog_AtomPub_api_base_url(blog_config: BlogConfig) -> str:
-    api_url = HATENA_BLOG_ENTRY_API. \
-        replace('{HATENA_ID}', blog_config.hatena_id).replace('{BLOG_ID}', blog_config.blog_id)
-    return api_url
+    # common api executor
+    @classmethod
+    def __resolve_api_response(cls, http_method: str, response: Response, url: str) -> Optional[str]:
+        print(response.status_code, response.reason, http_method, url)
+        if response.status_code == 200 or response.status_code == 201:
+            print('SUCCESS')
+            return response.text  # format: xml
+        else:
+            print(f'[Error] API failure: body={response.text} url={url}')
+            return None
 
+    # Blog
+    # GET Blog
+    def execute_get_blog_entry_api(self, entry_id: str) -> Optional[BlogEntry]:
+        api_url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{entry_id}'
+        request_headers = self.build_request_header()
+        xml_string_opt = execute_get_api(api_url, request_headers, HatenaBlogApiExecutor.__resolve_api_response)
+        return parse_blog_entry_xml(xml_string_opt)
 
-def __build_hatena_photo_entry_body(image_file_path: str) -> Optional[str]:
-    # Todo: refactor use library
-    __PIC_EXTENSION_TO_CONTENT_TYPE = {
-        'jpg': 'image/jpeg',
-        'jpeg': 'image/jpeg',
-        'png': 'image/png',
-        'gif': 'image/gif',
-        'bmp': 'image/bmp',
-        'svg': 'image/svg+xml',
-    }
-    split_str = image_file_path.rsplit('.', 1)
-    title = f'{resolve_current_time_sequence()}_{get_file_name_from_file_path(split_str[0])}'
-    extension = split_str[1].lower()
-    if not extension in __PIC_EXTENSION_TO_CONTENT_TYPE:
-        return None
-    b64_pic_data = read_pic_file_b64(image_file_path)
-    return build_hatena_photo_entry_post_xml_body(title, __PIC_EXTENSION_TO_CONTENT_TYPE[extension], b64_pic_data)
+    def execute_get_all_blog_entries_api(self) -> BlogEntries:
+        next_url = self.__build_hatena_blog_AtomPub_api_base_url()
+        request_headers = self.build_request_header()
+        blog_entries = BlogEntries()
+        while next_url is not None:
+            xml_string_opt = execute_get_api(next_url, request_headers,
+                                             HatenaBlogApiExecutor.__resolve_api_response)
+            if xml_string_opt is None:
+                break
+            next_blog_entries = parse_blog_entries_xml(xml_string_opt, self.__blog_conf.summary_entry_id)
+            next_url = get_next_page_url(xml_string_opt)
+            blog_entries.merge(next_blog_entries)
+        return blog_entries
 
+    # POST blog
+    def execute_register_blog_entry_api(self, title: str, category: str, content: str) -> Optional[BlogEntry]:
+        url = self.__build_hatena_blog_AtomPub_api_base_url()
+        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content)
+        headers = self.build_request_header()
+        print('[Info] API execute: POST Blog')
+        xml_string_opt = execute_post_api(url, headers, body.encode(encoding='utf-8'),
+                                          HatenaBlogApiExecutor.__resolve_api_response)
+        return parse_blog_entry_xml(xml_string_opt)
 
-def __resolve_blog_entry_response_xml_data(xml_string_opt: Optional[str]) -> Optional[BlogEntry]:
-    if xml_string_opt is None:
-        return None
-    return parse_blog_entry_xml(xml_string_opt)
+    # PUT blog
+    def __execute_put_blog_entry_api(self, url: str, title: str, category: str,
+                                     content: str) -> Optional[str]:
+        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content)
+        print('[Info] API execute: PUT Blog')
+        return execute_put_api(url, self.build_request_header(), body.encode(encoding='utf-8'),
+                               HatenaBlogApiExecutor.__resolve_api_response)
 
+    def execute_update_blog_summary_page(self, content: str) -> bool:
+        url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{self.__blog_conf.summary_entry_id}'
+        category = 'Summary'
+        res = self.__execute_put_blog_entry_api(url, get_summary_page_title(), category, content)
+        if res is None:
+            return False
+        return True
 
-def __resolve_photo_entry_response_xml_data(xml_string_opt: Optional[str], image_file_path: str) \
-        -> Optional[PhotoEntry]:
-    if xml_string_opt is None:
-        return None
-    return parse_photo_entry_xml(xml_string_opt, image_file_path)
+    def execute_update_blog_entry_api(self, entry_id: str, title: str, category: str,
+                                      content: str) -> Optional[BlogEntry]:
+        url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{entry_id}'
+        xml_string_opt = self.__execute_put_blog_entry_api(url, title, category, content)
+        return parse_blog_entry_xml(xml_string_opt)
 
+    # GET Photo
+    def execute_get_photo_entry_api(self, entry_id: str) -> Optional[PhotoEntry]:
+        api_url = f'{HATENA_PHOTO_ENTRY_EDIT_API}/{entry_id}'
+        request_headers = self.build_request_header()
+        print('[Info] API execute: GET Photo')
+        xml_string_opt = execute_get_api(api_url, request_headers, HatenaBlogApiExecutor.__resolve_api_response)
+        return parse_photo_entry_xml(xml_string_opt, '')
 
-# GET Blog
-def execute_get_hatena_specified_blog_entry_api(blog_config: BlogConfig, entry_id: str) -> Optional[BlogEntry]:
-    api_url = f'{__build_hatena_blog_AtomPub_api_base_url(blog_config)}/{entry_id}'
-    request_headers = __build_request_header(blog_config)
-    xml_string_opt = execute_get_api(api_url, request_headers)
-    return __resolve_blog_entry_response_xml_data(xml_string_opt)
+    # POST photo
+    def execute_register_photo_entry_api(self, image_file_path: str) -> Optional[PhotoEntry]:
+        def __build_hatena_photo_entry_body() -> Optional[str]:
+            # Todo: refactor use library
+            __PIC_EXTENSION_TO_CONTENT_TYPE = {
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'png': 'image/png',
+                'gif': 'image/gif',
+                'bmp': 'image/bmp',
+                'svg': 'image/svg+xml',
+            }
+            split_str = image_file_path.rsplit('.', 1)
+            title = f'{resolve_current_time_sequence()}_{get_file_name_from_file_path(split_str[0])}'
+            extension = split_str[1].lower()
+            if not extension in __PIC_EXTENSION_TO_CONTENT_TYPE:
+                return None
+            b64_pic_data = read_pic_file_b64(image_file_path)
+            return build_hatena_photo_entry_post_xml_body(title, __PIC_EXTENSION_TO_CONTENT_TYPE[extension],
+                                                          b64_pic_data)
 
+        url = HATENA_PHOTO_ENTRY_POST_API
+        body = __build_hatena_photo_entry_body()
+        print('[Info] API execute: POST Photo')
+        xml_string_opt = execute_post_api(url, self.build_request_header(), body,
+                                          HatenaBlogApiExecutor.__resolve_api_response)
+        image_filename = get_file_name_from_file_path(image_file_path)
+        return parse_photo_entry_xml(xml_string_opt, image_filename)
 
-def execute_get_hatena_all_entry_api(blog_config: BlogConfig) -> Optional[BlogEntries]:
-    api_url = __build_hatena_blog_AtomPub_api_base_url(blog_config)
-    request_headers = __build_request_header(blog_config)
-    xml_string_opt = execute_get_api(api_url, request_headers)
-    if xml_string_opt is None:
-        return None
-    blog_entries = parse_blog_entries_xml(xml_string_opt, blog_config)
-
-    next_url = get_next_page_url(xml_string_opt)
-    while next_url is not None:
-        next_xml_string_opt = execute_get_api(next_url, request_headers)
-        if next_xml_string_opt is None:
-            break
-        next_blog_entries = parse_blog_entries_xml(next_xml_string_opt, blog_config)
-        next_url = get_next_page_url(next_xml_string_opt)
-        blog_entries.merge(next_blog_entries)
-    return blog_entries
-
-
-# GET Photo
-def execute_get_hatena_specified_photo_entry_api(blog_config: BlogConfig, entry_id: str) -> Optional[PhotoEntry]:
-    api_url = f'{HATENA_PHOTO_ENTRY_EDIT_API}/{entry_id}'
-    request_headers = __build_request_header(blog_config)
-    xml_string_opt = execute_get_api(api_url, request_headers)
-    return __resolve_photo_entry_response_xml_data(xml_string_opt, '')
-
-
-# PUT blog
-def __execute_put_hatena_blog_entry_update_api(blog_config: BlogConfig, url: str, title: str, category: str,
-                                               content: str) \
-        -> Optional[str]:
-    body = build_hatena_blog_entry_xml_body(blog_config, title, category, content)
-    print('[Info] API execute: PUT Blog')
-    return execute_put_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
-
-
-def execute_put_hatena_summary_page(blog_config: BlogConfig, content: str) -> bool:
-    url = f'{__build_hatena_blog_AtomPub_api_base_url(blog_config)}/{blog_config.summary_entry_id}'
-    category = 'Summary'
-    res = __execute_put_hatena_blog_entry_update_api(blog_config, url, get_summary_page_title(), category, content)
-    if res is None:
-        return False
-    return True
-
-
-def execute_put_hatena_blog_update_api(blog_config: BlogConfig, entry_id: str, title: str, category: str,
-                                       content: str) -> Optional[BlogEntry]:
-    url = f'{__build_hatena_blog_AtomPub_api_base_url(blog_config)}/{entry_id}'
-    xml_string_opt = __execute_put_hatena_blog_entry_update_api(blog_config, url, title, category, content)
-    return __resolve_blog_entry_response_xml_data(xml_string_opt)
-
-
-# def execute_put_hatena_photo_update_api(blog_config: BlogConfig, image_file_path: str):
-#     """
-#     PUT では、画像のタイトルしか変更不可。画像自体の更新は DELETE+POSTで行うこと
-#     :param blog_config:
-#     :param image_file_path:
-#     :return:
-#     """
-#     url = HATENA_PHOTO_ENTRY_EDIT_API
-#     body = __build_hatena_photo_entry_body(image_file_path)
-#     print('[Info] API execute: PUT Photo')
-#     xml_string_opt = execute_put_api(url, __build_request_header(blog_config), body)
-#     image_filename = get_file_name_from_file_path(image_file_path)
-#     return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
-
-
-# POST blog
-def execute_post_hatena_blog_register_api(blog_config: BlogConfig, title: str, category: str, content: str) \
-        -> Optional[BlogEntry]:
-    url = __build_hatena_blog_AtomPub_api_base_url(blog_config)
-    body = build_hatena_blog_entry_xml_body(blog_config, title, category, content)
-    print('[Info] API execute: POST Blog')
-    xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body.encode(encoding='utf-8'))
-    return __resolve_blog_entry_response_xml_data(xml_string_opt)
-
-
-# POST photo
-def execute_post_hatena_photo_register_api(blog_config: BlogConfig, image_file_path: str):
-    url = HATENA_PHOTO_ENTRY_POST_API
-    body = __build_hatena_photo_entry_body(image_file_path)
-    print('[Info] API execute: POST Photo')
-    xml_string_opt = execute_post_api(url, __build_request_header(blog_config), body)
-    image_filename = get_file_name_from_file_path(image_file_path)
-    return __resolve_photo_entry_response_xml_data(xml_string_opt, image_filename)
-
-
-# UPDATE(DELETE+POST) photo
-def execute_update_hatena_photo_api(blog_config: BlogConfig, image_file_path: str, photo_entry: PhotoEntry) \
-        -> Optional[PhotoEntry]:
-    headers = __build_request_header(blog_config)
-    print('[Info] API execute: DELETE Photo')
-    url = f'{HATENA_PHOTO_ENTRY_EDIT_API}/{photo_entry.id}'
-    execute_delete_api(url, headers)
-    return execute_post_hatena_photo_register_api(blog_config, image_file_path)
-
-
-# common executor
-def __resolve_api_response(http_method: str, response: Response, url: str, headers: object) -> Optional[str]:
-    print(response.status_code, response.reason, http_method, url)
-    if response.status_code == 200 or response.status_code == 201:
-        print('SUCCESS')
-        return response.text  # format: xml
-    else:
-        print(f'[Error] API failure: body={response.text} url={url} headers={headers}')
-        return None
-
-
-def execute_get_api(url: str, headers: object) -> Optional[str]:
-    response = requests.get(url, headers=headers)
-    return __resolve_api_response('GET', response, url, headers)
-
-
-def execute_put_api(url: str, headers: object, body) -> Optional[str]:
-    response = requests.put(url, headers=headers, data=body)
-    return __resolve_api_response('PUT', response, url, headers)
-
-
-def execute_post_api(url: str, headers: object, body) -> Optional[str]:
-    response = requests.post(url, headers=headers, data=body)
-    return __resolve_api_response('POST', response, url, headers)
-
-
-def execute_delete_api(url: str, headers: object) -> Optional[str]:
-    response = requests.delete(url, headers=headers)
-    return __resolve_api_response('DELETE', response, url, headers)
+    # UPDATE(DELETE+POST) photo
+    # PUT can change title only
+    def execute_update_photo_entry_api(self, image_file_path: str, photo_entry: PhotoEntry) -> Optional[PhotoEntry]:
+        headers = self.build_request_header()
+        print('[Info] API execute: DELETE Photo')
+        url = f'{HATENA_PHOTO_ENTRY_EDIT_API}/{photo_entry.id}'
+        execute_delete_api(url, headers, HatenaBlogApiExecutor.__resolve_api_response)
+        return self.execute_register_photo_entry_api(image_file_path)

@@ -1,40 +1,39 @@
 import sys
 from typing import List
 
-from blogs.api.api_executor import execute_get_hatena_specified_blog_entry_api, \
-    execute_get_hatena_specified_photo_entry_api
-from blogs.hatena.blog_api_executor import build_request_header
+from blogs.api.interface import IBlogApiExecutor
+from blogs.hatena.blog_api_executor import HatenaBlogApiExecutor
 from common.constant import BLOG_CONF_PATH
 from domain.blog.blog_entry import BlogEntry
 from domain.doc.doc_entry import DocEntry
-from file.blog_config import BlogConfig
 from file.file_accessor import read_blog_config, load_category_group_def_yaml, read_md_file
 from file.md_data_handler import replace_image_link_in_md_data
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
 from service.external.blog_entry_pusher import put_hatena_summary_page, push_photo_entries, push_blog_entry
+from service.local.doc_entry_generator import new_local_document_set
 from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
 from service.local.doc_entry_searcher import search_doc_entry_by_group, search_doc_entry_by_category, \
     search_doc_entry_by_title
-from service.local.docs_initializer import new_local_document_set, initialize_docs_dir
+from service.local.docs_initializer import initialize_docs_dir
 
 
-def show_hatena_blog_entry(blog_config: BlogConfig, entry_id):
+def show_hatena_blog_entry(api_executor: IBlogApiExecutor, entry_id):
     # for debug
-    blog_entry_opt = execute_get_hatena_specified_blog_entry_api(blog_config, entry_id)
+    blog_entry_opt = api_executor.execute_get_blog_entry_api(entry_id)
     if blog_entry_opt is None:
-        print('Nothing')
+        print(f'Nothing entry: {entry_id}')
         return
     print(blog_entry_opt.content)
 
 
-def show_hatena_photo_entry(blog_config: BlogConfig, entry_id):
+def show_hatena_photo_entry(api_executor: IBlogApiExecutor, entry_id):
     # for debug
-    photo_entry_opt = execute_get_hatena_specified_photo_entry_api(blog_config, entry_id)
+    photo_entry_opt = api_executor.execute_get_photo_entry_api(entry_id)
     if photo_entry_opt is None:
-        print('Nothing')
+        print(f'Nothing entry: {entry_id}')
         return
     print(photo_entry_opt.build_dump_data())
 
@@ -43,6 +42,7 @@ def main(args: List[str], is_debug: bool):
     arg_str = ' '.join(args[1:])
     print(f'tool run. (specified options: {arg_str})\n')
     blog_config = read_blog_config(BLOG_CONF_PATH)
+    api_executor = HatenaBlogApiExecutor(blog_config)
     category_group_def = load_category_group_def_yaml()
 
     # TODO: refactor. use argparse? (no use docopt. because last commit is old)
@@ -88,15 +88,15 @@ def main(args: List[str], is_debug: bool):
     # external
     if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):
         if len(args) >= 3 and (args[2] == '-collect' or args[2] == '-c'):
-            collect_hatena_entry_local_list(blog_config, category_group_def)
+            collect_hatena_entry_local_list(api_executor, category_group_def)
             print('Success: blog entry collect')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
-            push_entry_from_docs_to_blog(blog_config, category_group_def, args[3:])
+            push_entry_from_docs_to_blog(api_executor, category_group_def, args[3:])
             return
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':
-        print(build_request_header(blog_config))
+        print(api_executor.build_request_header())
         return
     if len(args) >= 2 and args[1] == '-get-blog':
         hatena_blog_entry_id = '26006613443907494'
