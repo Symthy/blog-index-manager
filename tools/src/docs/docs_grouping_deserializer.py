@@ -7,7 +7,8 @@ from files.conf.category_group_def import CategoryGroupDef
 
 def deserialize_doc_entry_grouping_data(category_group_def: CategoryGroupDef,
                                         add_docs_entries: Optional[IEntries] = None) -> GroupToCategorizedEntriesMap:
-    entry_index_result_map = GroupToCategorizedEntriesMap.deserialize_docs_grouping_data(category_group_def)
+    entry_grouping_map = GroupToCategorizedEntriesMap.deserialize_docs_grouping_data(category_group_def)
+    print(entry_grouping_map.convert_md_lines())
     if add_docs_entries is not None:
-        entry_index_result_map.add_entries(category_group_def, add_docs_entries)
-    return entry_index_result_map
+        entry_grouping_map.add_entries(category_group_def, add_docs_entries)
+    return entry_grouping_map

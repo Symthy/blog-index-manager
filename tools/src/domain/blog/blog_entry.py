@@ -80,7 +80,9 @@ class BlogEntry(IEntry):
     def is_images_empty(self) -> bool:
         return self.__doc_images.is_empty()
 
-    def add_photo_entries(self, photo_entries: PhotoEntries):
+    def add_photo_entries(self, photo_entries: Optional[PhotoEntries] = None):
+        if photo_entries is None:
+            return
         self.__doc_images.merge(photo_entries)
 
     def build_id_to_title(self) -> Dict[str, str]:
@@ -117,6 +119,7 @@ class BlogEntry(IEntry):
 
 class BlogEntries(IEntries):
     def __init__(self, entries: List[BlogEntry] = None):
+        # Todo: examination. use dict? see
         self.__entries: List[BlogEntry] = []
         if entries is not None:
             self.__entries: List[BlogEntry] = entries
@@ -127,6 +130,12 @@ class BlogEntries(IEntries):
 
     def is_empty(self) -> bool:
         return len(self.__entries) == 0
+
+    def is_contains(self, target_entry_id: str) -> bool:
+        for entry in self.__entries:
+            if entry.id == target_entry_id:
+                return True
+        return False
 
     def add_entry(self, blog_entry: BlogEntry):
         self.__entries.append(blog_entry)
@@ -139,5 +148,5 @@ class BlogEntries(IEntries):
         return [entry.convert_md_line() for entry in self.__entries]
 
     @classmethod
-    def init_empty_instance(cls) -> BlogEntries:
-        return BlogEntries()
+    def new_instance(cls, entry_list: List[BlogEntry]) -> BlogEntries:
+        return BlogEntries(entry_list)

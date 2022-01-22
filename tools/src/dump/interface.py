@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, Optional, List
 
 from domain.blog.blog_entry import BlogEntries, BlogEntry
 from domain.doc.doc_entry import DocEntries, DocEntry
@@ -16,8 +16,8 @@ class IDumpEntryAccessor(ABC, Generic[TS]):
         pass
 
 
-class IDumpEntriesAccessor(ABC, Generic[TM, TS], IDumpEntryAccessor):
-    def load_entries(self) -> TM:
+class IDumpEntriesAccessor(IDumpEntryAccessor[TS], Generic[TM, TS]):
+    def load_entries(self, entry_ids: Optional[List[str]] = None) -> TM:
         pass
 
     def save_entries(self, entries: TM):

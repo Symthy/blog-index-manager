@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import Dict, List, Any, Generic
+from typing import Dict, List, Any, Generic, Optional
 
 from dump.dump_entry_accessor import DumpEntryAccessor
-from dump.interface import TS
+from dump.interface import TS, TM
 from files.file_accessor import load_json
 from ltime.time_resolver import resolve_entry_current_time
 
 
-class DumpEntryList(Generic[TS]):
+class DumpEntryList(Generic[TM, TS]):
     """
     xxx_entry_list.jsonの全データを保持するクラス
     """
@@ -36,10 +36,10 @@ class DumpEntryList(Generic[TS]):
             DumpEntryList.FIELD_ENTRIES: self.__entry_id_to_title
         }
 
-    def convert(self) -> List[TS]:
-        entry_list: List[TS] = []
-        for entry_id in self.entry_ids:
-            entry_list.append(self.__dump_entry_accessor.load_entry(entry_id))
+    def convert_entries(self, target_entry_ids: Optional[List[str]] = None) -> List[TS]:
+        # filter target entry ids
+        entry_list: List[TS] = [self.__dump_entry_accessor.load_entry(entry_id) for entry_id in self.entry_ids
+                                if target_entry_ids is not None and entry_id in target_entry_ids]
         return entry_list
 
 # dump data format

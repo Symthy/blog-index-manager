@@ -40,19 +40,19 @@ def push_blog_and_photo_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntr
         # new post
         new_photo_entries_opt = push_photo_entries(api_executor, doc_entry)
         new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, new_photo_entries_opt)
-        use_photo_entries = new_photo_entries_opt
+        use_photo_entries_opt = new_photo_entries_opt
     else:
         # Overwrite post
         old_photo_entries = None if old_blog_entry.is_images_empty() else old_blog_entry.doc_images
         new_photo_entries_opt: Optional[PhotoEntries] = push_photo_entries(api_executor, doc_entry, old_photo_entries)
-        use_photo_entries = old_photo_entries
+        use_photo_entries_opt = old_photo_entries
         if new_photo_entries_opt is not None and not new_photo_entries_opt.is_empty():
-            use_photo_entries = new_photo_entries_opt
-        new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, use_photo_entries, old_blog_entry.id)
+            use_photo_entries_opt = new_photo_entries_opt
+        new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, use_photo_entries_opt, old_blog_entry.id)
     if new_blog_entry_opt is None:
         return None
     # inherit old image when photo not updated
-    new_blog_entry_opt.add_photo_entries(use_photo_entries)
+    new_blog_entry_opt.add_photo_entries(use_photo_entries_opt)
     return new_blog_entry_opt
 
 

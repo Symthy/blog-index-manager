@@ -58,5 +58,9 @@ class IEntries(IConvertibleMarkdownLines, ABC):
         pass
 
     @abstractmethod
+    def is_contains(self, target_entry_id: str) -> bool:
+        pass
+
+    @abstractmethod
     def merge(self, entries: IEntries):
         pass

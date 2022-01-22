@@ -1,4 +1,4 @@
-from typing import Optional, Callable, Dict, Any, List, Generic
+from typing import Optional, Callable, Dict, Any, List
 
 from common.constant import LOCAL_DOCS_ENTRY_LIST_PATH, \
     HATENA_BLOG_ENTRY_LIST_PATH
@@ -10,10 +10,10 @@ from dump.interface import IDumpEntriesAccessor, TM, TS
 from files.file_accessor import dump_json
 
 
-class DumpEntriesAccessor(Generic[TM, TS], IDumpEntriesAccessor[TM]):
+class DumpEntriesAccessor(IDumpEntriesAccessor[TM, TS]):
     __DUMP_FILE_TO_ENTRIES_FACTORY: Dict[str, Callable[[Optional[List[TS]]], TM]] = {
-        HATENA_BLOG_ENTRY_LIST_PATH: BlogEntries.init_empty_instance,
-        LOCAL_DOCS_ENTRY_LIST_PATH: DocEntries.init_empty_instance
+        HATENA_BLOG_ENTRY_LIST_PATH: BlogEntries.new_instance,
+        LOCAL_DOCS_ENTRY_LIST_PATH: DocEntries.new_instance
     }
 
     def __init__(self, list_file_path: str, dump_entry_accessor: DumpEntryAccessor[TS],
@@ -26,9 +26,9 @@ class DumpEntriesAccessor(Generic[TM, TS], IDumpEntriesAccessor[TM]):
     def __build_dump_entry_list(self) -> DumpEntryList:
         return DumpEntryList(self.__entry_list_file_path, self.__dump_entry_accessor)
 
-    def load_entries(self) -> TM:
+    def load_entries(self, target_entry_ids: Optional[List[str]] = None) -> TM:
         dump_entry_list = self.__build_dump_entry_list()
-        entries = self.__entries_factory(dump_entry_list.convert())
+        entries = self.__entries_factory(dump_entry_list.convert_entries(target_entry_ids))
         return entries
 
     def save_entries(self, entries: TM):

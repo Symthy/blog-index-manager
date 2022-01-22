@@ -141,6 +141,7 @@ class DocEntry(IEntry):
 
 class DocEntries(IEntries):
     def __init__(self, entries: List[DocEntry] = None):
+        # Todo: examination. use dict? see
         self.__entries: List[DocEntry] = []
         if entries is not None:
             self.__entries: List[DocEntry] = entries
@@ -152,6 +153,15 @@ class DocEntries(IEntries):
     def is_empty(self) -> bool:
         return len(self.__entries) == 0
 
+    def is_contains(self, target_entry_id: str) -> bool:
+        for entry in self.__entries:
+            if entry.id == target_entry_id:
+                return True
+        return False
+
+    def __add_entry(self, blog_entry: DocEntry):
+        self.__entries.append(blog_entry)
+
     def __add_entries(self, blog_entries: List[DocEntry]):
         self.__entries.extend(blog_entries)
 
@@ -161,9 +171,6 @@ class DocEntries(IEntries):
 
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]
-
-    def __add_entry(self, blog_entry: DocEntry):
-        self.__entries.append(blog_entry)
 
     @classmethod
     def init_from_entry_ids(cls, entry_ids: List[str]) -> DocEntries:
@@ -175,5 +182,5 @@ class DocEntries(IEntries):
         return DocEntries(entries)
 
     @classmethod
-    def init_empty_instance(cls) -> DocEntries:
-        return DocEntries()
+    def new_instance(cls, entry_list: List[DocEntry]) -> DocEntries:
+        return DocEntries(entry_list)

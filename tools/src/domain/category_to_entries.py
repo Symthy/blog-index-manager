@@ -113,8 +113,8 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         if category_to_entries_obj is None:
             return self
         for category, entries in category_to_entries_obj.items():
-            # Todo: refactor: DI?
-            doc_entries: DocEntries = DumpDocEntriesAccessor().load_entries()
+            # Todo: refactor? use DI?
+            doc_entries: DocEntries = DumpDocEntriesAccessor().load_entries(list(entries.keys()))
             category_to_entries_set = CategoryToEntriesSet.deserialize_docs_grouping_data(category, doc_entries)
             self.__add_category_to_entries(category, category_to_entries_set)
         return self
