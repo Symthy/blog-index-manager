@@ -3,9 +3,8 @@ from __future__ import annotations
 from typing import List, Dict, Optional
 
 from common.constant import NON_CATEGORY_GROUP_NAME
-from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
-from domain.doc.doc_entry import DocEntries
 from domain.interface import IConvertibleMarkdownLines, IEntries, IEntry
+from dump.interface import IDumpEntriesAccessor
 
 
 class CategoryToEntriesSet(IConvertibleMarkdownLines):
@@ -50,7 +49,7 @@ class CategoryToEntriesSet(IConvertibleMarkdownLines):
         return self
 
     @classmethod
-    def deserialize_docs_grouping_data(cls, category: str, entries: IEntries) -> CategoryToEntriesSet:
+    def deserialize_entry_grouping_data(cls, category: str, entries: IEntries) -> CategoryToEntriesSet:
         return CategoryToEntriesSet.__init_from_dump_data(category, entries)
 
 
@@ -107,14 +106,14 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         self.__category_to_entries[category] = category_to_entries
 
     @classmethod
-    def deserialize_docs_grouping_data(cls, category_to_entries_obj: Optional[Dict[str, Dict[str, str]]] = None) \
+    def deserialize_entry_grouping_data(cls, dump_entries_accessor: IDumpEntriesAccessor,
+                                        category_to_entries_obj: Optional[Dict[str, Dict[str, str]]] = None) \
             -> CategoryToEntriesMap:
         self = CategoryToEntriesMap()
         if category_to_entries_obj is None:
             return self
-        for category, entries in category_to_entries_obj.items():
-            # Todo: refactor? use DI?
-            doc_entries: DocEntries = DumpDocEntriesAccessor().load_entries(list(entries.keys()))
-            category_to_entries_set = CategoryToEntriesSet.deserialize_docs_grouping_data(category, doc_entries)
+        for category, entry_key_to_value in category_to_entries_obj.items():
+            entries: IEntries = dump_entries_accessor.load_entries(list(entry_key_to_value.keys()))
+            category_to_entries_set = CategoryToEntriesSet.deserialize_entry_grouping_data(category, entries)
             self.__add_category_to_entries(category, category_to_entries_set)
         return self

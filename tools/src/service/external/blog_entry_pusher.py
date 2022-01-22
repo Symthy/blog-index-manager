@@ -21,8 +21,8 @@ def put_hatena_summary_page(api_executor: IBlogApiExecutor, category_group_def: 
     :param category_group_def:
     :return:
     """
-    entries_index_map = deserialize_doc_entry_grouping_data(category_group_def)
-    content = get_blog_summary_index_template().format(md_lines=join_lines(entries_index_map.convert_md_lines()))
+    entries_grouping_map = deserialize_doc_entry_grouping_data(category_group_def)
+    content = get_blog_summary_index_template().format(md_lines=join_lines(entries_grouping_map.convert_md_lines()))
     is_success = api_executor.execute_update_blog_summary_page(content)
     if not is_success:
         print('[Error] blog summary page updated failure')

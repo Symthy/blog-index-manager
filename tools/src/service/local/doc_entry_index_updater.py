@@ -6,6 +6,6 @@ from files.file_accessor import write_text_lines
 
 
 def update_entry_grouping_and_summary(category_group_def: CategoryGroupDef, add_docs_entries: DocEntries):
-    entry_index_result_map = deserialize_doc_entry_grouping_data(category_group_def, add_docs_entries)
-    entry_index_result_map.dump_docs_data()
-    write_text_lines(LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH, entry_index_result_map.convert_md_lines())
+    entry_grouping_map = deserialize_doc_entry_grouping_data(category_group_def, add_docs_entries)
+    entry_grouping_map.dump_docs_data()
+    write_text_lines(LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH, entry_grouping_map.convert_md_lines())
