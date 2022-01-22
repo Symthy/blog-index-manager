@@ -1,7 +1,7 @@
 from typing import List
 
 from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, DOCS_DIR_PATH_TEMP_FILE
-from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
+from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntry, new_doc_entry
 from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import is_exist_in_local_entry_list, write_text_line, \

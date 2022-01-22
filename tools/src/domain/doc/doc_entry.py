@@ -177,7 +177,7 @@ class DocEntries(IEntries):
             # update file when the entry json file already exists.
             dump_entry_list.push_entry(entry)
             entry.dump_data(f'{LOCAL_DOCS_ENTRY_DUMP_DIR}/{entry.id}.json')
-        dump_entry_list.dump_file()
+        dump_entry_list.build_dump_data()
 
     def __add_entry(self, blog_entry: DocEntry):
         self.__entries.append(blog_entry)
@@ -190,10 +190,14 @@ class DocEntries(IEntries):
         return self
 
     @classmethod
-    def init_by_entry_ids(cls, entry_ids: List[str]) -> DocEntries:
+    def init_from_entry_ids(cls, entry_ids: List[str]) -> DocEntries:
         entries: List[DocEntry] = []
         for entry_id in entry_ids:
             entry_dump_data = get_local_doc_entry_dump_data(entry_id)
             doc_entry = DocEntry.init_from_dump_data(entry_dump_data)
             entries.append(doc_entry)
         return DocEntries(entries)
+
+    @classmethod
+    def init_empty_instance(cls) -> DocEntries:
+        return DocEntries()

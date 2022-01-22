@@ -1,30 +1,35 @@
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Dict, List, Any, Generic
 
 from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_LIST_PATH
-from domain.interface import IEntry
+from dump.dump_entry_accessor import DumpEntryAccessor
+from dump.interface import TS
 from files.file_accessor import load_json, dump_json
 from ltime.time_resolver import resolve_entry_current_time
 
 
-class DumpEntryList:
+class DumpEntryList(Generic[TS]):
+    """
+    xxx_entry_list.jsonのデータを保持するクラス
+    """
     FIELD_UPDATED_TIME = 'updated_time'
     FIELD_ENTRIES = 'entries'
 
-    def __init__(self, file_path: str):
-        self.__dump_file_path = file_path
-        dump_data = load_json(file_path)
+    def __init__(self, entry_list_file_path: str, dump_entry_accessor: DumpEntryAccessor[TS]):
+        self.__dump_entry_accessor = dump_entry_accessor
+        dump_data = load_json(entry_list_file_path)
+        self.__dump_file_path = entry_list_file_path  # Todo: delete
         self.__updated_time: str = dump_data[DumpEntryList.FIELD_UPDATED_TIME] \
             if DumpEntryList.FIELD_UPDATED_TIME in dump_data else resolve_entry_current_time()
         self.__entry_id_to_title: Dict[str, str] = dump_data[DumpEntryList.FIELD_ENTRIES] \
             if DumpEntryList.FIELD_ENTRIES in dump_data else {}
 
-    @classmethod
+    @classmethod  # Todo: delete
     def init_blog_entry_list(cls) -> DumpEntryList:
         return DumpEntryList(HATENA_BLOG_ENTRY_LIST_PATH)
 
-    @classmethod
+    @classmethod  # Todo: delete
     def init_doc_entry_list(cls) -> DumpEntryList:
         return DumpEntryList(LOCAL_DOCS_ENTRY_LIST_PATH)
 
@@ -32,8 +37,14 @@ class DumpEntryList:
     def entry_ids(self) -> List[str]:
         return list(self.__entry_id_to_title.keys())
 
-    def push_entry(self, entry: IEntry):
+    def push_entry(self, entry: TS):
         self.__entry_id_to_title[entry.id] = entry.title
+
+    def build_dump_data(self) -> Dict[str, Any]:
+        return {
+            DumpEntryList.FIELD_UPDATED_TIME: resolve_entry_current_time(),
+            DumpEntryList.FIELD_ENTRIES: self.__entry_id_to_title
+        }
 
     def dump_file(self):
         dump_data = {
@@ -41,6 +52,12 @@ class DumpEntryList:
             DumpEntryList.FIELD_ENTRIES: self.__entry_id_to_title
         }
         dump_json(self.__dump_file_path, dump_data)
+
+    def convert(self) -> List[TS]:
+        entry_list: List[TS] = []
+        for entry_id in self.entry_ids:
+            entry_list.append(self.__dump_entry_accessor.load_entry(entry_id))
+        return entry_list
 
 # dump data format
 # {

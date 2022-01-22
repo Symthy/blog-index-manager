@@ -107,7 +107,7 @@ class BlogEntry(IEntry):
         dump_entry_data(self, dump_file_path)
 
     @classmethod
-    def __init_from_dump_data(cls, dump_data: Dict[str, any]) -> BlogEntry:
+    def init_from_dump_data(cls, dump_data: Dict[str, any]) -> BlogEntry:
         return BlogEntry(
             dump_data[BlogEntry.FIELD_ID],
             dump_data[BlogEntry.FIELD_TITLE],
@@ -123,7 +123,7 @@ class BlogEntry(IEntry):
     def deserialize_entry_data(cls, entry_id: str) -> BlogEntry:
         dump_file_path = f'{HATENA_BLOG_ENTRY_DUMP_DIR}{entry_id}.json'
         json_data = load_json(dump_file_path)
-        return BlogEntry.__init_from_dump_data(json_data)
+        return BlogEntry.init_from_dump_data(json_data)
 
 
 class BlogEntries(IEntries):
@@ -153,7 +153,7 @@ class BlogEntries(IEntries):
         for entry in self.__entries:
             dump_entry_list.push_entry(entry)
             entry.dump_data(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json')
-        dump_entry_list.dump_file()
+        dump_entry_list.build_dump_data()
 
     @classmethod
     def deserialize_all_data(cls) -> BlogEntries:
@@ -162,3 +162,7 @@ class BlogEntries(IEntries):
         for entry_id in dump_entry_list.entry_ids:
             self.add_entry(BlogEntry.deserialize_entry_data(entry_id))
         return self
+
+    @classmethod
+    def init_empty_instance(cls) -> BlogEntries:
+        return BlogEntries()

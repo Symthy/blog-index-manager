@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import List, Dict, Optional
 
 from common.constant import NON_CATEGORY_GROUP_NAME
-from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
+from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry, IEntries
@@ -108,5 +108,5 @@ def search_doc_entry_by_title(category_group_def: CategoryGroupDef, keyword: str
     entry_ids: List[str] = resolve_title_partial_match_doc_entry(keyword)
     if len(entry_ids) == 0:
         print(f'[Warn] Nothing partially matched doc title: {keyword}')
-    entries = DocEntries.init_by_entry_ids(entry_ids)
+    entries = DocEntries.init_from_entry_ids(entry_ids)
     EntrySearchResults.init_by_multi_groups(category_group_def, entries).print_search_results()

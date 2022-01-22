@@ -3,7 +3,7 @@ from typing import Optional, Dict, List
 from blogs.api.interface import IBlogApiExecutor
 from blogs.hatena.templates.hatena_entry_format import get_blog_summary_index_template, get_blog_entry_template
 from common.constant import DOC_IMAGES_DIR_NAME
-from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
+from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.blog.blog_entry import BlogEntry
 from domain.blog.photo_entry import PhotoEntry, PhotoEntries
 from domain.doc.doc_entry import DocEntry

@@ -19,7 +19,7 @@ def push_entry_to_docs_and_blog(api_executor: IBlogApiExecutor, category_group_d
 
 def push_entry_from_docs_to_blog(api_executor: IBlogApiExecutor, category_group_def: CategoryGroupDef,
                                  target_doc_entry_ids: List[str]):
-    doc_entries = DocEntries.init_by_entry_ids(target_doc_entry_ids)
+    doc_entries = DocEntries.init_from_entry_ids(target_doc_entry_ids)
     __push_entry_from_docs_to_blog(api_executor, category_group_def, doc_entries)
 
 
@@ -41,6 +41,6 @@ def __push_entry_from_docs_to_blog(api_executor: IBlogApiExecutor, category_grou
     # dump to file
     updated_blog_entries = BlogEntries(updated_blog_entry_list)
     updated_blog_entries.dump_all_data()
-    dump_blog_entry_list.dump_file()
+    dump_blog_entry_list.build_dump_data()
     blog_doc_mapping.dump_file()
     update_blog_entry_summary_index_file(category_group_def, updated_blog_entries)
