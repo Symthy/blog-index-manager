@@ -1,7 +1,7 @@
 from common.constant import LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntries
-from files.category_group_def import CategoryGroupDef
+from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import write_text_lines
 
 

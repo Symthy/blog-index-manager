@@ -7,7 +7,7 @@ from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
 from domain.blog.blog_entry import BlogEntry
 from domain.blog.photo_entry import PhotoEntry, PhotoEntries
 from domain.doc.doc_entry import DocEntry
-from files.category_group_def import CategoryGroupDef
+from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import read_md_file
 from files.files_operator import get_updated_time_of_target_file, get_file_name_from_file_path, \
     get_image_file_paths_in_target_dir

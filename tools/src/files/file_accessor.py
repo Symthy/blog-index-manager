@@ -7,8 +7,8 @@ from typing import List, Dict, Optional
 import yaml
 
 from common.constant import CATEGORY_GROUP_YAML_PATH, LOCAL_DOCS_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_DUMP_DIR
-from files.blog_config import BlogConfig
-from files.category_group_def import CategoryGroupDef
+from files.conf.blog_config import BlogConfig
+from files.conf.category_group_def import CategoryGroupDef
 
 
 def read_blog_config(config_path):

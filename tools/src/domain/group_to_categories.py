@@ -6,7 +6,7 @@ from typing import List, Dict, Optional
 from common.constant import LOCAL_DOCS_ENTRY_GROUPING_PATH
 from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_GROUP_NAME
 from domain.interface import IConvertibleMarkdownLines, IEntry, IEntries
-from files.category_group_def import CategoryGroupDef
+from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import dump_json, load_json
 
 DUMP_NON_CATEGORY_KEY = '-'

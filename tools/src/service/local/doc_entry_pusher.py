@@ -3,7 +3,7 @@ from typing import List
 from common.constant import BACKUP_DIR_PATH
 from docs.docs_movers import resolve_move_from_and_move_to_dir_path_dict, move_documents_to_docs_dir
 from domain.doc.doc_entry import new_doc_entries, DocEntries
-from files.category_group_def import CategoryGroupDef
+from files.conf.category_group_def import CategoryGroupDef
 from files.files_operator import is_exist_dir, delete_dir
 from service.local.doc_entry_index_updater import update_entry_grouping_and_index
 

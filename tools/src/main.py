@@ -24,7 +24,7 @@ def show_hatena_blog_entry(api_executor: IBlogApiExecutor, entry_id):
     # for debug
     blog_entry_opt = api_executor.execute_get_blog_entry_api(entry_id)
     if blog_entry_opt is None:
-        print(f'Nothing entry: {entry_id}')
+        print(f'[Error] Nothing entry: {entry_id}')
         return
     print(blog_entry_opt.content)
 
@@ -33,7 +33,7 @@ def show_hatena_photo_entry(api_executor: IBlogApiExecutor, entry_id):
     # for debug
     photo_entry_opt = api_executor.execute_get_photo_entry_api(entry_id)
     if photo_entry_opt is None:
-        print(f'Nothing entry: {entry_id}')
+        print(f'[Error] Nothing entry: {entry_id}')
         return
     print(photo_entry_opt.build_dump_data())
 
@@ -49,12 +49,12 @@ def main(args: List[str], is_debug: bool):
     # local
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
-        print('Success: created \"docs\" dir')
+        print('[Info] Success: created \"docs\" dir')
         return
     if len(args) >= 2 and (args[1] == '-new' or args[1] == '-n'):
         created_dir_name_opt = new_local_document_set(args)
         if created_dir_name_opt is not None:
-            print(f'Success: created \"{created_dir_name_opt}\" dir in work dir')
+            print(f'[Info] Success: created \"{created_dir_name_opt}\" dir in work dir')
         return
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
@@ -62,15 +62,15 @@ def main(args: List[str], is_debug: bool):
             push_entry_to_docs_and_blog(blog_config, category_group_def, target_dirs)
             return
         push_documents_to_docs(category_group_def, target_dirs)
-        print('Success: push doc data to docs dir.')
+        print('[Info] Success: push document to docs dir.')
         return
     if len(args) >= 2 and (args[1] == '-retrieve' or args[1] == '-ret' or args[1] == '-r'):
         if len(args) >= 3 and (args[2] == '-cancel' or args[2] == '-c'):
             cancel_retrieving_document(category_group_def, args[3:])
-            print('Success: retrieve cancel.')
+            print('[Info] Success: retrieve cancel.')
         else:
             retrieve_document_from_docs(category_group_def, args[2:])
-            print('Success: retrieve doc data to work dir.')
+            print('[Info] Success: retrieve doc data to work dir.')
         return
     if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
         if len(args) >= 3 and (args[2] == '-group' or args[2] == '-g'):
@@ -83,7 +83,7 @@ def main(args: List[str], is_debug: bool):
             search_doc_entry_by_title(category_group_def, args[3])
             return
     if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
-        print('Unimplemented')
+        print('[Error] Unimplemented')
         return
     # external
     if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):

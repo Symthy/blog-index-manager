@@ -1,7 +1,7 @@
 import os
 
 from common.constant import DOCS_DIR_PATH
-from files.category_group_def import CategoryGroupDef
+from files.conf.category_group_def import CategoryGroupDef
 
 
 def initialize_docs_dir(category_group_def: CategoryGroupDef):

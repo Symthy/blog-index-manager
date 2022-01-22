@@ -6,8 +6,8 @@ from typing import List, Optional, Dict
 from common.constant import NON_CATEGORY_GROUP_NAME, CATEGORY_FILE_NAME, \
     LOCAL_DOCS_ENTRY_DUMP_DIR, ID_FILE_NAME_HEADER
 from domain.interface import IEntry, IEntries
-from dump.data_dumper import dump_entry_data, resolve_dump_field_data
 from dump.dump_entry_list import DumpEntryList
+from dump.entry_data_dumper import dump_entry_data, resolve_dump_field_data
 from files.file_accessor import load_json, read_text_file, is_exist_in_local_entry_list, write_text_line, \
     get_doc_title_from_md_file, get_local_doc_entry_dump_data
 from files.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \

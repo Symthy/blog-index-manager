@@ -2,7 +2,7 @@ from typing import Optional
 
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntries
-from files.category_group_def import CategoryGroupDef
+from files.conf.category_group_def import CategoryGroupDef
 
 
 def deserialize_doc_entry_grouping_data(category_group_def: CategoryGroupDef,

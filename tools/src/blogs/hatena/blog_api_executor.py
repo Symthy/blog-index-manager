@@ -14,7 +14,7 @@ from blogs.hatena.templates.hatena_entry_format import build_hatena_blog_entry_x
     build_hatena_photo_entry_post_xml_body
 from domain.blog.blog_entry import BlogEntries, BlogEntry
 from domain.blog.photo_entry import PhotoEntry
-from files.blog_config import BlogConfig
+from files.conf.blog_config import BlogConfig
 from files.file_accessor import read_pic_file_b64
 from files.files_operator import get_file_name_from_file_path
 from ltime.time_resolver import resolve_current_time_sequence
