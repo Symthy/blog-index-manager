@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 from typing import List, Dict
 
-from common.constant import NON_CATEGORY_GROUP_NAME
+from common.constant import NON_CATEGORY_GROUP_NAME, CATEGORY_GROUP_YAML_PATH
+from files.file_accessor import load_yaml
 
 
 class GroupingCategories:
@@ -83,3 +86,8 @@ class CategoryGroupDef:
         # for debug
         for group in self.groups:
             self.__grouping_categories[group].print_data()
+
+    @classmethod
+    def load_category_group_def_yaml(cls) -> CategoryGroupDef:
+        json_data = load_yaml(CATEGORY_GROUP_YAML_PATH)  # return list
+        return CategoryGroupDef(json_data)

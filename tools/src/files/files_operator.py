@@ -78,17 +78,6 @@ def __get_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
     return [target_dir_path + f for f in files if os.path.isfile(os.path.join(target_dir_path, f))]
 
 
-def get_image_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
-    # Todo: refactor
-    file_paths = __get_file_paths_in_target_dir(target_dir_path)
-    image_file_paths = []
-    for file_path in file_paths:
-        if file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.bmp') or \
-                file_path.endswith('.svg'):
-            image_file_paths.append(file_path)
-    return image_file_paths
-
-
 def get_file_name_from_file_path(path: str) -> str:
     return path.rsplit('/', 1)[1]
 
@@ -100,7 +89,7 @@ def get_dir_name_from_dir_path(path: str) -> str:
     return path.rsplit('/', 1)[1]
 
 
-# Specialized
+# Todo: move specialized functions
 def get_md_file_name_in_target_dir(target_dir_path: str) -> Optional[str]:
     files = os.listdir(target_dir_path)
     extension = '.md'
@@ -135,3 +124,14 @@ def resolve_target_entry_dir_path_in_work(entry_id: str) -> Optional[str]:
         if entry_id == id_opt:
             return dir_path
     return None
+
+
+def get_image_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
+    # Todo: refactor
+    file_paths = __get_file_paths_in_target_dir(target_dir_path)
+    image_file_paths = []
+    for file_path in file_paths:
+        if file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.bmp') or \
+                file_path.endswith('.svg'):
+            image_file_paths.append(file_path)
+    return image_file_paths

@@ -6,7 +6,8 @@ from blogs.dump_blog_entries_accessor import DumpBlogEntriesAccessor
 from blogs.hatena.blog_api_executor import HatenaBlogApiExecutor
 from common.constant import BLOG_CONF_PATH
 from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
-from files.file_accessor import read_blog_config, load_category_group_def_yaml, read_md_file
+from files.conf.category_group_def import CategoryGroupDef
+from files.file_accessor import read_blog_config, read_md_file
 from files.md_data_handler import replace_image_link_in_md_data
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
@@ -45,7 +46,7 @@ def main(args: List[str], is_debug: bool):
     api_executor = HatenaBlogApiExecutor(blog_config)
     dump_blog_data_accessor = DumpBlogEntriesAccessor()
     dump_doc_data_accessor = DumpDocEntriesAccessor()
-    category_group_def = load_category_group_def_yaml()
+    category_group_def = CategoryGroupDef.load_category_group_def_yaml()
 
     # TODO: refactor and add validate. use argparse? (no use docopt. because last commit is old)
     # local

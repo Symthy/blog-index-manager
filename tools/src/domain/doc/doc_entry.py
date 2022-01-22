@@ -5,10 +5,11 @@ from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME, CATEGORY_FILE_NAME, \
     ID_FILE_NAME_HEADER
+from docs.doc_entry_list_accessor import is_exist_in_local_entry_list, get_local_doc_entry_dump_data
+from docs.docs_dir_accessor import get_doc_title_from_md_file
 from domain.interface import IEntry, IEntries
 from dump.entry_data_dumper import resolve_dump_field_data
-from files.file_accessor import read_text_file, is_exist_in_local_entry_list, write_text_line, \
-    get_doc_title_from_md_file, get_local_doc_entry_dump_data
+from files.file_accessor import read_text_file, write_text_line
 from files.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \
     get_file_name_from_file_path, get_dir_name_from_dir_path
 from ltime.time_resolver import convert_datetime_to_month_day_str, convert_datetime_to_entry_time_str, \

@@ -3,13 +3,13 @@ from __future__ import annotations
 from typing import List, Dict, Optional
 
 from common.constant import NON_CATEGORY_GROUP_NAME
+from docs.doc_entry_list_accessor import load_docs_entries_json
 from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry, IEntries
 from dump.blog_to_doc_mapping import BlogDocEntryMapping
 from files.conf.category_group_def import CategoryGroupDef
-from files.file_accessor import load_docs_entries_json
 
 
 class EntrySearchResults:
