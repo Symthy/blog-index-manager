@@ -2,7 +2,8 @@ from typing import List
 
 from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, DOCS_DIR_PATH_TEMP_FILE
 from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
-from domain.doc.doc_entry import DocEntry, new_doc_entry
+from domain.doc.doc_entry import DocEntry, new_doc_entry, DocEntries
+from dump.interface import IDumpEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import is_exist_in_local_entry_list, write_text_line, \
     read_file_first_line
@@ -10,22 +11,22 @@ from files.files_operator import copy_dir, move_dir, delete_dir, get_dir_name_fr
     resolve_target_entry_dir_path_in_work, delete_file
 
 
-def retrieve_document_from_docs(category_group_def: CategoryGroupDef, entry_ids: List[str]):
+def retrieve_document_from_docs(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
+                                category_group_def: CategoryGroupDef, entry_ids: List[str]):
     group_to_categorized_entries = deserialize_doc_entry_grouping_data(category_group_def)
     for doc_entry_id in entry_ids:
         if not is_exist_in_local_entry_list(doc_entry_id):
             print(f'[Error] Nothing specified document (id: {doc_entry_id})')
             return
-        doc_entry = DocEntry.deserialize_entry_data(doc_entry_id)
-        # target_entry_in_docs_dir_path = get_dir_path_from_local_entry_dump_data(doc_entry_id)
-        target_entry_docs_dir_path = doc_entry.dir_path
+        target_doc_entry = dump_doc_data_accessor.load_entry(doc_entry_id)
+        target_entry_docs_dir_path = target_doc_entry.dir_path
         entry_backup_dir_path = f'{BACKUP_DIR_PATH}{doc_entry_id}/'
         copy_dir(target_entry_docs_dir_path, entry_backup_dir_path)
         print(f'[Info] copy backup (path: {entry_backup_dir_path})')
         write_text_line(f'{entry_backup_dir_path}{DOCS_DIR_PATH_TEMP_FILE}', target_entry_docs_dir_path)
         dir_name = get_dir_name_from_dir_path(target_entry_docs_dir_path)
         move_dir(target_entry_docs_dir_path, f'{WORK_DIR_PATH}{dir_name}/')
-        group_to_categorized_entries.remove_entry(category_group_def, doc_entry)
+        group_to_categorized_entries.remove_entry(category_group_def, target_doc_entry)
     group_to_categorized_entries.dump_docs_data()
 
 

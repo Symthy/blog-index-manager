@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import List, Dict, Optional
 
 from common.constant import NON_CATEGORY_GROUP_NAME
+from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
 from domain.doc.doc_entry import DocEntries
 from domain.interface import IConvertibleMarkdownLines, IEntries, IEntry
 
@@ -112,7 +113,8 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         if category_to_entries_obj is None:
             return self
         for category, entries in category_to_entries_obj.items():
-            doc_entries = DocEntries.deserialize_grouping_data(entries)
+            # Todo: refactor: DI?
+            doc_entries: DocEntries = DumpDocEntriesAccessor().load_entries()
             category_to_entries_set = CategoryToEntriesSet.deserialize_docs_grouping_data(category, doc_entries)
             self.__add_category_to_entries(category, category_to_entries_set)
         return self

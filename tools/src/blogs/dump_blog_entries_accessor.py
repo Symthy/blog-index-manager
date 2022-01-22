@@ -5,7 +5,7 @@ from dump.dump_entry_accessor import DumpEntryAccessor
 from dump.interface import IDumpEntriesAccessor
 
 
-class DumpBlogEntriesAccessor(IDumpEntriesAccessor[BlogEntries]):
+class DumpBlogEntriesAccessor(IDumpEntriesAccessor[BlogEntries, BlogEntry]):
     def __init__(self):
         entry_accessor = DumpEntryAccessor[BlogEntry](HATENA_BLOG_ENTRY_DUMP_DIR)
         self.__entries_accessor: IDumpEntriesAccessor = \
@@ -16,3 +16,9 @@ class DumpBlogEntriesAccessor(IDumpEntriesAccessor[BlogEntries]):
 
     def save_entries(self, entries: BlogEntries):
         return self.__entries_accessor.save_entries(entries)
+
+    def load_entry(self, entry_id: str) -> BlogEntry:
+        return self.__entries_accessor.load_entry(entry_id)
+
+    def save_entry(self, entry: BlogEntry):
+        return self.__entries_accessor.save_entry(entry)

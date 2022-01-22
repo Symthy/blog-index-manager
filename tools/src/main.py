@@ -2,10 +2,10 @@ import sys
 from typing import List
 
 from blogs.api.interface import IBlogApiExecutor
+from blogs.dump_blog_entries_accessor import DumpBlogEntriesAccessor
 from blogs.hatena.blog_api_executor import HatenaBlogApiExecutor
 from common.constant import BLOG_CONF_PATH
-from domain.blog.blog_entry import BlogEntry
-from domain.doc.doc_entry import DocEntry
+from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
 from files.file_accessor import read_blog_config, load_category_group_def_yaml, read_md_file
 from files.md_data_handler import replace_image_link_in_md_data
 from options.usage_printer import print_usage
@@ -43,6 +43,8 @@ def main(args: List[str], is_debug: bool):
     print(f'tool run. (specified options: {arg_str})\n')
     blog_config = read_blog_config(BLOG_CONF_PATH)
     api_executor = HatenaBlogApiExecutor(blog_config)
+    dump_blog_data_accessor = DumpBlogEntriesAccessor()
+    dump_doc_data_accessor = DumpDocEntriesAccessor()
     category_group_def = load_category_group_def_yaml()
 
     # TODO: refactor and add validate. use argparse? (no use docopt. because last commit is old)
@@ -59,10 +61,12 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
         if len(args) >= 3 and (args[2] == '-all' or args[2] == '-a'):
-            push_entry_to_docs_and_blog(blog_config, category_group_def, target_dirs)
+            push_entry_to_docs_and_blog(blog_config, dump_blog_data_accessor, dump_doc_data_accessor,
+                                        category_group_def, target_dirs)
+            print('[Info] Success: pushed document to docs dir and blog.')
             return
-        push_documents_to_docs(category_group_def, target_dirs)
-        print('[Info] Success: push document to docs dir.')
+        push_documents_to_docs(dump_doc_data_accessor, category_group_def, target_dirs)
+        print('[Info] Success: pushed document to docs dir.')
         return
     if len(args) >= 2 and (args[1] == '-retrieve' or args[1] == '-ret' or args[1] == '-r'):
         if len(args) >= 3 and (args[2] == '-cancel' or args[2] == '-c'):
@@ -70,7 +74,7 @@ def main(args: List[str], is_debug: bool):
             print('[Info] Success: retrieve cancel.')
         else:
             retrieve_document_from_docs(category_group_def, args[2:])
-            print('[Info] Success: retrieve doc data to work dir.')
+            print('[Info] Success: retrieve document to work dir.')
         return
     if len(args) >= 2 and (args[1] == '-search' or args[1] == '-s'):
         if len(args) >= 3 and (args[2] == '-group' or args[2] == '-g'):
@@ -88,7 +92,7 @@ def main(args: List[str], is_debug: bool):
     # external
     if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):
         if len(args) >= 3 and (args[2] == '-collect' or args[2] == '-c'):
-            collect_hatena_entry_local_list(api_executor, category_group_def)
+            collect_hatena_entry_local_list(api_executor, dump_blog_data_accessor, category_group_def)
             print('[Info] Success: blog entries collection')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
@@ -111,17 +115,18 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and args[1] == '-put-photo':
         doc_id = args[2]
-        result = push_photo_entries(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        result = push_photo_entries(blog_config, dump_doc_data_accessor.load_entry(doc_id))
         print(result.build_dump_data())
         return
     if len(args) >= 2 and args[1] == '-put-blog':
         doc_id = args[2]
-        result = push_blog_entry(blog_config, DocEntry.deserialize_entry_data(doc_id))
+        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id))
         print(result.build_dump_data())
         return
     if len(args) >= 2 and args[1] == '-replace-md':
         md_data = read_md_file('./docs/Program/Golang/Golang_Generics/doc.md')
-        blog_entry = BlogEntry.deserialize_entry_data('13574176438053271362')
+        blog_entry_id = '13574176438053271362'
+        blog_entry = dump_blog_data_accessor.load_entry(blog_entry_id)
         print(replace_image_link_in_md_data(md_data, blog_entry.doc_images))
         return
     # usage

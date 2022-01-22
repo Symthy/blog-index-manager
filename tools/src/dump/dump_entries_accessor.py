@@ -37,3 +37,9 @@ class DumpEntriesAccessor(Generic[TM, TS], IDumpEntriesAccessor[TM]):
             dump_entry_list.push_entry(entry)
             self.__dump_entry_accessor.save_entry(entry)
         dump_json(self.__entry_list_file_path, dump_entry_list.build_dump_data())
+
+    def load_entry(self, entry_id: str) -> TS:
+        return self.__dump_entry_accessor.load_entry(entry_id)
+
+    def save_entry(self, entry: TS):
+        self.__dump_entry_accessor.save_entry(entry)

@@ -3,12 +3,10 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
+from common.constant import NON_CATEGORY_GROUP_NAME
 from domain.blog.photo_entry import PhotoEntries
 from domain.interface import IEntries, IEntry
-from dump.dump_entry_list import DumpEntryList
-from dump.entry_data_dumper import dump_entry_data, resolve_dump_field_data
-from files.file_accessor import load_json
+from dump.entry_data_dumper import resolve_dump_field_data
 from ltime.time_resolver import convert_datetime_to_entry_time_str, \
     convert_datetime_to_month_day_str, convert_entry_time_str_to_datetime
 
@@ -103,9 +101,6 @@ class BlogEntry(IEntry):
             BlogEntry.FIELD_DOC_IMAGES: self.__doc_images.build_dump_data(),
         }
 
-    def dump_data(self, dump_file_path: str):
-        dump_entry_data(self, dump_file_path)
-
     @classmethod
     def init_from_dump_data(cls, dump_data: Dict[str, any]) -> BlogEntry:
         return BlogEntry(
@@ -118,12 +113,6 @@ class BlogEntry(IEntry):
             dump_data[BlogEntry.FIELD_ORIGINAL_DOC_ID],
             PhotoEntries.init_from_dump_data(dump_data[BlogEntry.FIELD_DOC_IMAGES])
         )
-
-    @classmethod
-    def deserialize_entry_data(cls, entry_id: str) -> BlogEntry:
-        dump_file_path = f'{HATENA_BLOG_ENTRY_DUMP_DIR}{entry_id}.json'
-        json_data = load_json(dump_file_path)
-        return BlogEntry.init_from_dump_data(json_data)
 
 
 class BlogEntries(IEntries):
@@ -143,25 +132,11 @@ class BlogEntries(IEntries):
         self.__entries.append(blog_entry)
 
     def merge(self, blog_entries: BlogEntries):
+        # existed entry is overwrite
         self.__entries.extend(blog_entries.entry_list)
 
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]
-
-    def dump_all_data(self):
-        dump_entry_list = DumpEntryList.init_blog_entry_list()
-        for entry in self.__entries:
-            dump_entry_list.push_entry(entry)
-            entry.dump_data(f'{HATENA_BLOG_ENTRY_DUMP_DIR}/{entry.id}.json')
-        dump_entry_list.build_dump_data()
-
-    @classmethod
-    def deserialize_all_data(cls) -> BlogEntries:
-        dump_entry_list = DumpEntryList.init_blog_entry_list()
-        self = BlogEntries()
-        for entry_id in dump_entry_list.entry_ids:
-            self.add_entry(BlogEntry.deserialize_entry_data(entry_id))
-        return self
 
     @classmethod
     def init_empty_instance(cls) -> BlogEntries:

@@ -5,7 +5,7 @@ from dump.dump_entry_accessor import DumpEntryAccessor
 from dump.interface import IDumpEntriesAccessor
 
 
-class DumpDocEntriesAccessor(IDumpEntriesAccessor[DocEntries]):
+class DumpDocEntriesAccessor(IDumpEntriesAccessor[DocEntries, DocEntry]):
     def __init__(self):
         entry_accessor = DumpEntryAccessor[DocEntry](LOCAL_DOCS_ENTRY_DUMP_DIR)
         self.__entries_accessor: IDumpEntriesAccessor = \
@@ -16,3 +16,9 @@ class DumpDocEntriesAccessor(IDumpEntriesAccessor[DocEntries]):
 
     def save_entries(self, entries: DocEntries):
         return self.__entries_accessor.save_entries(entries)
+
+    def load_entry(self, entry_id: str) -> DocEntry:
+        return self.__entries_accessor.load_entry(entry_id)
+
+    def save_entry(self, entry: DocEntry):
+        return self.__entries_accessor.save_entry(entry)

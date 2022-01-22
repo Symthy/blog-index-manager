@@ -8,15 +8,21 @@ TM = TypeVar('TM', DocEntries, BlogEntries)
 TS = TypeVar('TS', DocEntry, BlogEntry)
 
 
-class IDumpEntriesAccessor(ABC, Generic[TM]):
+class IDumpEntryAccessor(ABC, Generic[TS]):
+    def load_entry(self, entry_id: str) -> TS:
+        pass
+
+    def save_entry(self, entry: TS):
+        pass
+
+
+class IDumpEntriesAccessor(ABC, Generic[TM, TS], IDumpEntryAccessor):
     def load_entries(self) -> TM:
         pass
 
     def save_entries(self, entries: TM):
         pass
 
-
-class IDumpEntryAccessor(ABC, Generic[TS]):
     def load_entry(self, entry_id: str) -> TS:
         pass
 

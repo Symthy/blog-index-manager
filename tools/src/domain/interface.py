@@ -45,10 +45,6 @@ class IEntry(IDumpDataBuilder, IConvertibleMarkdownLine, ABC):
     def build_id_to_title(self) -> Dict[str, str]:
         pass
 
-    @abstractmethod
-    def dump_data(self, dump_file_path: str):
-        pass
-
 
 class IEntries(IConvertibleMarkdownLines, ABC):
     @property
@@ -63,8 +59,4 @@ class IEntries(IConvertibleMarkdownLines, ABC):
 
     @abstractmethod
     def merge(self, entries: IEntries):
-        pass
-
-    @abstractmethod
-    def dump_all_data(self):
         pass
