@@ -3,10 +3,10 @@ from typing import List
 from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, DOCS_DIR_PATH_TEMP_FILE
 from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntry, new_doc_entry
-from file.category_group_def import CategoryGroupDef
-from file.file_accessor import is_exist_in_local_entry_list, write_text_line, \
+from files.category_group_def import CategoryGroupDef
+from files.file_accessor import is_exist_in_local_entry_list, write_text_line, \
     read_file_first_line
-from file.files_operator import copy_dir, move_dir, delete_dir, get_dir_name_from_dir_path, \
+from files.files_operator import copy_dir, move_dir, delete_dir, get_dir_name_from_dir_path, \
     resolve_target_entry_dir_path_in_work, delete_file
 
 

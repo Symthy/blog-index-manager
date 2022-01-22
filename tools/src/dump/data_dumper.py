@@ -1,8 +1,8 @@
 from typing import Union, List
 
 from domain.interface import IDumpDataBuilder
-from file.file_accessor import load_json, dump_json
-from file.files_operator import is_exist_file
+from files.file_accessor import load_json, dump_json
+from files.files_operator import is_exist_file
 
 
 def resolve_dump_field_data(entry, dump_data, field_name: Union[str, List[str]]):

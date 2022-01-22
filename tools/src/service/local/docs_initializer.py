@@ -1,10 +1,7 @@
 import os
-from typing import Optional, List
 
-from common.constant import WORK_DIR_PATH, DOCS_DIR_PATH, DOC_TITLE_MAX_LENGTH, CATEGORY_FILE_NAME, DOC_IMAGES_DIR_NAME
-from file.category_group_def import CategoryGroupDef
-from file.files_operator import make_new_file, make_new_dir, translate_win_files_unusable_char
-from ltime.time_resolver import resolve_current_time_date_time
+from common.constant import DOCS_DIR_PATH
+from files.category_group_def import CategoryGroupDef
 
 
 def initialize_docs_dir(category_group_def: CategoryGroupDef):

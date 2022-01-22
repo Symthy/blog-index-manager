@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from common.constant import DOC_TITLE_MAX_LENGTH, DOC_IMAGES_DIR_NAME, WORK_DIR_PATH, CATEGORY_FILE_NAME
-from file.files_operator import make_new_file, make_new_dir, translate_win_files_unusable_char
+from files.files_operator import make_new_file, make_new_dir, translate_win_files_unusable_char
 from ltime.time_resolver import resolve_current_time_date_time
 
 

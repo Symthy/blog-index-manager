@@ -3,10 +3,9 @@ from typing import List
 from blogs.api.interface import IBlogApiExecutor
 from domain.blog.blog_entry import BlogEntry, BlogEntries
 from domain.doc.doc_entry import DocEntries
-from file.blog_config import BlogConfig
-from file.category_group_def import CategoryGroupDef
-from file.dump.blog_to_doc_mapping import BlogDocEntryMapping
-from file.dump.dump_entry_list import DumpEntryList
+from dump.blog_to_doc_mapping import BlogDocEntryMapping
+from dump.dump_entry_list import DumpEntryList
+from files.category_group_def import CategoryGroupDef
 from service.external.blog_entry_index_updater import update_blog_entry_summary_index_file
 from service.external.blog_entry_pusher import push_blog_and_photo_entry
 from service.local.doc_entry_pusher import push_documents_to_docs

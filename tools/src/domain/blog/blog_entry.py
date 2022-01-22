@@ -5,10 +5,10 @@ from typing import List, Optional, Dict
 
 from common.constant import HATENA_BLOG_ENTRY_DUMP_DIR, NON_CATEGORY_GROUP_NAME
 from domain.blog.photo_entry import PhotoEntries
-from domain.data_dumper import dump_entry_data, resolve_dump_field_data
 from domain.interface import IEntries, IEntry
-from file.dump.dump_entry_list import DumpEntryList
-from file.file_accessor import load_json
+from dump.data_dumper import dump_entry_data, resolve_dump_field_data
+from dump.dump_entry_list import DumpEntryList
+from files.file_accessor import load_json
 from ltime.time_resolver import convert_datetime_to_entry_time_str, \
     convert_datetime_to_month_day_str, convert_entry_time_str_to_datetime
 
@@ -111,7 +111,7 @@ class BlogEntry(IEntry):
         return BlogEntry(
             dump_data[BlogEntry.FIELD_ID],
             dump_data[BlogEntry.FIELD_TITLE],
-            '',
+            '',  # content is not dump
             dump_data[BlogEntry.FIELD_PAGE_URL],
             convert_entry_time_str_to_datetime(dump_data[BlogEntry.FIELD_UPDATED_AT]),
             dump_data[BlogEntry.FIELD_CATEGORIES],

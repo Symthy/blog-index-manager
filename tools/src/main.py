@@ -45,7 +45,7 @@ def main(args: List[str], is_debug: bool):
     api_executor = HatenaBlogApiExecutor(blog_config)
     category_group_def = load_category_group_def_yaml()
 
-    # TODO: refactor. use argparse? (no use docopt. because last commit is old)
+    # TODO: refactor and add validate. use argparse? (no use docopt. because last commit is old)
     # local
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
@@ -89,7 +89,7 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-blog' or args[1] == '-b'):
         if len(args) >= 3 and (args[2] == '-collect' or args[2] == '-c'):
             collect_hatena_entry_local_list(api_executor, category_group_def)
-            print('Success: blog entry collect')
+            print('[Info] Success: blog entries collection')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
             push_entry_from_docs_to_blog(api_executor, category_group_def, args[3:])

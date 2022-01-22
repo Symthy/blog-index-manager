@@ -7,9 +7,9 @@ from docs.docs_data_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry, IEntries
-from file.category_group_def import CategoryGroupDef
-from file.dump.blog_to_doc_mapping import BlogDocEntryMapping
-from file.file_accessor import load_docs_entries_json
+from dump.blog_to_doc_mapping import BlogDocEntryMapping
+from files.category_group_def import CategoryGroupDef
+from files.file_accessor import load_docs_entries_json
 
 
 class EntrySearchResults:
