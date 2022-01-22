@@ -1,8 +1,8 @@
 from blogs.api.interface import IBlogApiExecutor
 from domain.blog.blog_entry import BlogEntries
 from domain.interface import IConvertibleMarkdownLines
-from file.category_group_def import CategoryGroupDef
-from file.md_data_handler import join_lines
+from files.category_group_def import CategoryGroupDef
+from files.md_data_handler import join_lines
 from service.external.blog_entry_index_updater import update_blog_entry_summary_index_file
 
 

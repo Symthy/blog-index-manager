@@ -2,9 +2,9 @@ import os
 from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME, WORK_DIR_PATH, DOCS_DIR_PATH, CATEGORY_FILE_NAME
-from file.category_group_def import CategoryGroupDef
-from file.file_accessor import read_text_file, get_doc_title_from_md_file
-from file.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
+from files.category_group_def import CategoryGroupDef
+from files.file_accessor import read_text_file, get_doc_title_from_md_file
+from files.files_operator import get_dir_names_in_target_dir, get_exist_dir_names_in_target_dir, \
     get_md_file_path_in_target_dir, translate_win_files_unusable_char, move_dir
 
 

@@ -1,7 +1,7 @@
 from typing import Dict, Optional
 
 from common.constant import HATENA_BLOG_TO_DOC_ENTRY_DICTIONARY_PATH
-from file.file_accessor import load_json, dump_json
+from files.file_accessor import load_json, dump_json
 
 
 class BlogDocEntryMapping:

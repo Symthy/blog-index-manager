@@ -4,7 +4,7 @@ from typing import Dict, List
 
 from common.constant import HATENA_BLOG_ENTRY_LIST_PATH, LOCAL_DOCS_ENTRY_LIST_PATH
 from domain.interface import IEntry
-from file.file_accessor import load_json, dump_json
+from files.file_accessor import load_json, dump_json
 from ltime.time_resolver import resolve_entry_current_time
 
 

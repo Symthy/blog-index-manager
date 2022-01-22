@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from common.constant import EXCLUDE_ENTRY_IDS_TXT_PATH
 from domain.blog.blog_entry import BlogEntries, BlogEntry
-from file.file_accessor import read_text_file
+from files.file_accessor import read_text_file
 
 
 def print_xml_children(root: ET.Element):

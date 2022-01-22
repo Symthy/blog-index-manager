@@ -2,8 +2,8 @@ from common.constant import HATENA_BLOG_ENTRY_INDEX_RESULT_PATH
 from domain.blog.blog_entry import BlogEntries
 from domain.category_to_entries import CategoryToEntriesMap
 from domain.group_to_categories import GroupToCategorizedEntriesMap
-from file.category_group_def import CategoryGroupDef
-from file.file_accessor import write_text_lines
+from files.category_group_def import CategoryGroupDef
+from files.file_accessor import write_text_lines
 
 
 def update_blog_entry_summary_index_file(category_group_def: CategoryGroupDef,
