@@ -1,10 +1,10 @@
 import sys
 from typing import List
 
-from blogs.hatena.api_executor import execute_get_hatena_specified_blog_entry_api, build_wsse, \
+from blogs.api.api_executor import execute_get_hatena_specified_blog_entry_api, \
     execute_get_hatena_specified_photo_entry_api
+from blogs.hatena.blog_api_executor import build_request_header
 from common.constant import BLOG_CONF_PATH
-from docs.docs_initializer import new_local_document_set, initialize_docs_dir
 from domain.blog.blog_entry import BlogEntry
 from domain.doc.doc_entry import DocEntry
 from file.blog_config import BlogConfig
@@ -18,6 +18,7 @@ from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
 from service.local.doc_entry_searcher import search_doc_entry_by_group, search_doc_entry_by_category, \
     search_doc_entry_by_title
+from service.local.docs_initializer import new_local_document_set, initialize_docs_dir
 
 
 def show_hatena_blog_entry(blog_config: BlogConfig, entry_id):
@@ -95,7 +96,7 @@ def main(args: List[str], is_debug: bool):
             return
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':
-        print('X-WSSE: ' + build_wsse(blog_config))
+        print(build_request_header(blog_config))
         return
     if len(args) >= 2 and args[1] == '-get-blog':
         hatena_blog_entry_id = '26006613443907494'

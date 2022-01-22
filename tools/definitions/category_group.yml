@@ -23,11 +23,11 @@
     - Nest
     - REST
 - FrontEnd:
+    - UI
     - React
     - Next
     - Vue
     - Nuxt
-    - UI
     - HTML
     - CSS
 - Infra:
