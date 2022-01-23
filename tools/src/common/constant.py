@@ -1,15 +1,15 @@
 # relative path
-OUT_DIR_PATH = './tools/out/'
+DATA_DIR_PATH = './tools/data/'
 
-HATENA_BLOG_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'hatena_entry_data/'
-HATENA_BLOG_ENTRY_LIST_PATH = OUT_DIR_PATH + 'hatena_entry_list.json'
-HATENA_BLOG_ENTRY_INDEX_RESULT_PATH = OUT_DIR_PATH + 'hatena_entry_index_result.md'
+HATENA_BLOG_ENTRY_DUMP_DIR = DATA_DIR_PATH + 'hatena_entry_data/'
+HATENA_BLOG_ENTRY_LIST_PATH = DATA_DIR_PATH + 'hatena_entry_list.json'
+HATENA_BLOG_ENTRY_INDEX_RESULT_PATH = DATA_DIR_PATH + 'hatena_entry_grouping_result.md'
 
-LOCAL_DOCS_ENTRY_DUMP_DIR = OUT_DIR_PATH + 'local_entry_data/'
-LOCAL_DOCS_ENTRY_LIST_PATH = OUT_DIR_PATH + 'local_entry_list.json'
-LOCAL_DOCS_ENTRY_GROUPING_PATH = OUT_DIR_PATH + 'local_entry_grouping.json'
+LOCAL_DOCS_ENTRY_DUMP_DIR = DATA_DIR_PATH + 'local_entry_data/'
+LOCAL_DOCS_ENTRY_LIST_PATH = DATA_DIR_PATH + 'local_entry_list.json'
+LOCAL_DOCS_ENTRY_GROUPING_PATH = DATA_DIR_PATH + 'local_entry_grouping.json'
 
-HATENA_BLOG_TO_DOC_ENTRY_DICTIONARY_PATH = OUT_DIR_PATH + 'hatena_blog_to_doc_dict.json'
+HATENA_BLOG_TO_DOC_ENTRY_DICTIONARY_PATH = DATA_DIR_PATH + 'hatena_blog_to_doc_dict.json'
 LOCAL_DOCS_ENTRY_INDEX_RESULT_PATH = './SUMMARY.md'
 
 WORK_DIR_PATH = './work/'
@@ -21,9 +21,8 @@ BACKUP_DIR_PATH = './backup/'
 CONF_DIR_PATH = './conf/'
 BLOG_CONF_PATH = CONF_DIR_PATH + 'blog.conf'
 
-DEFINITIONS_DIR_PATH = './tools/definitions/'
-EXCLUDE_ENTRY_IDS_TXT_PATH = DEFINITIONS_DIR_PATH + 'exclude_entry_ids.txt'
-CATEGORY_GROUP_YAML_PATH = DEFINITIONS_DIR_PATH + 'category_group.yml'
+EXCLUDE_ENTRY_IDS_TXT_PATH = CONF_DIR_PATH + 'exclude_entry_ids.txt'
+CATEGORY_GROUP_YAML_PATH = CONF_DIR_PATH + 'category_group_def.yml'
 
 ID_FILE_NAME_HEADER = '.id_'
 CATEGORY_FILE_NAME = 'category.txt'

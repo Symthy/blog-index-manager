@@ -15,7 +15,9 @@
     - Shell
     - Regexp
 - Web
-- Git
+- Git:
+    - Github API
+    - Github Pages
 - BackEnd:
     - DB
     - SQL
@@ -42,9 +44,8 @@
 - Tools
 - Roadmap
 - Management
-- Job Relation:
-    - JobMemo
+- Job
+- Career:
     - JobChange
-- Career
 - Portfolio
 - Others
