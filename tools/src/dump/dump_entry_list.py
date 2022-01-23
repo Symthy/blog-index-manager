@@ -41,9 +41,12 @@ class DumpEntryList(Generic[TM, TS]):
         }
 
     def convert_entries(self, target_entry_ids: Optional[List[str]] = None) -> List[TS]:
-        # filter target entry ids
-        entry_list: List[TS] = [self.__dump_entry_accessor.load_entry(entry_id) for entry_id in self.entry_ids
-                                if target_entry_ids is not None and entry_id in target_entry_ids]
+        if target_entry_ids is None:
+            entry_list: List[TS] = [self.__dump_entry_accessor.load_entry(entry_id) for entry_id in self.entry_ids]
+        else:
+            # filter target entry ids
+            entry_list: List[TS] = [self.__dump_entry_accessor.load_entry(entry_id) for entry_id in self.entry_ids
+                                    if entry_id in target_entry_ids]
         return entry_list
 
 # dump data format

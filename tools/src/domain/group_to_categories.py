@@ -229,6 +229,7 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
     @classmethod
     def deserialize_entry_grouping_data(cls, dump_entries_accessor: IDumpEntriesAccessor,
                                         category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
+        # Todo: doc only process. fix: generalization? or doc only?
         group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]] = load_json(LOCAL_DOCS_ENTRY_GROUPING_PATH)
         self = GroupToCategorizedEntriesMap(category_group_def)
         for group in category_group_def.groups:
