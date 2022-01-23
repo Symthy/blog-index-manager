@@ -3,53 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from common.constant import NON_CATEGORY_GROUP_NAME, CATEGORY_FILE_NAME, \
-    ID_FILE_NAME_HEADER
-from docs.doc_entry_list_accessor import is_exist_in_local_entry_list, get_local_doc_entry_dump_data
-from docs.docs_dir_accessor import get_doc_title_from_md_file
+from common.constant import NON_CATEGORY_GROUP_NAME
 from domain.interface import IEntry, IEntries
 from dump.entry_data_dumper import resolve_dump_field_data
-from files.file_accessor import read_text_file, write_text_line
-from files.files_operator import get_md_file_path_in_target_dir, get_id_from_id_file, \
-    get_file_name_from_file_path, get_dir_name_from_dir_path
 from ltime.time_resolver import convert_datetime_to_month_day_str, convert_datetime_to_entry_time_str, \
-    get_current_datetime, convert_datetime_to_time_sequence, \
     convert_entry_time_str_to_datetime
-
-
-def new_doc_entries(move_from_path_to_move_to_path_dict: Dict[str, str]) -> DocEntries:
-    docs_entry_list = []
-    for move_from_path, move_to_path in move_from_path_to_move_to_path_dict.items():
-        docs_entry_opt = new_doc_entry(move_from_path, move_to_path)
-        if docs_entry_opt is not None:
-            docs_entry_list.append(docs_entry_opt)
-    return DocEntries(docs_entry_list)
-
-
-def new_doc_entry(target_dir_path: str, move_to_path: str) -> Optional[DocEntry]:
-    created_datetime: datetime = get_current_datetime()
-    md_file_path: Optional[str] = get_md_file_path_in_target_dir(target_dir_path)
-    dir_name = get_dir_name_from_dir_path(target_dir_path)
-    if md_file_path is None:
-        print(f'[Error] skip: non exist md file (dir: {dir_name})')
-        return None
-    doc_title = get_doc_title_from_md_file(md_file_path)
-    if doc_title is None:
-        print(f'[Error] skip: empty doc title (dir: {dir_name})')
-        return None
-    entry_id: Optional[str] = get_id_from_id_file(target_dir_path)
-    if entry_id is None:
-        entry_id = convert_datetime_to_time_sequence(created_datetime)
-        id_file_path = f'{target_dir_path}/{ID_FILE_NAME_HEADER}{entry_id}'
-        write_text_line(id_file_path, entry_id)
-    doc_file_name = get_file_name_from_file_path(md_file_path)
-    categories = read_text_file(target_dir_path + CATEGORY_FILE_NAME)
-    created_at = created_datetime
-    updated_at = None
-    if is_exist_in_local_entry_list(entry_id):
-        created_at = None  # use existed time in dump file
-        updated_at = get_current_datetime()
-    return DocEntry(entry_id, doc_title, move_to_path, doc_file_name, categories, created_at, updated_at)
 
 
 class DocEntry(IEntry):
@@ -172,15 +130,6 @@ class DocEntries(IEntries):
 
     def convert_md_lines(self) -> List[str]:
         return [entry.convert_md_line() for entry in self.__entries]
-
-    @classmethod
-    def init_from_entry_ids(cls, entry_ids: List[str]) -> DocEntries:
-        entries: List[DocEntry] = []
-        for entry_id in entry_ids:
-            entry_dump_data = get_local_doc_entry_dump_data(entry_id)
-            doc_entry = DocEntry.init_from_dump_data(entry_dump_data)
-            entries.append(doc_entry)
-        return DocEntries(entries)
 
     @classmethod
     def new_instance(cls, entry_list: List[DocEntry]) -> DocEntries:

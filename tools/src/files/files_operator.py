@@ -2,9 +2,19 @@ import codecs
 import os
 import shutil
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 
-from common.constant import ID_FILE_NAME_HEADER, WORK_DIR_PATH
+
+def is_file(target_dir_path: str, file_name: str) -> bool:
+    return os.path.isfile(os.path.join(target_dir_path, file_name))
+
+
+def is_dir(target_dir_path: str) -> bool:
+    return os.path.isdir(target_dir_path)
+
+
+def get_files(target_dir_path: str) -> List[str]:
+    return os.listdir(target_dir_path)
 
 
 def make_new_dir(new_dir_path: str):
@@ -73,7 +83,7 @@ def get_exist_dir_names_in_target_dir(target_dir_path: str, specified_dir_names:
             os.path.isdir(os.path.join(target_dir_path, d)) and os.path.exists(os.path.join(target_dir_path, d))]
 
 
-def __get_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
+def get_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
     files = os.listdir(target_dir_path)
     return [target_dir_path + f for f in files if os.path.isfile(os.path.join(target_dir_path, f))]
 
@@ -87,51 +97,3 @@ def get_dir_name_from_dir_path(path: str) -> str:
         # dir path: xxx/
         return path[:-1].rsplit('/', 1)[1]
     return path.rsplit('/', 1)[1]
-
-
-# Todo: move specialized functions
-def get_md_file_name_in_target_dir(target_dir_path: str) -> Optional[str]:
-    files = os.listdir(target_dir_path)
-    extension = '.md'
-    for file in files:
-        if os.path.isfile(os.path.join(target_dir_path, file)) and file.endswith(extension):
-            return file
-    return None
-
-
-def get_md_file_path_in_target_dir(target_dir_path: str) -> Optional[str]:
-    me_file_name_opt = get_md_file_name_in_target_dir(target_dir_path)
-    return target_dir_path + me_file_name_opt if me_file_name_opt is not None else None
-    # files = glob.glob(f'{target_dir_path}/*' + extension)
-    # return files[0] if len(files) > 0 else None
-
-
-def get_id_from_id_file(target_dir_path: str) -> Optional[str]:
-    files = os.listdir(target_dir_path)
-    for file in files:
-        if os.path.isfile(os.path.join(target_dir_path, file)) and file.startswith(ID_FILE_NAME_HEADER):
-            return file[len(ID_FILE_NAME_HEADER):]
-    return None
-
-
-def resolve_target_entry_dir_path_in_work(entry_id: str) -> Optional[str]:
-    files = os.listdir(WORK_DIR_PATH)
-    for dir_name in files:
-        dir_path = f'{WORK_DIR_PATH}{dir_name}'
-        if not os.path.isdir(dir_path):
-            continue
-        id_opt = get_id_from_id_file(dir_path)
-        if entry_id == id_opt:
-            return dir_path
-    return None
-
-
-def get_image_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
-    # Todo: refactor
-    file_paths = __get_file_paths_in_target_dir(target_dir_path)
-    image_file_paths = []
-    for file_path in file_paths:
-        if file_path.endswith('.png') or file_path.endswith('.jpg') or file_path.endswith('.bmp') or \
-                file_path.endswith('.svg'):
-            image_file_paths.append(file_path)
-    return image_file_paths

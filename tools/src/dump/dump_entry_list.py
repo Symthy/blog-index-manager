@@ -30,6 +30,10 @@ class DumpEntryList(Generic[TM, TS]):
     def push_entry(self, entry: TS):
         self.__entry_id_to_title[entry.id] = entry.title
 
+    def search_by_title(self, keyword) -> List[str]:
+        entry_ids = [eid for eid, title in self.__entry_id_to_title.items() if keyword in title]
+        return entry_ids
+
     def build_dump_data(self) -> Dict[str, Any]:
         return {
             DumpEntryList.FIELD_UPDATED_TIME: resolve_entry_current_time(),

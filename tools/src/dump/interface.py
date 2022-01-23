@@ -28,3 +28,9 @@ class IDumpEntriesAccessor(IDumpEntryAccessor[TS], Generic[TM, TS]):
 
     def save_entry(self, entry: TS):
         pass
+
+    def search_entry_id(self, keyword: str) -> List[str]:
+        pass
+
+    def has_entry(self, entry_id: str) -> bool:
+        pass

@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 from common.constant import NON_CATEGORY_GROUP_NAME
-from docs.doc_entry_list_accessor import load_docs_entries_json
 from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
-from domain.doc.doc_entry import DocEntries
+from domain.doc.doc_entry import DocEntries, DocEntry
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry, IEntries
 from dump.blog_to_doc_mapping import BlogDocEntryMapping
+from dump.interface import IDumpEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
 
 
@@ -96,17 +96,10 @@ def search_doc_entry_by_category(category_group_def: CategoryGroupDef, category:
     print(f'[Warn] Nothing specified category: {category}')
 
 
-def search_doc_entry_by_title(category_group_def: CategoryGroupDef, keyword: str):
-    def resolve_title_partial_match_doc_entry(search_word: str) -> List[str]:
-        entry_id_to_title: Dict[str, str] = load_docs_entries_json()
-        ids = []
-        for eid, title in entry_id_to_title.items():
-            if search_word in title:
-                ids.append(eid)
-        return ids
-
-    entry_ids: List[str] = resolve_title_partial_match_doc_entry(keyword)
-    if len(entry_ids) == 0:
+def search_doc_entry_by_title(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
+                              category_group_def: CategoryGroupDef, keyword: str):
+    target_entry_ids = dump_doc_data_accessor.search_entry_id(keyword)
+    if len(target_entry_ids) == 0:
         print(f'[Warn] Nothing partially matched doc title: {keyword}')
-    entries = DocEntries.init_from_entry_ids(entry_ids)
-    EntrySearchResults.init_by_multi_groups(category_group_def, entries).print_search_results()
+    doc_entries: DocEntries = dump_doc_data_accessor.load_entries(target_entry_ids)
+    EntrySearchResults.init_by_multi_groups(category_group_def, doc_entries).print_search_results()

@@ -100,7 +100,8 @@ def main(args: List[str], is_debug: bool):
             print('[Info] Success: blog entries collection')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
-            push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, category_group_def, args[3:])
+            push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
+                                         category_group_def, args[3:])
             return
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':

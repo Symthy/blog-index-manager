@@ -23,9 +23,10 @@ def push_entry_to_docs_and_blog(api_executor: IBlogApiExecutor,
 
 def push_entry_from_docs_to_blog(api_executor: IBlogApiExecutor,
                                  dump_blog_data_accessor: IDumpEntriesAccessor[BlogEntries, BlogEntry],
+                                 dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
                                  category_group_def: CategoryGroupDef,
                                  target_doc_entry_ids: List[str]):
-    doc_entries = DocEntries.init_from_entry_ids(target_doc_entry_ids)
+    doc_entries: DocEntries = dump_doc_data_accessor.load_entries(target_doc_entry_ids)
     __push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, category_group_def, doc_entries)
 
 

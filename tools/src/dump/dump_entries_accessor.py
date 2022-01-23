@@ -16,30 +16,33 @@ class DumpEntriesAccessor(IDumpEntriesAccessor[TM, TS]):
         LOCAL_DOCS_ENTRY_LIST_PATH: DocEntries.new_instance
     }
 
-    def __init__(self, list_file_path: str, dump_entry_accessor: DumpEntryAccessor[TS],
+    def __init__(self, entry_list_file_path: str, dump_entry_accessor: DumpEntryAccessor[TS],
                  entries_factory: Optional[Callable[[Any], TM]] = None):
-        self.__entry_list_file_path = list_file_path
+        self.__entry_list_file_path = entry_list_file_path
         self.__dump_entry_accessor = dump_entry_accessor
-        self.__entries_factory = DumpEntriesAccessor.__DUMP_FILE_TO_ENTRIES_FACTORY[list_file_path] \
+        self.__dump_entry_list = DumpEntryList(entry_list_file_path, dump_entry_accessor)
+        self.__entries_factory = DumpEntriesAccessor.__DUMP_FILE_TO_ENTRIES_FACTORY[entry_list_file_path] \
             if entries_factory is None else entries_factory
 
-    def __build_dump_entry_list(self) -> DumpEntryList:
-        return DumpEntryList(self.__entry_list_file_path, self.__dump_entry_accessor)
-
     def load_entries(self, target_entry_ids: Optional[List[str]] = None) -> TM:
-        dump_entry_list = self.__build_dump_entry_list()
-        entries = self.__entries_factory(dump_entry_list.convert_entries(target_entry_ids))
+        entries = self.__entries_factory(self.__dump_entry_list.convert_entries(target_entry_ids))
         return entries
 
     def save_entries(self, entries: TM):
-        dump_entry_list = self.__build_dump_entry_list()
         for entry in entries.entry_list:
-            dump_entry_list.push_entry(entry)
+            self.__dump_entry_list.push_entry(entry)
             self.__dump_entry_accessor.save_entry(entry)
-        dump_json(self.__entry_list_file_path, dump_entry_list.build_dump_data())
+        dump_json(self.__entry_list_file_path, self.__dump_entry_list.build_dump_data())
 
     def load_entry(self, entry_id: str) -> TS:
         return self.__dump_entry_accessor.load_entry(entry_id)
 
     def save_entry(self, entry: TS):
         self.__dump_entry_accessor.save_entry(entry)
+
+    def search_entry_id(self, keyword: str) -> List[str]:
+        # Todo: specify other than title in keyword
+        return self.__dump_entry_list.search_by_title(keyword)
+
+    def has_entry(self, entry_id) -> bool:
+        return entry_id in self.__dump_entry_list.entry_ids

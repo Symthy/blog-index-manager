@@ -1,8 +1,9 @@
 from typing import List, Optional
 
 from common.constant import BACKUP_DIR_PATH
+from docs.doc_entry_factory import new_doc_entries
 from docs.docs_movers import resolve_move_from_and_move_to_dir_path_dict, move_documents_to_docs_dir
-from domain.doc.doc_entry import new_doc_entries, DocEntries, DocEntry
+from domain.doc.doc_entry import DocEntries, DocEntry
 from dump.interface import IDumpEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
 from files.files_operator import is_exist_dir, delete_dir
@@ -18,7 +19,7 @@ def push_documents_to_docs(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntri
         return None
     # Todo: specifiable entry id
     # Todo: validate dir name
-    new_docs_entries = new_doc_entries(move_from_path_to_move_to_path_dict)
+    new_docs_entries = new_doc_entries(dump_doc_data_accessor, move_from_path_to_move_to_path_dict)
     for entry in new_docs_entries.entry_list:
         # if exist backup, remove backup
         target_dir_path = f'{BACKUP_DIR_PATH}{entry.id}'

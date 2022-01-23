@@ -24,3 +24,9 @@ class DumpBlogEntriesAccessor(IDumpEntriesAccessor[BlogEntries, BlogEntry]):
 
     def save_entry(self, entry: BlogEntry):
         return self.__entries_accessor.save_entry(entry)
+
+    def search_entry_id(self, keyword: str) -> List[str]:
+        return self.__entries_accessor.search_entry_id(keyword)
+
+    def has_entry(self, entry_id: str) -> bool:
+        return self.__entries_accessor.has_entry(entry_id)
