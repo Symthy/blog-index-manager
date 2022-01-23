@@ -1,9 +1,20 @@
 {
   "Architecture": {},
   "Development": {},
-  "Program": {},
+  "Program": {
+    "Golang": {
+      "20220123193352": "Golang Generics"
+    },
+    "JavaScript": {
+      "20220123193618": "JavaScript 基本"
+    }
+  },
   "Web": {},
-  "Git": {},
+  "Git": {
+    "-": {
+      "20220123193918": "Git 追跡解除"
+    }
+  },
   "BackEnd": {},
   "FrontEnd": {},
   "Infra": {},
