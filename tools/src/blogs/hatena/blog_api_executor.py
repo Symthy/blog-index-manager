@@ -88,9 +88,10 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
         return blog_entries
 
     # POST blog
-    def execute_register_blog_entry_api(self, title: str, category: str, content: str) -> Optional[BlogEntry]:
+    def execute_register_blog_entry_api(self, title: str, category: str, content: str, is_draft: bool) \
+            -> Optional[BlogEntry]:
         url = self.__build_hatena_blog_AtomPub_api_base_url()
-        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content)
+        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content, is_draft)
         headers = self.build_request_header()
         print('[Info] API execute: POST Blog')
         xml_string_opt = execute_post_api(url, headers, body.encode(encoding='utf-8'),
@@ -99,8 +100,8 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
 
     # PUT blog
     def __execute_put_blog_entry_api(self, url: str, title: str, category: str,
-                                     content: str) -> Optional[str]:
-        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content)
+                                     content: str, is_draft: bool) -> Optional[str]:
+        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content, is_draft)
         print('[Info] API execute: PUT Blog')
         return execute_put_api(url, self.build_request_header(), body.encode(encoding='utf-8'),
                                HatenaBlogApiExecutor.__resolve_api_response)
@@ -108,15 +109,15 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
     def execute_update_blog_summary_page(self, content: str) -> bool:
         url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{self.__blog_conf.summary_entry_id}'
         category = 'Summary'
-        res = self.__execute_put_blog_entry_api(url, get_summary_page_title(), category, content)
+        res = self.__execute_put_blog_entry_api(url, get_summary_page_title(), category, content, False)
         if res is None:
             return False
         return True
 
     def execute_update_blog_entry_api(self, entry_id: str, title: str, category: str,
-                                      content: str) -> Optional[BlogEntry]:
+                                      content: str, is_draft: bool) -> Optional[BlogEntry]:
         url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{entry_id}'
-        xml_string_opt = self.__execute_put_blog_entry_api(url, title, category, content)
+        xml_string_opt = self.__execute_put_blog_entry_api(url, title, category, content, is_draft)
         return parse_blog_entry_xml(xml_string_opt)
 
     # GET Photo

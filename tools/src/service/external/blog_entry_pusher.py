@@ -34,12 +34,12 @@ def __build_md_file_path(dir_path: str, md_file_name: str):
 
 # Todo: refactor all
 
-def push_blog_and_photo_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntry,
+def push_blog_and_photo_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntry, is_draft: bool,
                               old_blog_entry: Optional[BlogEntry] = None) -> Optional[BlogEntry]:
     if old_blog_entry is None:
         # new post
         new_photo_entries_opt = push_photo_entries(api_executor, doc_entry)
-        new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, new_photo_entries_opt)
+        new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, is_draft, new_photo_entries_opt)
         use_photo_entries_opt = new_photo_entries_opt
     else:
         # Overwrite post
@@ -48,7 +48,8 @@ def push_blog_and_photo_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntr
         use_photo_entries_opt = old_photo_entries
         if new_photo_entries_opt is not None and not new_photo_entries_opt.is_empty():
             use_photo_entries_opt = new_photo_entries_opt
-        new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, use_photo_entries_opt, old_blog_entry.id)
+        new_blog_entry_opt = push_blog_entry(api_executor, doc_entry, is_draft, use_photo_entries_opt,
+                                             old_blog_entry.id)
     if new_blog_entry_opt is None:
         return None
     # inherit old image when photo not updated
@@ -57,7 +58,7 @@ def push_blog_and_photo_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntr
 
 
 # public: for testing
-def push_blog_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntry,
+def push_blog_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntry, is_draft: bool,
                     photo_entries_opt: Optional[PhotoEntries] = None,
                     old_blog_id_opt: Optional[str] = None) -> Optional[BlogEntry]:
     md_file_path = __build_md_file_path(doc_entry.dir_path, doc_entry.doc_file_name)
@@ -71,7 +72,7 @@ def push_blog_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntry,
     if old_blog_id_opt is None:
         blog_entry_opt = api_executor.execute_register_blog_entry_api(title, category, content)
     else:
-        blog_entry_opt = api_executor.execute_update_blog_entry_api(old_blog_id_opt, title, category, content)
+        blog_entry_opt = api_executor.execute_update_blog_entry_api(old_blog_id_opt, title, category, content, is_draft)
     if blog_entry_opt is None:
         return None
     blog_entry_opt.register_doc_id(doc_entry.id)

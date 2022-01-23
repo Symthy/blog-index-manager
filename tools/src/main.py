@@ -48,7 +48,7 @@ def main(args: List[str], is_debug: bool):
     dump_doc_data_accessor = DumpDocEntriesAccessor()
     category_group_def = CategoryGroupDef.load_category_group_def_yaml()
 
-    # TODO: refactor and add validate. use argparse? (no use docopt. because last commit is old)
+    # TODO: refactor and add validation. use argparse? (no use docopt. because last commit is old)
     # local
     if len(args) >= 2 and (args[1] == '-init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
@@ -62,8 +62,9 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
         if len(args) >= 3 and (args[2] == '-all' or args[2] == '-a'):
+            is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
             push_entry_to_docs_and_blog(blog_config, dump_blog_data_accessor, dump_doc_data_accessor,
-                                        category_group_def, target_dirs)
+                                        category_group_def, is_draft, target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
             return
         result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, target_dirs)
@@ -88,9 +89,12 @@ def main(args: List[str], is_debug: bool):
             search_doc_entry_by_category(category_group_def, args[3])
             return
         if len(args) >= 3 and (args[2] == '-title' or args[2] == '-t'):
-            search_doc_entry_by_title(category_group_def, args[3])
+            search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[3])
             return
     if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
+        print('[Error] Unimplemented')
+        return
+    if len(args) >= 2 and (args[1] == '-organize' or args[1] == '-o'):
         print('[Error] Unimplemented')
         return
     # external
@@ -100,19 +104,21 @@ def main(args: List[str], is_debug: bool):
             print('[Info] Success: blog entries collection')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
+            is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
             push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                         category_group_def, args[3:])
+                                         category_group_def, args[3:], is_draft)
+            print('[Info] Success: pushed specified document to blog.')
             return
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':
         print(api_executor.build_request_header())
         return
-    if len(args) >= 2 and args[1] == '-get-blog':
-        hatena_blog_entry_id = '26006613443907494'
+    if len(args) >= 3 and args[1] == '-get-blog':
+        hatena_blog_entry_id = args[2]
         show_hatena_blog_entry(blog_config, hatena_blog_entry_id)
         return
-    if len(args) >= 2 and args[1] == '-get-photo':
-        hatena_photo_entry_id = '20191002233050'
+    if len(args) >= 3 and args[1] == '-get-photo':
+        hatena_photo_entry_id = args[2]
         show_hatena_photo_entry(blog_config, hatena_photo_entry_id)
         return
     if len(args) >= 2 and args[1] == '-put-summary':
@@ -125,7 +131,7 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and args[1] == '-put-blog':
         doc_id = args[2]
-        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id))
+        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id), False)
         print(result.build_dump_data())
         return
     if len(args) >= 2 and args[1] == '-replace-md':

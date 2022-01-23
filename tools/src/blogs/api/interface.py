@@ -15,7 +15,8 @@ class IBlogApiExecutor(ABC):
         pass
 
     @abstractmethod
-    def execute_register_blog_entry_api(self, title: str, category: str, content: str) -> Optional[BlogEntry]:
+    def execute_register_blog_entry_api(self, title: str, category: str, content: str,
+                                        is_draft: bool) -> Optional[BlogEntry]:
         pass
 
     @abstractmethod
@@ -24,7 +25,7 @@ class IBlogApiExecutor(ABC):
 
     @abstractmethod
     def execute_update_blog_entry_api(self, entry_id: str, title: str, category: str,
-                                      content: str) -> Optional[BlogEntry]:
+                                      content: str, is_draft: bool) -> Optional[BlogEntry]:
         pass
 
     @abstractmethod
