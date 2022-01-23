@@ -111,7 +111,7 @@ def main(args: List[str], is_debug: bool):
             print('[Info] Success: pushed specified document to blog.')
             return
         if len(args) >= 3 and (args[2] == '-summary' or args[2] == '-s'):
-            is_success = put_hatena_summary_page(blog_config, category_group_def)
+            is_success = put_hatena_summary_page(api_executor, category_group_def)
             if is_success:
                 print('[Info] Success: blog summary page updated')
             else:

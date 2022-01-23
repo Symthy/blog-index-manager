@@ -6,7 +6,7 @@ SUMMARY_PAGE_TITLE = "Knowledge Stack & Index (全記事一覧)"
 
 
 def get_summary_page_title() -> str:
-    return SUMMARY_PAGE_TITLE
+    return __replace_xml_escape(SUMMARY_PAGE_TITLE)
 
 
 __BLOG_ENTRY_TEMPLATE = """<?xml version="1.0" encoding="utf-8"?>
