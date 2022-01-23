@@ -7,6 +7,7 @@ from typing import List
 import yaml
 
 from files.conf.blog_config import BlogConfig
+from files.files_operator import is_exist_file
 
 
 def read_blog_config(config_path):
@@ -62,6 +63,8 @@ def write_text_lines(file_path, lines: List[str]):
 
 
 def load_json(file_path):
+    if not is_exist_file(file_path):
+        return {}
     with codecs.open(file_path, mode='r', encoding='utf-8') as file:
         obj = json.load(file)
     return obj
