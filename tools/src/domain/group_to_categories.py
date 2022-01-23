@@ -53,6 +53,9 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         self.__category_to_entries[category_to_entries.category] = category_to_entries
 
     def remove_entry(self, category, entry_id):
+        if category == self.__group:
+            self.__entries_of_non_category.pop(entry_id)
+            return
         category_to_entries_set: CategoryToEntriesSet = self.__category_to_entries[category]
         category_to_entries_set.remove_entry(entry_id)
         if category_to_entries_set.is_empty():
@@ -74,8 +77,7 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
         self.__categories.sort()
 
     def add_entry(self, entry: IEntry):
-        # if entry.top_category is None or len(entry.top_category) == 0:
-        if entry.top_category == NON_CATEGORY_GROUP_NAME:
+        if entry.top_category == NON_CATEGORY_GROUP_NAME or entry.top_category == self.__group:
             self.__add_entry_to_non_category(entry)
             return
         if entry.top_category in self.__categories:
@@ -119,10 +121,11 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         self.__sorted_groups: List[str] = []
         self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}  # key: group
         # initialize process
-        if category_to_entries_map is not None:
-            self.__init_based_category_group_def(category_group_def, category_to_entries_map)
-            # Categories that don't exist in definitions are pushed under "Others"
-            self.__init_non_exist_category_in_definition(category_group_def, category_to_entries_map)
+        if category_to_entries_map is None:
+            return
+        self.__init_based_category_group_def(category_group_def, category_to_entries_map)
+        # Categories that don't exist in definitions are pushed under "Others"
+        self.__init_non_exist_category_in_definition(category_group_def, category_to_entries_map)
 
     def __init_based_category_group_def(self, category_group_def: CategoryGroupDef,
                                         category_to_entries_map: CategoryToEntriesMap):
@@ -130,21 +133,21 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
             def_group = grouping_categories.group_name
             def_categories = grouping_categories.categories
             self.__sorted_groups.append(def_group)  # the order of groups follows the definition(category_group.yml)
+            group_to_categorized_entries_set = GroupToCategorizedEntriesSet(def_group)
             if category_to_entries_map.is_exist_category(def_group):
-                # group don't has category (group name equal category name) case
-                group_to_categorized_entries_set = GroupToCategorizedEntriesSet(def_group)
+                # group name equal category name case
                 category_to_entries_set: CategoryToEntriesSet = category_to_entries_map.get_category_to_entries_set(
                     def_group)
                 group_to_categorized_entries_set.add_entries_to_non_category(category_to_entries_set.entry_list)
-                self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
+                print(['1\n'] + category_to_entries_set.convert_md_lines())
             else:
                 # group has category case
-                group_to_categorized_entries_set = GroupToCategorizedEntriesSet(def_group)
                 for def_category in def_categories:
                     if category_to_entries_map.is_exist_category(def_category):
                         category_to_entries_set = category_to_entries_map.get_category_to_entries_set(def_category)
                         group_to_categorized_entries_set.add_category_to_entries_set(category_to_entries_set)
-                self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
+                        print(['2\n'] + category_to_entries_set.convert_md_lines())
+            self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
 
     def __init_non_exist_category_in_definition(self, category_group_def: CategoryGroupDef,
                                                 category_to_entries_map: CategoryToEntriesMap):

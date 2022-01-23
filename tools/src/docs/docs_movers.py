@@ -37,11 +37,12 @@ def resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGrou
 def __resolve_move_to_dir_name_and_path(category_group_def: CategoryGroupDef, move_from_dir_path: str,
                                         doc_title: str) -> str:
     doc_category = __resolve_doc_category(move_from_dir_path)  # default category: Others
-    group = ''
+    group_dir = ''
     if not __category_is_group(doc_category, category_group_def):
-        group = category_group_def.get_belongs_group(doc_category)
+        group_dir = f'{category_group_def.get_belongs_group(doc_category)}/'
+    group_and_category_part_path = f'{group_dir}{doc_category}'
     # change dir name to doc title
-    move_to_dir_path = f'{DOCS_DIR_PATH}{group}/{doc_category}/{translate_win_files_unusable_char(doc_title)}/'
+    move_to_dir_path = f'{DOCS_DIR_PATH}{group_and_category_part_path}/{translate_win_files_unusable_char(doc_title)}/'
     return move_to_dir_path
 
 

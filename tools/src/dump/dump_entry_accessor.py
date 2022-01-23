@@ -26,4 +26,4 @@ class DumpEntryAccessor(IDumpEntryAccessor[TS]):
         return self.__entry_factory(json_data)
 
     def save_entry(self, entry: TS):
-        dump_entry_data(entry, f'{self.__entry_dump_dir_path}/{entry.id}.json')
+        dump_entry_data(entry, f'{self.__entry_dump_dir_path}{entry.id}.json')

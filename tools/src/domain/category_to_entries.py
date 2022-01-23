@@ -65,9 +65,10 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
                 category_to_entries_set = CategoryToEntriesSet(category)
                 category_to_entries_set.add_entry(entry)
                 self.__category_to_entries[category] = category_to_entries_set
-                if category != NON_CATEGORY_GROUP_NAME:
+                if category == NON_CATEGORY_GROUP_NAME:
                     # because: Others is last in categories
-                    self.__sorted_categories.append(category)
+                    continue
+                self.__sorted_categories.append(category)
             else:
                 self.__category_to_entries[category].add_entry(entry)
         self.__sorted_categories.sort()
