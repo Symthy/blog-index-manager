@@ -2,7 +2,7 @@ from xml.sax.saxutils import escape
 
 from ltime.time_resolver import resolve_entry_current_time
 
-SUMMARY_PAGE_TITLE = "Knowledge Index (記事一覧)"
+SUMMARY_PAGE_TITLE = "Knowledge Stack & Index (全記事一覧)"
 
 
 def get_summary_page_title() -> str:
@@ -48,7 +48,9 @@ def get_blog_summary_index_template() -> str:
     return """本ページは投稿記事一覧です。 (自動更新)
 
 {md_lines}
-    """
+
+※ [自作ツール(Githubリンク)](https://github.com/Symthy/docs-and-blog-enty-manager) により本ブログへの投稿/更新はほぼ自動化
+"""
 
 
 def get_blog_entry_template() -> str:
