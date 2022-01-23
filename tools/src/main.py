@@ -2,6 +2,7 @@ import sys
 from typing import List
 
 from blogs.api.interface import IBlogApiExecutor
+from blogs.blog_grouping_deserializer import deserialize_blog_entry_grouping_data
 from blogs.dump_blog_entries_accessor import DumpBlogEntriesAccessor
 from blogs.hatena.blog_api_executor import HatenaBlogApiExecutor
 from common.constant import BLOG_CONF_PATH
@@ -109,6 +110,13 @@ def main(args: List[str], is_debug: bool):
                                          category_group_def, args[3:], is_draft)
             print('[Info] Success: pushed specified document to blog.')
             return
+        if len(args) >= 3 and (args[2] == '-summary' or args[2] == '-s'):
+            is_success = put_hatena_summary_page(blog_config, category_group_def)
+            if is_success:
+                print('[Info] Success: blog summary page updated')
+            else:
+                print('[Error] Failure: blog summary page updated')
+            return
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':
         print(api_executor.build_request_header())
@@ -121,8 +129,8 @@ def main(args: List[str], is_debug: bool):
         hatena_photo_entry_id = args[2]
         show_hatena_photo_entry(blog_config, hatena_photo_entry_id)
         return
-    if len(args) >= 2 and args[1] == '-put-summary':
-        put_hatena_summary_page(blog_config, category_group_def)
+    if len(args) >= 2 and args[1] == '-show-blog-summary':
+        print(deserialize_blog_entry_grouping_data(category_group_def).convert_md_lines())
         return
     if len(args) >= 2 and args[1] == '-put-photo':
         doc_id = args[2]
