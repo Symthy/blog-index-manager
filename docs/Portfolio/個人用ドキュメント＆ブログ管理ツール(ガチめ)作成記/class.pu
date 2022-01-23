@@ -1,0 +1,33 @@
+@startuml
+
+class GroupToCategorizedEntriesMap
+class GroupToCategorizedEntriesSet
+note right: 1グループ分の\n記事リストを持つ
+class CategoryToEntriesMap
+class CategoryToEntriesSet
+note left: 1カテゴリ分の\n記事リストを持つ
+interface IEntries
+class BlogEntries
+class DocEntries
+interface IEntry
+note left: 1記事分
+class BlogEntry
+class DocEntry
+
+GroupToCategorizedEntriesMap "1" o..> "m" GroupToCategorizedEntriesSet
+GroupToCategorizedEntriesSet "1" o..> "1" CategoryToEntriesMap
+
+GroupToCategorizedEntriesSet "1" o..> "1" IEntries
+
+CategoryToEntriesMap "1" o..> "m" CategoryToEntriesSet
+CategoryToEntriesSet "1" o..> "1" IEntries
+
+IEntries <|.. BlogEntries
+IEntries <|.. DocEntries
+DocEntries "1" o..> "m" DocEntry
+BlogEntries "1" o..> "m" BlogEntry
+IEntry <|... BlogEntry
+IEntry <|... DocEntry
+CategoryToEntriesSet ..> IEntry
+
+@enduml

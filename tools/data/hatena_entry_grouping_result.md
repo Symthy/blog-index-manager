@@ -1,0 +1,17 @@
+- Architecture
+- Development
+- Program
+- Web
+- Git
+- BackEnd
+- FrontEnd
+- Infra
+- Algorithm
+- Tools
+- Roadmap
+- Management
+- Job
+- Career
+- Portfolio
+  - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
+- Others
