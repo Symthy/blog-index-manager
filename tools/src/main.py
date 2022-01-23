@@ -63,7 +63,7 @@ def main(args: List[str], is_debug: bool):
         target_dirs = args[2:] if len(args) > 2 else []
         if len(args) >= 3 and (args[2] == '-all' or args[2] == '-a'):
             is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
-            push_entry_to_docs_and_blog(blog_config, dump_blog_data_accessor, dump_doc_data_accessor,
+            push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
                                         category_group_def, is_draft, target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
             return

@@ -151,8 +151,8 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
 
         url = HATENA_PHOTO_ENTRY_POST_API
         body = __build_hatena_photo_entry_body()
-        print('[Info] API execute: POST Photo')
-        xml_string_opt = execute_post_api(url, self.build_request_header(), body,
+        print(f'[Info] API execute: POST Photo (image: {image_file_path})')
+        xml_string_opt = execute_post_api(url, self.build_request_header(), body.encode(encoding='utf-8'),
                                           HatenaBlogApiExecutor.__resolve_api_response)
         image_filename = get_file_name_from_file_path(image_file_path)
         return parse_photo_entry_xml(xml_string_opt, image_filename)

@@ -70,7 +70,7 @@ def push_blog_entry(api_executor: IBlogApiExecutor, doc_entry: DocEntry, is_draf
     content = get_blog_entry_template().format(content=md_file_data)
     # Todo: refactor
     if old_blog_id_opt is None:
-        blog_entry_opt = api_executor.execute_register_blog_entry_api(title, category, content)
+        blog_entry_opt = api_executor.execute_register_blog_entry_api(title, category, content, is_draft)
     else:
         blog_entry_opt = api_executor.execute_update_blog_entry_api(old_blog_id_opt, title, category, content, is_draft)
     if blog_entry_opt is None:
