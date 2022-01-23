@@ -1,10 +1,10 @@
 from typing import Optional, Dict, List
 
 from blogs.api.interface import IBlogApiExecutor
+from blogs.blog_grouping_deserializer import deserialize_blog_entry_grouping_data
 from blogs.hatena.templates.hatena_entry_format import get_blog_summary_index_template, get_blog_entry_template
 from common.constant import DOC_IMAGES_DIR_NAME
 from docs.doc_set_accessor import get_image_file_paths_in_target_dir
-from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.blog.blog_entry import BlogEntry
 from domain.blog.photo_entry import PhotoEntry, PhotoEntries
 from domain.doc.doc_entry import DocEntry
@@ -14,18 +14,17 @@ from files.files_operator import get_updated_time_of_target_file, get_file_name_
 from files.md_data_handler import join_lines, replace_image_link_in_md_data
 
 
-def put_hatena_summary_page(api_executor: IBlogApiExecutor, category_group_def: CategoryGroupDef):
+def put_hatena_summary_page(api_executor: IBlogApiExecutor, category_group_def: CategoryGroupDef) -> bool:
     """
     ブログのトップページ(summary)を更新する
     :param api_executor:
     :param category_group_def:
     :return:
     """
-    entries_grouping_map = deserialize_doc_entry_grouping_data(category_group_def)
+    entries_grouping_map = deserialize_blog_entry_grouping_data(category_group_def)
     content = get_blog_summary_index_template().format(md_lines=join_lines(entries_grouping_map.convert_md_lines()))
     is_success = api_executor.execute_update_blog_summary_page(content)
-    if not is_success:
-        print('[Error] blog summary page updated failure')
+    return is_success
 
 
 def __build_md_file_path(dir_path: str, md_file_name: str):
