@@ -15,9 +15,6 @@
     - Shell
     - Regexp
 - Web
-- Git:
-    - Github API
-    - Github Pages
 - BackEnd:
     - DB
     - SQL
@@ -41,6 +38,10 @@
     - VMware
     - Vagrant
 - Algorithm
+- Git:
+    - Github API
+    - Github Pages
+- VSCode
 - Tools
 - Roadmap
 - Management

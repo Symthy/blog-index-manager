@@ -6,12 +6,14 @@
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
 - Web
-- Git
-  - [Git 追跡解除](./docs/Git/Git_追跡解除/Git_追跡解除.md)
 - BackEnd
 - FrontEnd
 - Infra
 - Algorithm
+- Git
+  - [Git 追跡解除](./docs/Git/Git_追跡解除/Git_追跡解除.md)
+- VSCode
+  - [Markdown format](./docs/VSCode/Markdown_format/doc.md)
 - Tools
 - Roadmap
 - Management
