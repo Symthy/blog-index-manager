@@ -76,7 +76,7 @@ def main(args: List[str], is_debug: bool):
         return
     if len(args) >= 2 and (args[1] == '-retrieve' or args[1] == '-ret' or args[1] == '-r'):
         if len(args) >= 3 and (args[2] == '-cancel' or args[2] == '-c'):
-            cancel_retrieving_document(category_group_def, args[3:])
+            cancel_retrieving_document(dump_doc_data_accessor, category_group_def, args[3:])
             print('[Info] Success: retrieve cancel.')
         else:
             retrieve_document_from_docs(dump_doc_data_accessor, category_group_def, args[2:])
