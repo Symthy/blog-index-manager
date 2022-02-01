@@ -1,11 +1,12 @@
 {
-  "updated_time": "2022-01-29T23:38:25",
+  "updated_time": "2022-02-01T21:11:44",
   "entries": {
     "20220123190520": "個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記",
     "20220123193352": "Golang Generics",
     "20220123193618": "JavaScript 基本",
     "20220123193918": "Git 追跡解除",
     "20220129110728": "Markdown format",
-    "20220129233432": "Java Assertj + Mockito"
+    "20220129233432": "Java Assertj + Mockito",
+    "20220201211144": "Gson Serialize (Object -> String) での時刻フォーマット指定方法"
   }
 }

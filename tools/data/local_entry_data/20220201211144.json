@@ -1,0 +1,12 @@
+{
+  "id": "20220201211144",
+  "title": "Gson Serialize (Object -> String) での時刻フォーマット指定方法",
+  "dir_path": "./docs/Program/Java/Gson_Serialize_(Object_-＞_String)_での時刻フォーマット指定方法/",
+  "doc_file_name": "doc.md",
+  "top_category": "Java",
+  "categories": [
+    "Java"
+  ],
+  "created_at": "2022-02-01T21:11:44",
+  "updated_at": ""
+}

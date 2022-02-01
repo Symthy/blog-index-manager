@@ -9,7 +9,8 @@
       "20220123193618": "JavaScript 基本"
     },
     "Java": {
-      "20220129233432": "Java Assertj + Mockito"
+      "20220129233432": "Java Assertj + Mockito",
+      "20220201211144": "Gson Serialize (Object -> String) での時刻フォーマット指定方法"
     }
   },
   "Web": {},

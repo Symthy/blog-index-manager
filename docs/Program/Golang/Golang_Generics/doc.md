@@ -351,6 +351,83 @@ ref:
 
 - [連結リストの実装でGo言語のジェネリクスのドラフトを触ってみる](https://medium.com/eureka-engineering/golang-generics-design-draft-linked-list-4d1174e2355d)
 
+## 実践メモ
+
+Gorm使用の基本的な処理を提供するリポジトリクラス
+
+- ISchema: Gorm用に用意しているデータモデル用インターフェース
+- IDomain: ドメイン用(ジェネリクスの型制限用)
+
+都合により一部関数を外から与える。以下のようにすることで利用側も受け取る型が一意に定まる。
+
+```go
+package infrastructure
+
+type ISchema[T IDomain] interface {
+    ConvertToDomain() *T
+}
+
+// 型制限をかけるためだけのインターフェース ※他に良いものがあればそれで
+type IDomain interface {
+    Id() uint
+}
+```
+
+```go
+package database
+
+type BaseRepository[TS infrastructure.ISchema[TD], TD infrastructure.IDomain] struct {
+    db           *gorm.DB
+    emptySchemaBuilder func() TS
+    // Domainに実装すると双方向依存。感覚的にDomainに実装するのも違うため分離している
+    toSchemaConverter    func(domain TD) TS
+}
+
+func (rep BaseRepository[TS, TD]) FindById(id uint) (*TD, error) {
+    var schema = rep.emptySchemaBuilder()
+    tx := rep.db.First(&schema, id)
+    if tx.Error != nil {
+        return nil, tx.Error
+    }
+    return schema.ConvertToDomain(), tx.Error
+}
+
+func (rep BaseRepository[TS, TD]) Create(model TD) (*TD, error) {
+    schema := rep.schemaConverter(model)
+    db := rep.dbClient.Db()
+    tx := db.Create(&schema)
+    if tx.Error != nil {
+        return nil, tx.Error
+    }
+    return schema.ConvertToDomain(), nil
+}
+
+func (rep BaseRepository[TS, TD]) Update(model TD) (*TD, error) {
+    _, err := rep.FindById(model.Id())
+    if err != nil {
+        return nil, err
+    }
+    schema := rep.toSchemaConverter(model)
+    updated := rep.emptySchemaBuilder()
+    tx := rep.db.Model(&updated).Updates(schema)
+    if tx.Error != nil {
+        return nil, tx.Error
+    }
+    return updated.ConvertToDomain(), nil
+}
+
+func (rep BaseRepository[TS, TD]) Delete(id uint) (*TD, error) {
+    db := rep.dbClient.Db()
+    schema := rep.emptySchemaBuilder()
+    tx := db.Delete(&schema, id)
+    if tx.Error != nil {
+        return nil, tx.Error
+    }
+    return schema.ConvertToDomain(), nil
+}
+
+```
+
 ## Links
 
 ref:
