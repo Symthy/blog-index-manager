@@ -33,32 +33,7 @@
 
 ### 簡易なもののサンプル
 
-```java
-Class ExampleService {
-
-  // パス情報は別クラスで管理されている前提
-  private static String EXTERNAL_CONF_DIR_PATH = ProductPorperties.getConfDir() + File.separator + "external";
-  
-  private static EXTERNAL_XXX_CONF_NAME = "external_xxx.conf";
-  private static EXTERNAL_YYY_CONF_NAME = "external_yyy.conf";
-  private static EXTERNAL_ZZZ_CONF_NAME = "external_zzz.conf";
-  Logger LOGGER = LoggerFactory.getLogger(ExampleService.class);
-
-  ExampleService() {
-    initSetting()
-    
-    if () {
-    
-    try {
-      loadExternalConfig()
-    } catch (IOException e) {
-      LOGGER.error("load failure.", e)
-    }
-  }
-
-
-}
-```
+- before
 
 ```java
 Class ExampleService {
@@ -101,6 +76,8 @@ Class ExampleService {
   }
 }
 ```
+
+- after
 
 ```java
 Class ExampleService {

@@ -1,13 +1,7 @@
 - Architecture
 - Development
 - Program
-  - Java
-    - [Java Assertj + Mockito](https://symthy.hatenablog.com/entry/2022/01/29/233929) (2022/01)
-    - [Gson Serialize (Object -> String) での時刻フォーマット指定方法](https://symthy.hatenablog.com/entry/2022/02/01/211144) (2022/02)
-  - Golang
-    - [Golang Generics](https://symthy.hatenablog.com/entry/2022/01/23/193352) (2022/01)
-  - JavaScript
-    - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
+  - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
 - Web
 - BackEnd
 - FrontEnd
