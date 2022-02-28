@@ -1,0 +1,66 @@
+@startuml
+package PresentaionLayer {
+  class Controller
+}
+
+package ApplicationLayer {
+  class ApplicationService
+  class Specification
+  class Command
+}
+
+package DomainServiceLayer {
+  class DomainService
+}
+
+package DomainLayer {
+  interface IRepository
+  interface INotification
+  interface IDomainModelFactory
+  class DomainModelFactory
+  class DomainModel
+  class ValueObject
+}
+
+package InfrastructureLayer {
+  class Repository
+  class Dto
+  class DtoBuilder
+  class DtoConverter
+}
+
+Controller o..> ApplicationService
+Controller ..> Command
+
+ApplicationService ..> Specification
+ApplicationService .> Command
+
+ApplicationService o..> IDomainModelFactory
+ApplicationService o....> DomainService
+ApplicationService ..> DomainModel
+ApplicationService ..> ValueObject
+ApplicationService o..> IRepository
+Specification ..> DomainModel
+
+IDomainModelFactory <|-- DomainModelFactory
+DomainModelFactory ..> DomainModel
+DomainModel o..> ValueObject
+DomainModelFactory ..> ValueObject
+DomainModel ..> INotification
+
+DomainService ..> DomainModel
+DomainService o..> IRepository
+
+DomainModelFactory o.> IRepository
+Specification o..> IRepository
+DtoBuilder ..> DomainModel
+IRepository <|--- Repository
+Repository ..> DomainModel
+INotification <|-- DtoBuilder
+
+Repository ..> Dto
+DtoBuilder .> Dto
+Repository ..> DtoBuilder
+Repository ..> DtoConverter
+DtoConverter ..> Dto
+@enduml

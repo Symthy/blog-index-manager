@@ -1,6 +1,10 @@
 {
   "Architecture": {},
-  "Development": {},
+  "Development": {
+    "DDD": {
+      "20220220230658": "DDD メモ"
+    }
+  },
   "Program": {
     "Golang": {
       "20220123193352": "Golang Generics"
@@ -17,8 +21,16 @@
     }
   },
   "Web": {},
-  "BackEnd": {},
-  "FrontEnd": {},
+  "BackEnd": {
+    "ElasticStack": {
+      "20220228213158": "Elasticsearch メモ"
+    }
+  },
+  "FrontEnd": {
+    "React": {
+      "20220223232831": "React 基本メモ"
+    }
+  },
   "Infra": {},
   "Algorithm": {},
   "Git": {

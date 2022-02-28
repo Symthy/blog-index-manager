@@ -4,3 +4,4 @@ __pycache__/
 work/
 backup/
 conf/blog.conf
+out/

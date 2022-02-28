@@ -1,5 +1,7 @@
 - Architecture
 - Development
+  - DDD
+    - [DDD メモ](./docs/Development/DDD/DDD_メモ/doc.md)
 - Program
   - Golang
     - [Golang Generics](./docs/Program/Golang/Golang_Generics/doc.md)
@@ -11,7 +13,11 @@
   - [コードレビュー どう取り組むか](./docs/Program/コードレビュー_どう取り組むか/doc.md)
 - Web
 - BackEnd
+  - ElasticStack
+    - [Elasticsearch メモ](./docs/BackEnd/ElasticStack/Elasticsearch_メモ/doc.md)
 - FrontEnd
+  - React
+    - [React 基本メモ](./docs/FrontEnd/React/React_基本メモ/doc.md)
 - Infra
 - Algorithm
 - Git

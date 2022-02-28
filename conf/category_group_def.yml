@@ -21,6 +21,7 @@
     - ORM
     - Nest
     - REST
+    - ElasticStack
 - FrontEnd:
     - UI
     - React

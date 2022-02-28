@@ -1,10 +1,16 @@
 - Architecture
 - Development
+  - DDD
+    - [DDD メモ](https://symthy.hatenablog.com/entry/2022/02/20/230658) (2022/02)
 - Program
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
 - Web
 - BackEnd
+  - ElasticStack
+    - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)
 - FrontEnd
+  - React
+    - [React 基本メモ](https://symthy.hatenablog.com/entry/2022/02/23/232831) (2022/02)
 - Infra
 - Algorithm
 - Git

@@ -4,28 +4,28 @@
 
 ### 共通
 
-- 同値
+- 同値: isEqualTo
 
 ```java
 assertThat("Foo").isEqualTo("Foo");
 assertThat("Foo").isNotEqualTo("Bar");
 ```
 
-- Null
+- Null: isNull/isNotNull
 
 ```java
 assertThat(actual).isNull();
 assertThat(actual).isNotNull();
 ```
 
-- 同一インスタンス
+- 同一インスタンス: isSameAs/isNotSameAs
 
 ```java
 assertThat(bar1).isSameAs(bar2);
 assertThat(bar1).isNotSameAs(bar2);
 ```
 
-- インスタンスの型
+- インスタンスの型: isInstanceOf/isNotInstanceOf
 
 ```java
 assertThat(baz).isInstanceOf(Baz.class);
@@ -33,13 +33,13 @@ assertThat(qux).isInstanceOf(Baz.class).isInstanceOf(Qux.class);
 assertThat(qux).isNotInstanceOf(Baz.class);
 ```
 
-- toString()
+- toString値: hasToString
 
 ```java
 assertThat(fooBar).hasToString("FooBar");  // toString()の値確認
 ```
 
-- 注釈
+- 注釈: as
 
 ```java
 assertThat("Foo").as("AssertJ sample").isEqualTo("Bar");
@@ -258,6 +258,19 @@ assertThat(params)
      tuple("projectId", "cde"));
 ```
 
+#### assertAll (全て実行する)
+
+失敗するものがあっても assertAll 内は全て検証される（ただし、結果が少々見にくい）
+
+```java
+assertThat(persons.get(0))
+  .satisfies(p -> assertAll(
+    () -> assertThat(p.getName()).isEqualTo("SYM"),
+    () -> assertThat(p.getAge()).isEqualTo(0),
+    () -> assertThat(p.getJob()).isEqualTo("Engineer")
+  ));
+```
+
 ### 例外
 
 - 例外確認
@@ -359,3 +372,7 @@ doReturn("モック化").when(mockedService).getMessage(any());
 - [公式ドキュメント](https://assertj.github.io/doc/)
 
 - [AssertJ版：テストでよく使う検証メソッド一覧](https://qiita.com/naotawool/items/6512ecbe2fd006dacfd2)
+
+以下も参考になりそう
+
+- [ユニットテストのassertionにAssertJ 3.9を利用するサンプルコード](https://qiita.com/rubytomato@github/items/a70395be1853848dacb2)

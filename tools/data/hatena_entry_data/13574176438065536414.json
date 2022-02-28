@@ -1,0 +1,19 @@
+{
+  "id": "13574176438065536414",
+  "title": "DDD メモ",
+  "page_url": "https://symthy.hatenablog.com/entry/2022/02/20/230658",
+  "top_category": "DDD",
+  "categories": [
+    "DDD"
+  ],
+  "updated_at": "2022-02-26T15:17:42",
+  "original_doc_id": "20220220230658",
+  "doc_images": {
+    "ddd_layer_uml.png": {
+      "id": "20220226151735",
+      "syntax": "f:id:SYM_simu:20220226151735p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20220226/20220226151735.png",
+      "updated_at": "2022-02-26T15:17:42"
+    }
+  }
+}
