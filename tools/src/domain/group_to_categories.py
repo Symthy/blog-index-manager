@@ -139,12 +139,11 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
                 category_to_entries_set: CategoryToEntriesSet = category_to_entries_map.get_category_to_entries_set(
                     def_group)
                 group_to_categorized_entries_set.add_entries_to_non_category(category_to_entries_set.entry_list)
-            else:
-                # group has category case
-                for def_category in def_categories:
-                    if category_to_entries_map.is_exist_category(def_category):
-                        category_to_entries_set = category_to_entries_map.get_category_to_entries_set(def_category)
-                        group_to_categorized_entries_set.add_category_to_entries_set(category_to_entries_set)
+            # group has category case
+            for def_category in def_categories:
+                if category_to_entries_map.is_exist_category(def_category):
+                    category_to_entries_set = category_to_entries_map.get_category_to_entries_set(def_category)
+                    group_to_categorized_entries_set.add_category_to_entries_set(category_to_entries_set)
             self.__group_to_categorized_entries[def_group] = group_to_categorized_entries_set
 
     def __init_non_exist_category_in_definition(self, category_group_def: CategoryGroupDef,

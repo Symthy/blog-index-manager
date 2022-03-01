@@ -99,6 +99,8 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
     def convert_md_lines(self) -> List[str]:
         lines = []
         for category in self.__sorted_categories:
+            if not category in self.__category_to_entries:
+                continue
             lines = lines + self.__category_to_entries[category].convert_md_lines()
         return lines
 

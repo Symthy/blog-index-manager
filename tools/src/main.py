@@ -13,6 +13,7 @@ from files.md_data_handler import replace_image_link_in_md_data
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
+from service.external.blog_entry_index_updater import update_blog_entry_summary_file
 from service.external.blog_entry_pusher import put_hatena_summary_page, push_photo_entries, push_blog_entry
 from service.local.doc_entry_generator import new_local_document_set
 from service.local.doc_entry_pusher import push_documents_to_docs
@@ -120,6 +121,9 @@ def main(args: List[str], is_debug: bool):
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '-wsse':
         print(api_executor.build_request_header())
+        return
+    if len(args) >= 2 and args[1] == '-update-summary':
+        update_blog_entry_summary_file(dump_blog_data_accessor, category_group_def)
         return
     if len(args) >= 3 and args[1] == '-get-blog':
         hatena_blog_entry_id = args[2]
