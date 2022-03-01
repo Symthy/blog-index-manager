@@ -141,6 +141,8 @@ class BlogEntries(IEntries):
         self.__entries.append(blog_entry)
 
     def merge(self, blog_entries: BlogEntries):
+        if blog_entries.is_empty():
+            return
         # existed entry is overwrite
         self.__entries.extend(blog_entries.entry_list)
 
