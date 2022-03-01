@@ -31,7 +31,7 @@ Repositoryのinterfaceはdomain層とQueryServiceのinterfaceはapplication層�
 
 - [DDD x CQRS 更新系と参照系で異なるORMを併用して上手くいった話](https://www.slideshare.net/koichiromatsuoka/ddd-x-cqrs-orm)
 
-## 参考リンク
+## ref
 
 - [little hands' lab - ドメイン駆動設計(DDD) 記事一覧](https://little-hands.hatenablog.com/archive/category/%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3%E9%A7%86%E5%8B%95%E8%A8%AD%E8%A8%88%28DDD%29)
 
@@ -52,3 +52,6 @@ Repositoryのinterfaceはdomain層とQueryServiceのinterfaceはapplication層�
     - マイクロサービスを考えるなら一読した方が良いかも
 
 - [Domain Driven Design（ドメイン駆動設計） Quickly 日本語版](https://www.infoq.com/jp/minibooks/domain-driven-design-quickly/)
+
+- [最近の海外DDDセミナーを聞いてみたら色々と常識が破壊された](https://qiita.com/dairappa/items/fd136a98cab98c517673)
+    - イベントが設計の基本線となりつつあるらしい… pub/subの設計
