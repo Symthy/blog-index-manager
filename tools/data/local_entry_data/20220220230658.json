@@ -1,12 +1,12 @@
 {
   "id": "20220220230658",
-  "title": "DDD メモ",
-  "dir_path": "./docs/Development/DDD/DDD_メモ/",
+  "title": "DDD 実践メモ",
+  "dir_path": "./docs/Development/DDD/DDD_実践メモ/",
   "doc_file_name": "doc.md",
   "top_category": "DDD",
   "categories": [
     "DDD"
   ],
   "created_at": "2022-02-20T23:06:58",
-  "updated_at": "2022-02-28T22:32:12"
+  "updated_at": "2022-03-06T13:20:12"
 }

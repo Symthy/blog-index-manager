@@ -1,10 +1,11 @@
 - Architecture
 - Development
   - DDD
-    - [DDD メモ](./docs/Development/DDD/DDD_メモ/doc.md)
+    - [DDD 実践メモ](./docs/Development/DDD/DDD_実践メモ/doc.md)
 - Program
   - Golang
     - [Golang Generics](./docs/Program/Golang/Golang_Generics/doc.md)
+    - [Golang コード自動生成](./docs/Program/Golang/Golang_コード自動生成/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
   - Java

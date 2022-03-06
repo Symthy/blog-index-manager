@@ -1,8 +1,16 @@
 - Architecture
 - Development
   - DDD
-    - [DDD メモ](https://symthy.hatenablog.com/entry/2022/02/20/230658) (2022/02)
+    - [DDD 実践メモ](https://symthy.hatenablog.com/entry/2022/02/20/230658) (2022/03)
 - Program
+  - Java
+    - [Java Assertj + Mockito](https://symthy.hatenablog.com/entry/2022/01/29/233929) (2022/02)
+    - [Gson Serialize (Object -> String) での時刻フォーマット指定方法](https://symthy.hatenablog.com/entry/2022/02/01/211144) (2022/02)
+  - Golang
+    - [Golang Generics](https://symthy.hatenablog.com/entry/2022/01/23/193352) (2022/01)
+    - [Golang コード自動生成](https://symthy.hatenablog.com/entry/2022/03/01/235231) (2022/03)
+  - JavaScript
+    - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
 - Web
 - BackEnd

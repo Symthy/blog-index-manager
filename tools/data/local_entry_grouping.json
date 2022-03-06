@@ -2,12 +2,13 @@
   "Architecture": {},
   "Development": {
     "DDD": {
-      "20220220230658": "DDD メモ"
+      "20220220230658": "DDD 実践メモ"
     }
   },
   "Program": {
     "Golang": {
-      "20220123193352": "Golang Generics"
+      "20220123193352": "Golang Generics",
+      "20220301235231": "Golang コード自動生成"
     },
     "JavaScript": {
       "20220123193618": "JavaScript 基本"
