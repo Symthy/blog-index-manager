@@ -9,6 +9,7 @@
   - Golang
     - [Golang Generics](https://symthy.hatenablog.com/entry/2022/01/23/193352) (2022/01)
     - [Golang コード自動生成](https://symthy.hatenablog.com/entry/2022/03/01/235231) (2022/03)
+    - [Golang Gorm 実践メモ＆注意点](https://symthy.hatenablog.com/entry/2022/03/06/134409) (2022/03)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
@@ -32,3 +33,4 @@
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
 - Others
+  - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)

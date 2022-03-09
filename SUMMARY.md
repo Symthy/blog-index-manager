@@ -6,6 +6,7 @@
   - Golang
     - [Golang Generics](./docs/Program/Golang/Golang_Generics/doc.md)
     - [Golang コード自動生成](./docs/Program/Golang/Golang_コード自動生成/doc.md)
+    - [Golang Gorm 実践メモ＆注意点](./docs/Program/Golang/Golang_Gorm_実践メモ＆注意点/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
   - Java
@@ -33,3 +34,4 @@
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)
 - Others
+  - [エンジニアを分類する3タイプから考える自身のタイプとその先と](./docs/Others/エンジニアを分類する3タイプから考える自身のタイプとその先と/doc.md)
