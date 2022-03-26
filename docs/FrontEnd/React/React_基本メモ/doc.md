@@ -47,13 +47,84 @@ props = properties。`{ 属性名: 属性値 }` の形式。
 
 [コンポーネントライフサイクル図](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
-## <記載中>
+※ 16.3以降は componentWillMount, componentWillReceiveProps, componentWillUpdate 非推奨（いずれ完全削除予定）
+
+### Presentational Component / Container Component
+
+- Presentational Component： 見た目だけを責務とするコンポーネント
+- Container Component： ロジックを追加するためのコンポーネント
+
+Presentational Component はスタイルガイドと共存させやすく (スタイルガイドに登録することでデザインの運用に活用できてるため) 再利用性が高まる
+
+公式が推奨するコンポーネントの正しい作り方
+
+1. デザインモックを作成、そのUIをコンポーネントの構造に分解 (Presentational)
+2. (ロジックを除外した) 静的に動作するバージョンを作成 (Presentational)
+3. UI を表現するために最低限必要な「状態」を特定 (Container)
+4. 3 の「状態」の配置場所を決定 (Container)
+5. (階層構造を逆のぼって考え) データが上階層から下階層に流れるようにする (Container)
+
+|観点|Presentational|Container|
+|---|---|---| 
+|関心点|どのように見えるか|どのように機能するか|
+|マークアップ量|内部にDOMマークアップを多く持つ|DOMマークアップを可能な限り持たない|
+|データ/振舞い|propsとして一方的に受け取る|他のコンポーネントに受け渡す|
+|Flux依存度|(Fluxの)store等に依存しない|(Fluxの)actionを実行したり、storeに依存する|
+|状態|自身の状態を持たない（UIの状態は持つ）|データの状態を持つ|
+|データ更新|データの変更に介入しない|データの変更に介入し任意の処理を行う|
+|実装|関数コンポーネントで表現されることが多い|（関数コンポーネントでも可能だが）HOC、Render Props、Hooksを使うことが多い|
+
+## Hooks (関数コンポーネント合体強化パーツ)
+
+HOC：高階関数コンポーネント (High Order Component)
+
+- コンポーネントを引数に取り、戻り値としてコンポーネントを返す関数
+
+```ts
+type Props = { target: string };
+const HelloComponent: FC<Props> = ({ target }) => <h1>Hello {target}!</h1>;
+export default withTarget(HelloComponent);
+```
+
+Render Props：レンダリングのための関数をprops として受け取る
+
+- 受け渡されてレンダリングに使われるprops のほうを指す
+
+```ts
+type Props = { target: string };
+const HelloComponent: FC<Props> = ({ target }) => <h1>Hello {target}!</h1>;
+```
+
+```ts
+<TargetProvider render={HelloComponent} />
+const TargetProvider: FC<{ render: FC<Props> }> = ({ render }) => render({ target: 'Patty' });
+```
+
+HOC、render propsの問題
+
+- 共通して抱えていた問題は、ロジックの追加が著しくコンポーネントツリーを汚染してしまうこと
+- HOC もrender props も状態を持つロジックを分離できても、積極的に再利用できるほどには抽象化できなかった
+
+Hooks
+
+- 状態を持ったロジックを完全に任意のコンポーネントから分離できる
+- それ単独でテストや別コンポーネントでの再利用が簡単にできる
+- コンポーネントの階層構造を変えることなく、状態を伴った再利用可能なロジックを追加できる
+
+- (ライフサイクルメソッドの反省のもとに)時間によって切り分けるのではなく、機能ごとに副作用を伴う処理をまとめて記述できる仕組みを提供
+- 機能ごとにまとまっているため、それをコンポーネントから切り離して別コンポーネントで再利用するのことが容易に可能
+
+Hooks実装
+
+- statusを扱う : useState()
+- 副作用を扱る： useEffect()
+- メモ化： useMemo() 計算結果をコンポーネントシステムの外に保存しておくことでコンピュータリソース削減
 
 ## 実装（基本）
 
 [チュートリアル](https://ja.reactjs.org/tutorial/tutorial.html)
 
-## サンプル
+### サンプル
 
 create-react-app すると以下ができるイメージ
 
