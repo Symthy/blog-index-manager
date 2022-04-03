@@ -12,6 +12,9 @@
     - [Golang Gorm 実践メモ＆注意点](https://symthy.hatenablog.com/entry/2022/03/06/134409) (2022/03)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
+    - [JS 高階関数](https://symthy.hatenablog.com/entry/2022/04/03/155620) (2022/04)
+  - Python
+    - [Python 色々メモ](https://symthy.hatenablog.com/entry/2022/03/31/225306) (2022/03)
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
 - Web
 - BackEnd

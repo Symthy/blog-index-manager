@@ -9,9 +9,12 @@
     - [Golang Gorm 実践メモ＆注意点](./docs/Program/Golang/Golang_Gorm_実践メモ＆注意点/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
+    - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
   - Java
     - [Java Assertj + Mockito](./docs/Program/Java/Java_Assertj_+_Mockito/doc.md)
     - [Gson Serialize (Object -> String) での時刻フォーマット指定方法](./docs/Program/Java/Gson_Serialize_(Object_-＞_String)_での時刻フォーマット指定方法/doc.md)
+  - Python
+    - [Python 色々メモ](./docs/Program/Python/Python_色々メモ/python_基本.md)
   - [コードレビュー どう取り組むか](./docs/Program/コードレビュー_どう取り組むか/doc.md)
 - Web
 - BackEnd
