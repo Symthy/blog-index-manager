@@ -49,6 +49,8 @@ def get_blog_summary_index_template() -> str:
 
 {md_lines}
 
+※ 旧ページ：[SYM's Knowledge Index](https://protective-metatarsal-484.notion.site/SYM-s-Knowledge-Index-fb9cfb0b2ccb46cab20bd95f84ec6c2c) 徐々に移行予定
+
 ※ [自作ツール(Githubリンク)](https://github.com/Symthy/docs-and-blog-enty-manager) により本ブログへの投稿/更新はほぼ自動化
 """
 
