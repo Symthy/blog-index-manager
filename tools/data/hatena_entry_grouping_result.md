@@ -16,6 +16,8 @@
     - [JS 高階関数](https://symthy.hatenablog.com/entry/2022/04/03/155620) (2022/04)
   - Python
     - [Python 色々メモ](https://symthy.hatenablog.com/entry/2022/03/31/225306) (2022/03)
+  - Shell
+    - [一定量メモリを消費させるshell](https://symthy.hatenablog.com/entry/2022/04/11/183102) (2022/04)
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
 - Web
 - BackEnd
@@ -23,8 +25,10 @@
     - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)
 - FrontEnd
   - React
-    - [React 基本メモ](https://symthy.hatenablog.com/entry/2022/02/23/232831) (2022/03)
+    - [React 基本概念等](https://symthy.hatenablog.com/entry/2022/02/23/232831) (2022/04)
     - [React スタイリング メモ](https://symthy.hatenablog.com/entry/2022/03/27/001117) (2022/03)
+    - [React ステート管理 (TypeScript コード例)](https://symthy.hatenablog.com/entry/2022/04/09/232955) (2022/04)
+    - [React 副作用/メモ化/レデューサー (TypeScriptコード例付)](https://symthy.hatenablog.com/entry/2022/04/12/132552) (2022/04)
   - [フロントエンド 技術要素概要集](https://symthy.hatenablog.com/entry/2022/03/27/195235) (2022/03)
 - Infra
 - Algorithm

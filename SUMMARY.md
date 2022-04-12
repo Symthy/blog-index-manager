@@ -16,6 +16,8 @@
     - [Gson Serialize (Object -> String) での時刻フォーマット指定方法](./docs/Program/Java/Gson_Serialize_(Object_-＞_String)_での時刻フォーマット指定方法/doc.md)
   - Python
     - [Python 色々メモ](./docs/Program/Python/Python_色々メモ/python_基本.md)
+  - Shell
+    - [一定量メモリを消費させるshell](./docs/Program/Shell/一定量メモリを消費させるshell/doc.md)
   - [コードレビュー どう取り組むか](./docs/Program/コードレビュー_どう取り組むか/doc.md)
 - Web
 - BackEnd
@@ -23,8 +25,10 @@
     - [Elasticsearch メモ](./docs/BackEnd/ElasticStack/Elasticsearch_メモ/doc.md)
 - FrontEnd
   - React
-    - [React 基本メモ](./docs/FrontEnd/React/React_基本メモ/doc.md)
+    - [React 基本概念等](./docs/FrontEnd/React/React_基本概念等/doc.md)
     - [React スタイリング メモ](./docs/FrontEnd/React/React_スタイリング_メモ/doc.md)
+    - [React ステート管理 (TypeScript コード例)](./docs/FrontEnd/React/React_ステート管理_(TypeScript_コード例)/doc.md)
+    - [React 副作用/メモ化/レデューサー (TypeScriptコード例付)](./docs/FrontEnd/React/React_副作用／メモ化／レデューサー_(TypeScriptコード例付)/doc.md)
   - [フロントエンド 技術要素概要集](./docs/FrontEnd/フロントエンド_技術要素概要集/doc.md)
 - Infra
 - Algorithm

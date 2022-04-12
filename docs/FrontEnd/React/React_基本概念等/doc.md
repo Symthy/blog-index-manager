@@ -1,4 +1,4 @@
-# React 基本メモ
+# React 基本概念等
 
 ## コンセプト
 
@@ -408,6 +408,7 @@ import React, { useState } from 'react';
 
 const App = () => {
   const [isShow, setShowFlag] = useState(true);
+  const [num, setNum] = useState(0);
   const onClickCountUp = () => {
     setNum(num + 1);
   };
@@ -436,6 +437,7 @@ import React, { useState } from 'react';
 
 const App = () => {
   const [isShow, setShowFlag] = useState(true);
+  const [num, setNum] = useState(0);
   const onClickCountUp = () => {
     setNum(num + 1);
   };
@@ -472,6 +474,10 @@ import React, { useState } from 'react';
 
 const App = () => {
   const [isShow, setShowFlag] = useState(true);
+  const [num, setNum] = useState(0);
+  const onClickCountUp = () => {
+    setNum(num + 1);
+  };
   const onClickChange = () => {
     setShowFlag(!isShow);
   };
