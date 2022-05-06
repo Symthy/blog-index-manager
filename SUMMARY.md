@@ -44,4 +44,6 @@
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)
 - Others
+  - GraphQL
+    - [GraphQLについてまとめる](./docs/Others/GraphQL/GraphQLについてまとめる/doc.md)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](./docs/Others/エンジニアを分類する3タイプから考える自身のタイプとその先と/doc.md)

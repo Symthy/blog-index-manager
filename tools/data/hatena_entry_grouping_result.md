@@ -43,4 +43,6 @@
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
 - Others
+  - GraphQL
+    - [GraphQLについてまとめる](https://symthy.hatenablog.com/entry/2022/05/06/230418) (2022/05)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)
