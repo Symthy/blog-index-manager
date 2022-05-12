@@ -1,9 +1,13 @@
 #!/bin/bash -eu
 
-root_dir_path=$(dirname $(readlink -f $0))
+root_path=$(dirname $(readlink -f $0))
 
-pushd ${root_dir_path} > /dev/null
+pushd ${root_path} > /dev/null
+source ${root_path}/docker/docker_exec.sh
 
-tool_script_path="${root_dir_path}/tools/src/main.py"
+# echo "=== python version ==="
+# docker exec -it "${DOCKER_CONTAINER_NAME}" python --version
+# echo "======================"
 
-python ${tool_script_path} $@
+run_docker_container $@
+
