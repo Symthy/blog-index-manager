@@ -30,19 +30,19 @@ function build_docker_image() {
 }
 
 function run_docker_container() {
-  arg="-"
+  args="-"
   if [ $# -ge 1 ]; then
-    arg=$1
+    args=$@
   fi
   build_docker_image
   echo "=== START - docker container run ==="
   if [ -n "${docker_compose_cmd}" ]; then
-    OPTION="${arg}" docker-compose up -d
+    OPTION="${args}" docker-compose up -d
     sleep 1  # wait container stop
     show_docker_logs
     docker-compose rm -f "${DOCKER_CONTAINER_NAME}"
   else
-    docker run -d -t -v `pwd`:/work --rm --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}" "${arg}"
+    docker run -d -t -v `pwd`:/work --rm --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}" "${args}"
   fi
   echo "=== END - docker container run ==="
   echo
