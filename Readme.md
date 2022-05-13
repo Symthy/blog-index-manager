@@ -16,16 +16,13 @@
 
 ## Tool Summary
 
-Todo
+カテゴリとカテゴリグループの定義（category_group_def.yml）に基づいて、
+
+作成したドキュメントをカテゴリ毎にフォルダに振り分けてローカル管理＆はてなブログに投稿可能なツール
 
 ## Tool introduction
 
-### Operating environment
-
-- python3 (3.9以上推奨。3.9未満は動作保証しません)
-    - 必要ライブラリ：準備中
-- Linux OS / WindowsはGit Bash
-
+required: Docker
 ### Initialize settings
 
 必要があれば、以下定義(Category Group 定義)を編集
@@ -35,13 +32,21 @@ Todo
 以下を実行
 
 ```shell
-initialize.sh
+./initialize.sh
 ```
 
 以下を編集
 
 - conf/blog.conf
 - tools/definitions/category_group.yml
+
+### How to run tool
+
+```sh
+./run.sh <option>
+```
+
+`<option>` に指定可能な物は、Usage参照
 
 ## Tool Detail description
 
@@ -51,8 +56,8 @@ created by Python3 (最低限動確済)
 
 - 1フォルダ = 1記事
     - 1フォルダには1つのmdファイルまで (複数ある場合は動作を保証しない)
-- 各記事にカテゴリ付与可能
     - mdファイルの先頭行は必ず "# ～" とする。 "～" の部分を記事タイトルとして扱う
+- 各記事にカテゴリ付与可能
     - フォルダ内の category.txt に記事に付与するカテゴリ名を記載要
     - 複数書く場合は1行1カテゴリで記載要
 - 各記事のカテゴリ(先頭1つ)を元に定義(category_group.yml)に従ってグルーピング
@@ -72,20 +77,15 @@ created by Python3 (最低限動確済)
 
 - Entry: 1記事の事を指します
     - Blog Entry:  ブログ記事を指します
-    - Doc Entry:   ローカルで管理する記事(mdファイル格納フォルダ)を指します
-- document set: 1記事分のフォルダ及びフォルダに格納されるファイルセット
-
-#### document set
-
-初期生成(-i, -init オプション)にてworkフォルダ直下に生成されるフォルダ
-
-フォルダ名：初期生成時は現在時刻の数列（フォルダ名は変更可能）
-
-- doc.md: 記事本体（ファイル名は変更可能）
-    - ファイル内の先頭行 "# ～" のうち "～" の部分を記事タイトルとして扱う
-- category.txt: 記事に付与するカテゴリ用ファイル
-- images: 記事に使用する画像を配置するためのフォルダ（ここに配置されなかったものは無効）
-- .id_xxxxx: 内部的に付与するID (-p, -push実行時に付与。削除厳禁)
+    - Doc Entry:   ローカルで管理する記事(mdファイル格納フォルダ)を指す
+- document set: 1記事分のフォルダ及びフォルダに格納されるファイル一式を指す
+    - 初期生成(-i, -init オプション)にてworkフォルダ直下に生成されるフォルダ（initialize.shで実行）
+    - フォルダ名：初期生成時は現在時刻の数列。登録後は記事タイトルとなる。
+      - doc.md: 記事本体（ファイル名は変更可能）
+        - ファイル内の先頭行 "# ～" のうち "～" の部分を記事タイトルとして扱う
+      - category.txt: 記事に付与するカテゴリ用ファイル
+      - images: 記事に使用する画像を配置するためのフォルダ（ここに配置されなかったものは無効）
+      - .id_xxxxx: 内部的に付与するID (-p, -push実行時に付与。削除厳禁)
 
 ### Usage:
 
@@ -144,7 +144,7 @@ Doc Entry ID    Doc Entry Title                  Group Name      Category Name  
     - 投稿済みdocumentは上書き投稿となる
     - 各documentにて使用している画像の投稿も可能
 
-※ ひとまずローカル -> 某ブログへの一方通行
+※ ひとまずローカル -> ブログへの一方通行
 
 追加機能メモ
 
@@ -155,4 +155,4 @@ Doc Entry ID    Doc Entry Title                  Group Name      Category Name  
 
 ## used third party tools
 
-- GitBook (予定)
+- HonBook (予定)
