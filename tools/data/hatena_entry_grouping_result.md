@@ -1,7 +1,6 @@
 - Architecture
-- Development
-  - DDD
-    - [DDD 実践メモ](https://symthy.hatenablog.com/entry/2022/02/20/230658) (2022/03)
+  - MicroArchit
+    - [マイクロサービスアーキテクチャ メモ](https://symthy.hatenablog.com/entry/2022/05/11/190352) (2022/05)
 - Program
   - Java
     - [Java Assertj + Mockito](https://symthy.hatenablog.com/entry/2022/01/29/233929) (2022/02)
@@ -19,7 +18,12 @@
   - Shell
     - [一定量メモリを消費させるshell](https://symthy.hatenablog.com/entry/2022/04/11/183102) (2022/04)
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
-- Web
+- Algorithm
+- Development
+  - DDD
+    - [DDD 実践メモ](https://symthy.hatenablog.com/entry/2022/02/20/230658) (2022/03)
+  - GraphQL
+    - [GraphQLについてまとめる](https://symthy.hatenablog.com/entry/2022/05/06/230418) (2022/05)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)
@@ -31,18 +35,24 @@
     - [React 副作用/メモ化/レデューサー (TypeScriptコード例付)](https://symthy.hatenablog.com/entry/2022/04/12/132552) (2022/04)
   - [フロントエンド 技術要素概要集](https://symthy.hatenablog.com/entry/2022/03/27/195235) (2022/03)
 - Infra
-- Algorithm
+  - Docker
+    - [Docker メモ](https://symthy.hatenablog.com/entry/2022/05/14/015712) (2022/05)
+  - [RPM Tips Stack](https://symthy.hatenablog.com/entry/2022/05/14/005630) (2022/05)
+- Web
 - Git
   - [Git 追跡解除](https://symthy.hatenablog.com/entry/2022/01/23/194009) (2022/01)
+  - [Git Tips Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005712) (2022/05)
 - VSCode
+  - [VSCode Markdown](https://symthy.hatenablog.com/entry/2022/05/14/015847) (2022/05)
 - Tools
 - Roadmap
 - Management
+  - Product Manage
+    - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)
 - Job
 - Career
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
 - Others
-  - GraphQL
-    - [GraphQLについてまとめる](https://symthy.hatenablog.com/entry/2022/05/06/230418) (2022/05)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)
+  - [はてなブログ投稿自動化 メモ](https://symthy.hatenablog.com/entry/2022/05/14/001912) (2022/05)

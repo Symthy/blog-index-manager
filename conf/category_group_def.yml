@@ -2,10 +2,6 @@
 - Architecture:
     - CleanArchit
     - MicroArchit
-- Development:
-    - Agile
-    - TDD
-    - DDD
 - Program:
     - Java
     - Golang
@@ -14,7 +10,12 @@
     - Python
     - Shell
     - Regexp
-- Web
+- Algorithm
+- Development:
+    - Agile
+    - TDD
+    - DDD
+    - GraphQL
 - BackEnd:
     - DB
     - SQL
@@ -38,14 +39,17 @@
     - k8s
     - VMware
     - Vagrant
-- Algorithm
+- Web
 - Git:
     - Github API
     - Github Pages
 - VSCode
 - Tools
 - Roadmap
-- Management
+- Management:
+    - Product Manage
+    - Project Manage
+    - Engieer Manage
 - Job
 - Career:
     - JobChange
