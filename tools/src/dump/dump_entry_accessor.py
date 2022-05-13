@@ -1,5 +1,4 @@
-from collections import Callable
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Callable
 
 from common.constant import LOCAL_DOCS_ENTRY_DUMP_DIR, HATENA_BLOG_ENTRY_DUMP_DIR
 from domain.blog.blog_entry import BlogEntry

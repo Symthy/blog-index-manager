@@ -7,7 +7,7 @@ OPTIONS:
   -i, -init                            initialize docs directory (don't delete exist file and dir).
   -n, -new [<OPTS>]                    new document set under "work" dir (create dir, md file and category file).
     OPTS (can also specify the following together):                                
-      -t, -title <DocTitle>                specified document title (default: "Document").
+      -t, -title <DocTitle>                specified document title (default: "doc").
       -c, -category <CategoryName>         specified category (default: empty value).
   -s, -search <OPTS>                   search document entry (show entry id, title, group, category).
     OPTS:

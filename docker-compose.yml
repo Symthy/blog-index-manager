@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  docs-manager:
+    #restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: 'docs-manager'
+    container_name: 'docs-manager'
+    working_dir: '/work'
+    volumes:
+      - type: bind
+        source: "."
+        target: "/work"
+    tty: true
+    command: ${OPTION}

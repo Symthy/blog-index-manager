@@ -1,13 +1,14 @@
 #!/bin/bash -eu
 
-root_dir_path=$(dirname $(readlink -f $0))
+root_path=$(dirname $(readlink -f $0))
+source "${root_path}/docker/docker_exec.sh"
 
-pushd ${root_dir_path} > /dev/null
+pushd ${root_path} > /dev/null
 
-tool_script_path="${root_dir}/tools/src/main.py"
+if [ ! -e "${root_path}/conf/blog.conf" ]; then
+  cp "${root_path}/conf/blog.conf.model" "${root_path}/conf/blog.conf"
+fi
 
-python3 ${tool_script_path} -init
+run_docker_container "-init"
 
-copy ./conf/blog.conf.model ./conf/blog.conf
-
-popd
+popd > /dev/null
