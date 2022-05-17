@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+import unicodedata
+
 from common.constant import NON_CATEGORY_GROUP_NAME
 from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntries, DocEntry
@@ -13,7 +15,8 @@ from files.conf.category_group_def import CategoryGroupDef
 
 
 class EntrySearchResults:
-    LINE_FORMAT = '{0:<15} {1:<32} {2:<15} {3:<15} {4:<11}'
+    LINE_FORMAT = '{0:<15} {1:<{title_width}} {2:<15} {3:<15} {4:<11}'
+    DEFAULT_TITLE_WIDTH = 32
 
     class EntrySearchResult:
         def __init__(self, entry_id, title, group, category, blog_id: Optional[str] = None):
@@ -24,17 +27,23 @@ class EntrySearchResults:
             self.__is_blog_posted = 'True' if blog_id is not None else 'False'
 
         def print_entry_search_result(self):
+            double_byte_char_count = 0
+            for char in self.__title:
+                if unicodedata.east_asian_width(char) in "FWA":
+                    double_byte_char_count += 1
+            width = EntrySearchResults.DEFAULT_TITLE_WIDTH - double_byte_char_count
             print(EntrySearchResults.LINE_FORMAT.format(self.__id, self.__title, self.__group, self.__category,
-                                                        self.__is_blog_posted))
+                                                        self.__is_blog_posted, title_width=width))
 
     def __init__(self):
-        self.__results = []
+        self.__results: List[EntrySearchResults.EntrySearchResult] = []
 
     @classmethod
     def print_header_line(cls):
         hyphen = '-'
         print(EntrySearchResults.LINE_FORMAT
-              .format('Doc Entry ID', 'Doc Entry Title', 'Group Name', 'Category Name', 'Blog Posted'))
+              .format('Doc Entry ID', 'Doc Entry Title', 'Group Name', 'Category Name', 'Blog Posted',
+                      title_width=EntrySearchResults.DEFAULT_TITLE_WIDTH))
         print(f'{hyphen:->15} {hyphen:->32} {hyphen:->15} {hyphen:->15} {hyphen:->11}')
 
     @classmethod
@@ -70,7 +79,7 @@ class EntrySearchResults:
 def search_doc_entry_by_group(category_group_def: CategoryGroupDef, group: str):
     grouping_data: GroupToCategorizedEntriesMap = deserialize_doc_entry_grouping_data(category_group_def)
     if not category_group_def.has_group_case_insensitive(group):
-        print(f'[Warn] Nothing specified group: {group}')
+        print(f'[Info] Nothing specified group: {group}')
         return
     entries: List[IEntry] = grouping_data.get_entries(group)
     EntrySearchResults.init_by_single_group(group, entries).print_search_results()
@@ -80,7 +89,7 @@ def search_doc_entry_by_category(category_group_def: CategoryGroupDef, category:
     def print_entries_in_category(group_name: str, category_name: str):
         entries: List[IEntry] = grouping_data.get_entries(group_name, category_name)
         if len(entries) == 0:
-            print(f'[Warn] Nothing docs of specified category: {category_name}')
+            print(f'[Info] Nothing docs of specified category: {category_name}')
         EntrySearchResults.init_by_single_group(group_name, entries).print_search_results()
 
     grouping_data: GroupToCategorizedEntriesMap = deserialize_doc_entry_grouping_data(category_group_def)
@@ -93,7 +102,7 @@ def search_doc_entry_by_category(category_group_def: CategoryGroupDef, category:
     if is_exist_category:
         print_entries_in_category(group, category)
         return
-    print(f'[Warn] Nothing specified category: {category}')
+    print(f'[Info] Nothing specified category: {category}')
 
 
 def search_doc_entry_by_title(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
