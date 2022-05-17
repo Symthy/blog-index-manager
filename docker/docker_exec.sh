@@ -35,16 +35,24 @@ function run_docker_container() {
     args=$@
   fi
   build_docker_image
+  result=""
   echo "=== START - docker container run ==="
   if [ -n "${docker_compose_cmd}" ]; then
     OPTION="${args}" docker-compose up -d
     sleep 1  # wait container stop
-    show_docker_logs
+    result=`get_docker_logs`
     docker-compose rm -f "${DOCKER_CONTAINER_NAME}"
   else
-    docker run -d -t -v `pwd`:/work --rm --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}" "${args}"
+    # Todo: fix option
+    result=`docker run -d -t -v `pwd`:/work --rm --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}" "${args}"`
   fi
   echo "=== END - docker container run ==="
+  echo
+  echo "--- tool exec result ---"
+  echo
+  echo "${result}"
+  echo
+  echo "------------------------"
   echo
 }
 
@@ -65,10 +73,7 @@ function stop_docker_container() {
   echo
 }
 
-function show_docker_logs() {
-  echo
-  echo "--- tool logs"
-  docker logs "${DOCKER_CONTAINER_NAME}"
-  echo "---"
-  echo
+function get_docker_logs() {
+  logs=`docker logs "${DOCKER_CONTAINER_NAME}"`
+  echo "${logs}"
 }
