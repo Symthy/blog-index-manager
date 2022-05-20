@@ -54,5 +54,7 @@
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
 - Others
+  - Refactor
+    - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)
   - [はてなブログ投稿自動化 メモ](https://symthy.hatenablog.com/entry/2022/05/14/001912) (2022/05)

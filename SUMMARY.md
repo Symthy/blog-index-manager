@@ -57,5 +57,7 @@
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)
 - Others
+  - Refactor
+    - [Refactor Diary 1 (Java: APIレスポンス解析)](./docs/Others/Refactor/Refactor_Diary_1_(Java：_APIレスポンス解析)/doc.md)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](./docs/Others/エンジニアを分類する3タイプから考える自身のタイプとその先と/doc.md)
   - [はてなブログ投稿自動化 メモ](./docs/Others/はてなブログ投稿自動化_メモ/はてなブログ投稿自動化.md)
