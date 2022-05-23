@@ -7,6 +7,7 @@
     - [Golang コード自動生成](./docs/Program/Golang/Golang_コード自動生成/doc.md)
     - [Golang Gorm 実践メモ＆注意点](./docs/Program/Golang/Golang_Gorm_実践メモ＆注意点/doc.md)
     - [Golang ポインタ](./docs/Program/Golang/Golang_ポインタ/doc.md)
+    - [golang 並列処理](./docs/Program/Golang/golang_並列処理/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
     - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
@@ -17,6 +18,7 @@
     - [Python 色々メモ](./docs/Program/Python/Python_色々メモ/python_基本.md)
   - Shell
     - [一定量メモリを消費させるshell](./docs/Program/Shell/一定量メモリを消費させるshell/doc.md)
+    - [shell 1行目のおまじない shebang（シバン）](./docs/Program/Shell/shell_1行目のおまじない_shebang（シバン）/doc.md)
   - [コードレビュー どう取り組むか](./docs/Program/コードレビュー_どう取り組むか/doc.md)
 - Algorithm
 - Development

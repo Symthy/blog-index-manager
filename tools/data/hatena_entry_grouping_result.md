@@ -10,6 +10,7 @@
     - [Golang コード自動生成](https://symthy.hatenablog.com/entry/2022/03/01/235231) (2022/03)
     - [Golang Gorm 実践メモ＆注意点](https://symthy.hatenablog.com/entry/2022/03/06/134409) (2022/03)
     - [Golang ポインタ](https://symthy.hatenablog.com/entry/2022/04/03/212749) (2022/04)
+    - [golang 並列処理](https://symthy.hatenablog.com/entry/2022/05/22/014353) (2022/05)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
     - [JS 高階関数](https://symthy.hatenablog.com/entry/2022/04/03/155620) (2022/04)
@@ -17,6 +18,7 @@
     - [Python 色々メモ](https://symthy.hatenablog.com/entry/2022/03/31/225306) (2022/03)
   - Shell
     - [一定量メモリを消費させるshell](https://symthy.hatenablog.com/entry/2022/04/11/183102) (2022/04)
+    - [shell 1行目のおまじない shebang（シバン）](https://symthy.hatenablog.com/entry/2022/05/23/174937) (2022/05)
   - [コードレビュー どう取り組むか](https://symthy.hatenablog.com/entry/2022/02/03/100011) (2022/02)
 - Algorithm
 - Development
