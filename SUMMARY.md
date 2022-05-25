@@ -8,6 +8,7 @@
     - [Golang Gorm 実践メモ＆注意点](./docs/Program/Golang/Golang_Gorm_実践メモ＆注意点/doc.md)
     - [Golang ポインタ](./docs/Program/Golang/Golang_ポインタ/doc.md)
     - [golang 並列処理](./docs/Program/Golang/golang_並列処理/doc.md)
+    - [gRPC (by golang)](./docs/Program/Golang/gRPC_(by_golang)/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
     - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
