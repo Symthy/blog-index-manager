@@ -1,0 +1,85 @@
+<mxfile host="65bd71144e">
+    <diagram id="z_4XOjwL4jTCdvpgFBC6" name="ページ1">
+        <mxGraphModel dx="744" dy="496" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="&lt;br&gt;&lt;br&gt;ユーザ" style="shape=actor;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="210" width="40" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="RO&lt;br&gt;(Relaying Party)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="294" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="OP&lt;br&gt;(OpenID Provider)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="60" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="UserInfo&lt;br&gt;エンドポイント" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="300" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="endArrow=classic;html=1;strokeColor=#030303;" parent="1" source="2" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="350" y="260" as="sourcePoint"/>
+                        <mxPoint x="280" y="240" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="8" value="" style="endArrow=classic;html=1;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="424" y="209" as="sourcePoint"/>
+                        <mxPoint x="566" y="139" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" value="&lt;font color=&quot;#000000&quot;&gt;① アクセス&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="240" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;font color=&quot;#000000&quot;&gt;② アクセス権要求&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="160" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="endArrow=classic;html=1;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="562" y="103" as="sourcePoint"/>
+                        <mxPoint x="152" y="223" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" value="&lt;font color=&quot;#000000&quot;&gt;③確認&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="307" y="166" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="" style="endArrow=classic;html=1;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="146" y="210" as="sourcePoint"/>
+                        <mxPoint x="562" y="90" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="17" value="&lt;font color=&quot;#000000&quot;&gt;④同意&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="294" y="120" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="endArrow=classic;html=1;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="570" y="150" as="sourcePoint"/>
+                        <mxPoint x="430" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="19" value="&lt;font color=&quot;#030303&quot;&gt;⑤ アクセストークン&lt;br&gt;&amp;nbsp;&amp;amp;&amp;nbsp; IDトークン 発行&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="190" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="&lt;font color=&quot;#000000&quot;&gt;⑥IDトークンを検証し&lt;br&gt;ユーザ認証&lt;br&gt;→ログイン完了&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="279" y="280" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="&lt;font color=&quot;#030303&quot;&gt;⑦アクセストークンを&lt;br&gt;使用してユーザ情報取得&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="250" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="" style="endArrow=classic;html=1;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="429" y="260" as="sourcePoint"/>
+                        <mxPoint x="569" y="310" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="24" value="" style="endArrow=classic;html=1;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="570" y="320" as="sourcePoint"/>
+                        <mxPoint x="429" y="270" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

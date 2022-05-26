@@ -61,3 +61,4 @@
     - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)
   - [はてなブログ投稿自動化 メモ](https://symthy.hatenablog.com/entry/2022/05/14/001912) (2022/05)
+  - [OpenID Connect 概要まとめ (In progress)](https://symthy.hatenablog.com/entry/2022/05/26/003822) (2022/05)
