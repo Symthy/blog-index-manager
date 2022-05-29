@@ -34,7 +34,7 @@ def __replace_xml_escape(content: str) -> str:
 def build_hatena_blog_entry_xml_body(hatena_id: str, title: str, category: str, content: str,
                                      is_draft: bool = True) -> str:
     entry_xml = __BLOG_ENTRY_TEMPLATE.format(
-        title=title,
+        title=__replace_xml_escape(title),
         author=hatena_id,
         content=__replace_xml_escape(content),
         update_time=resolve_entry_current_time(),
