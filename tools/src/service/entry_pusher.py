@@ -11,6 +11,7 @@ from service.external.blog_entry_pusher import push_blog_and_photo_entry
 from service.local.doc_entry_pusher import push_documents_to_docs
 
 
+# Todo: change arguments to command
 def push_entry_to_docs_and_blog(api_executor: IBlogApiExecutor,
                                 dump_blog_data_accessor: IDumpEntriesAccessor[BlogEntries, BlogEntry],
                                 dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],

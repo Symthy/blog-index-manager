@@ -10,6 +10,7 @@ from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import read_blog_config, read_md_file
 from files.md_data_handler import replace_image_link_in_md_data
+from oauth.oauth import execute_oauth, get_hatena_bookmarks
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
@@ -155,6 +156,12 @@ def main(args: List[str], is_debug: bool):
         blog_entry_id = '13574176438053271362'
         blog_entry = dump_blog_data_accessor.load_entry(blog_entry_id)
         print(replace_image_link_in_md_data(md_data, blog_entry.doc_images))
+        return
+    if len(args) >= 2 and args[1] == '-oauth':
+        execute_oauth(blog_config)
+        return
+    if len(args) >= 2 and args[1] == '-bookmarks':
+        get_hatena_bookmarks(blog_config)
         return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):

@@ -4,6 +4,7 @@ __pycache__/
 work/
 backup/
 conf/blog.conf
+conf/access_token.conf
 SUMMARY.md
 
 tools/data/hatena_entry_data/

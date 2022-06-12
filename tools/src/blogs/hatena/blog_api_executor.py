@@ -35,7 +35,7 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
 
     # Todo: OAuth
     # public: for testing
-    def build_request_header(self):
+    def build_request_header(self) -> dict:
         def __build_wsse(blog_config: BlogConfig):
             user_name = blog_config.hatena_id
             api_key = blog_config.api_key
@@ -88,10 +88,11 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
         return blog_entries
 
     # POST blog
-    def execute_register_blog_entry_api(self, title: str, category: str, content: str, is_draft: bool) \
-            -> Optional[BlogEntry]:
+    def execute_register_blog_entry_api(self, title: str, category: str, content: str, is_draft: bool,
+                                        is_title_escape: bool) -> Optional[BlogEntry]:
         url = self.__build_hatena_blog_AtomPub_api_base_url()
-        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content, is_draft)
+        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content, is_draft,
+                                                is_title_escape)
         headers = self.build_request_header()
         print('[Info] API execute: POST Blog')
         xml_string_opt = execute_post_api(url, headers, body.encode(encoding='utf-8'),
@@ -110,7 +111,7 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
     def execute_update_blog_summary_page(self, content: str) -> bool:
         url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{self.__blog_conf.summary_entry_id}'
         category = 'Summary'
-        res = self.__execute_put_blog_entry_api(url, get_summary_page_title(), category, content, False)
+        res = self.__execute_put_blog_entry_api(url, get_summary_page_title(), category, content, False, False)
         if res is None:
             return False
         return True
