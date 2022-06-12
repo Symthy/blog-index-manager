@@ -100,8 +100,9 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
 
     # PUT blog
     def __execute_put_blog_entry_api(self, url: str, title: str, category: str,
-                                     content: str, is_draft: bool) -> Optional[str]:
-        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content, is_draft)
+                                     content: str, is_draft: bool, is_title_escape: bool) -> Optional[str]:
+        body = build_hatena_blog_entry_xml_body(self.__blog_conf.hatena_id, title, category, content, is_draft,
+                                                is_title_escape)
         print('[Info] API execute: PUT Blog')
         return execute_put_api(url, self.build_request_header(), body.encode(encoding='utf-8'),
                                HatenaBlogApiExecutor.__resolve_api_response)
@@ -115,9 +116,9 @@ class HatenaBlogApiExecutor(IBlogApiExecutor):
         return True
 
     def execute_update_blog_entry_api(self, entry_id: str, title: str, category: str,
-                                      content: str, is_draft: bool) -> Optional[BlogEntry]:
+                                      content: str, is_draft: bool, is_title_escape: bool) -> Optional[BlogEntry]:
         url = f'{self.__build_hatena_blog_AtomPub_api_base_url()}/{entry_id}'
-        xml_string_opt = self.__execute_put_blog_entry_api(url, title, category, content, is_draft)
+        xml_string_opt = self.__execute_put_blog_entry_api(url, title, category, content, is_draft, is_title_escape)
         return parse_blog_entry_xml(xml_string_opt)
 
     # GET Photo

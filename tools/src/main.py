@@ -64,9 +64,11 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
         if len(args) >= 3 and (args[2] == '-all' or args[2] == '-a'):
+            ex_opts: List[str] = args[3:]
             is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
+            is_title_escape = True if len(args) >= 4 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                        category_group_def, is_draft, target_dirs)
+                                        category_group_def, is_draft, is_title_escape, target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
             return
         result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, target_dirs)
@@ -106,9 +108,11 @@ def main(args: List[str], is_debug: bool):
             print('[Info] Success: blog entries collection')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
-            is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
+            ex_opts: List[str] = args[3:]
+            is_draft = True if len(args) >= 4 and ('--draft' in ex_opts or '-d' in ex_opts) else False
+            is_title_escape = True if len(args) >= 4 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                         category_group_def, args[3:], is_draft)
+                                         category_group_def, args[3:], is_draft, is_title_escape)
             print('[Info] Success: pushed specified document to blog.')
             return
         if len(args) >= 3 and (args[2] == '-summary' or args[2] == '-s'):
@@ -136,14 +140,14 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and args[1] == '-show-blog-summary':
         print(deserialize_blog_entry_grouping_data(category_group_def).convert_md_lines())
         return
-    if len(args) >= 2 and args[1] == '-put-photo':
+    if len(args) >= 3 and args[1] == '-put-photo':
         doc_id = args[2]
         result = push_photo_entries(blog_config, dump_doc_data_accessor.load_entry(doc_id))
         print(result.build_dump_data())
         return
-    if len(args) >= 2 and args[1] == '-put-blog':
+    if len(args) >= 3 and args[1] == '-put-blog':
         doc_id = args[2]
-        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id), False)
+        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id), False, False)
         print(result.build_dump_data())
         return
     if len(args) >= 2 and args[1] == '-replace-md':
