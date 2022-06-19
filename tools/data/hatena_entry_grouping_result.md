@@ -10,7 +10,7 @@
     - [Golang コード自動生成](https://symthy.hatenablog.com/entry/2022/03/01/235231) (2022/03)
     - [Golang Gorm 実践メモ＆注意点](https://symthy.hatenablog.com/entry/2022/03/06/134409) (2022/03)
     - [Golang ポインタ](https://symthy.hatenablog.com/entry/2022/04/03/212749) (2022/04)
-    - [golang 並列処理](https://symthy.hatenablog.com/entry/2022/05/22/014353) (2022/05)
+    - [Golang 並列処理（Gorutine/Channel/WaitGroup/ErrorGroup）](https://symthy.hatenablog.com/entry/2022/05/22/014353) (2022/06)
     - [gRPC (by golang)](https://symthy.hatenablog.com/entry/2022/05/25/232601) (2022/05)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
@@ -55,6 +55,7 @@
   - Product Manage
     - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)
 - Job
+  - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](https://symthy.hatenablog.com/entry/2022/06/19/215508) (2022/06)
 - Career
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)

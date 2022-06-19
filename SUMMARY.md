@@ -7,7 +7,7 @@
     - [Golang コード自動生成](./docs/Program/Golang/Golang_コード自動生成/doc.md)
     - [Golang Gorm 実践メモ＆注意点](./docs/Program/Golang/Golang_Gorm_実践メモ＆注意点/doc.md)
     - [Golang ポインタ](./docs/Program/Golang/Golang_ポインタ/doc.md)
-    - [golang 並列処理](./docs/Program/Golang/golang_並列処理/doc.md)
+    - [Golang 並列処理（Gorutine/Channel/WaitGroup/ErrorGroup）](./docs/Program/Golang/Golang_並列処理（Gorutine／Channel／WaitGroup／ErrorGroup）/doc.md)
     - [gRPC (by golang)](./docs/Program/Golang/gRPC_(by_golang)/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
@@ -58,6 +58,7 @@
   - Product Manage
     - [プロダクトマネジメント Link Stack](./docs/Management/Product Manage/プロダクトマネジメント_Link_Stack/doc.md)
 - Job
+  - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](./docs/Job/PlantUML_ガントチャート_を活用してスクラムでのプチ進捗管理を行い見える化を進めたい/doc.md)
 - Career
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)

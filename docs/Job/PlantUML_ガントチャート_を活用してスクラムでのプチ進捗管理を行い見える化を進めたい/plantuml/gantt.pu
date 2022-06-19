@@ -1,0 +1,124 @@
+@startgantt
+language ja
+
+printscale daily zoom 6
+<style>
+ganttDiagram {
+	task {
+		'FontColor red
+		FontSize 16
+		FontStyle bold
+		BackGroundColor Azure
+		LineColor DodgerBlue
+	}
+	milestone {
+		'FontColor blue
+		FontSize 16
+		'FontStyle italic
+		BackGroundColor black
+		LineColor black
+	}
+	note {
+		FontSize 12
+	}
+	arrow {
+		LineColor black
+	}
+	separator {
+		FontSize 18
+		FontStyle bold
+		FontColor black
+	}
+    timeline {
+	    BackgroundColor AntiqueWhite
+	}
+	closed {
+		BackgroundColor pink
+		FontColor red
+	}
+}
+</style>
+
+Project starts 2022/07/01
+saturday are closed
+sunday are closed
+'2022/xx/xx is closed
+'2022/xx/xx to 2022/xx/xx is closed
+
+[Sprint XX] lasts 2 weeks
+[Sprint XX] is colored in LightGreen
+[Sprint XX] links to [[http://example.com]]
+
+'[Task 1 (1日)] lasts 1 day
+'[T2 (5日)] lasts 5 days
+'[T3 (1週間)] lasts 1 week
+'[T4 (1週間と4日)] lasts 1 week and 4 days
+
+
+-- Person A --
+
+'Task A
+[Task A] happens at [Sprint XX]'s start
+[A 検討] lasts 2 days
+note bottom
+・こういう点が良くなかったよね
+end note
+[A 環境構築] lasts 1 days
+note bottom
+・どこどこに時間がかかった
+・ここはこうした方が良かった
+end note
+[A 実装] lasts 4 days
+[A PR] lasts 2 days
+note bottom
+・こうすれば指摘減らせたよね
+end note
+
+[A 検討] -> [A 環境構築]
+[A 環境構築] -> [A 実装]
+[A 実装] -> [A PR]
+[A 環境構築] displays on same row as [A 検討]
+[A 実装] displays on same row as [A 検討]
+[A PR] displays on same row as [A 検討]
+
+[A 検討END] happens on 2022/7/4
+[A 環境構築END] happens on 2022/7/6
+[A 実装END] happens on 2022/7/12
+[A END] happens on 2022/7/14
+[A 実装END] displays on same row as [A 検討END]
+[A 環境構築END] displays on same row as [A 検討END]
+[A END] displays on same row as [A 検討END]
+
+-- Person B --
+'Task B
+[Task B] happens at [Sprint XX]'s start
+[B 検討] lasts 1 days
+[B 実装] lasts 3 days
+[B PR] lasts 2 days
+[B 検討] -> [B 実装]
+[B 実装] -> [B PR]
+[B 実装] displays on same row as [B 検討]
+[B PR] displays on same row as [B 検討]
+
+[B 検討END] happens on 2022/7/4
+[B 実装END] happens on 2022/7/6
+[B END] happens on 2022/7/11
+[B 実装END] displays on same row as [B 検討END]
+[B END] displays on same row as [B 実装END]
+
+-- --
+'Task C
+[Task C] happens at [Sprint XX]'s start
+[C 実装] pause on 2022/7/1 to 2022/7/8
+[C 実装] lasts 2 days
+[C PR] lasts 1 days
+[C 実装] -> [C PR]
+[C PR] displays on same row as [C 実装]
+
+[C 実装END] happens on 2022/7/12
+[C END] happens on 2022/7/14
+[C END] displays on same row as [C 実装END]
+
+-- --
+
+@endgantt

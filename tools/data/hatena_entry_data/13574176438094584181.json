@@ -1,12 +1,12 @@
 {
   "id": "13574176438094584181",
-  "title": "golang 並列処理",
+  "title": "Golang 並列処理（Gorutine/Channel/WaitGroup/ErrorGroup）",
   "page_url": "https://symthy.hatenablog.com/entry/2022/05/22/014353",
   "top_category": "Golang",
   "categories": [
     "Golang"
   ],
-  "updated_at": "2022-05-22T01:43:53",
+  "updated_at": "2022-06-17T12:02:36",
   "original_doc_id": "20220522014138",
   "doc_images": {}
 }

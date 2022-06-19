@@ -1,29 +1,29 @@
-# golang 並列処理
+# Golang 並列処理（Gorutine/Channel/WaitGroup/ErrorGroup）
 
-Goの魅力
+Go の魅力
 
-- 他の言語は後から並列処理の機構を組み込むと大手術になることがあるが、Goは容易
+- 他の言語は後から並列処理の機構を組み込むと大手術になることがあるが、Go は容易
 - 高水準のパフォーマンスが出るコードを少ない手間で実現できるところ
-- I/Oコストが高い領域はGoとの相性が良い
+- I/O コストが高い領域は Go との相性が良い
 
-Goの業務アプリケーションで並列処理の適用を検討すべき場面は、1リクエスト/バッチタスクの内部を高速化したい時。（例：１リクエスト中で複数データストアから情報取得し、結果を複数箇所に格納が必要な時）
+Go の業務アプリケーションで並列処理の適用を検討すべき場面は、1 リクエスト/バッチタスクの内部を高速化したい時。（例：１リクエスト中で複数データストアから情報取得し、結果を複数箇所に格納が必要な時）
 
 ## Gorutine
 
-- 個々のgoroutineは識別不可
+- 個々の goroutine は識別不可
 - 優先度や親子関係はない
 - 外部から終了させられない
 - 終了検知には別の仕組みが必要（channel?)
 - かなり少ない量のメモリしか要求せず、起動は高速
   - 起動コストはゼロではない
 
-goroutineの乱用は避ける
+goroutine の乱用は避ける
 
 - 並列処理は複雑さと高める
-- goroutineを駆使したコードは意図が伝わりにくい
+- goroutine を駆使したコードは意図が伝わりにくい
 - 基本的には標準/準標準パッケージ機能の利用を検討
 
-```go
+```golang
 func main() {
 	go output("goroutine")
 
@@ -35,15 +35,15 @@ func main() {
 
 ## Channel
 
-- 同時実行するgoroutineを接続するパイプ（複数のgoroutineから送受信しても安全が保障されたキュー）
-- Channelは同期の手段
-  - Channelはgoroutineをブロックする
-  - 送信goroutineと受信goroutineが揃うまでブロック（バッファなしの場合)
+- 同時実行する goroutine を接続するパイプ（複数の goroutine から送受信しても安全が保障されたキュー）
+- Channel は同期の手段
+  - Channel は goroutine をブロックする
+  - 送信 goroutine と受信 goroutine が揃うまでブロック（バッファなしの場合)
   - 送信側のバッファ一杯になると受信側が取りに来るまで or バッファが空ならブロック（バッファありの場合）
 
 ※ブロック＝待ち受け
 
-```go
+```golang
 func main() {
 	msgs := make(chan string, 3)
 	msgs <- "main"
@@ -64,7 +64,7 @@ func main() {
 - 一方向チャネル型
   - チャネルの向きを指定できる。向き：送信/受信
 
-```go
+```golang
 func send(recvCh chan<- string, msg string) {
 	recvCh <- msg
 }
@@ -89,7 +89,7 @@ func main() {
 - キャパシティが一杯のチャネルに書き込もうとするゴルーチンは、チャネルの空きが出るまで待機する
 - 空のチャネルから読み込もうとするゴルーチンは、チャネルに要素が入ってくるまで待機する
 
-```go
+```golang
 func main() {
 	// send slow
 	ch1 := make(chan string, 2)
@@ -122,10 +122,10 @@ func main() {
 
 複数チャネルの待ち受けかつチャネル毎の制御ができる。
 
-- 複数goroutineの待ち受け可
+- 複数 goroutine の待ち受け可
 - 先に終わったものから捌く
 
-```go
+```golang
 func main() {
 	ch1 := make(chan string)
 	ch2 := make(chan string)
@@ -145,7 +145,7 @@ func main() {
 			fmt.Println("received1", msg1)
 		case msg2 := <-ch2:
 			fmt.Println("received2", msg2)
-		// default: 
+		// default:
 		// fmt.Println("none")
      	// default句を入れると待ち受けが起こらず全てnoneが出力
 		// default句は何も送受信がなかった時の処理
@@ -159,7 +159,7 @@ func main() {
 
 #### timeout
 
-```go
+```golang
 func main() {
 
 	ch1 := make(chan string, 1)
@@ -191,10 +191,10 @@ func main() {
 
 #### Non-Blocking Channel Operation
 
-- バッファなしchannelのため最初からブロック
-- `<-readCh` : Channelから値読み込みを永遠に待ち続ける = 値書き込みがなければ永続待機 = deadlock発生
+- バッファなし channel のため最初からブロック
+- `<-readCh` : Channel から値読み込みを永遠に待ち続ける = 値書き込みがなければ永続待機 = deadlock 発生
 
-```go
+```golang
 func main() {
 	// var writeCh chan<- string
 	var readCh <-chan string
@@ -212,8 +212,7 @@ func main() {
 
 上記ケースを制御できるのが default
 
-```go
-
+```golang
 func main() {
 	messages := make(chan string)
 	signals := make(chan bool)
@@ -246,9 +245,9 @@ func main() {
 
 ### close
 
-(チャネル受信待ちなど) ブロック中のgoroutineを解放
+(チャネル受信待ちなど) ブロック中の goroutine を解放
 
-```go
+```golang
 func main() {
 	jobs := make(chan int, 5)
 	done := make(chan bool)
@@ -278,11 +277,11 @@ func main() {
 }
 ```
 
-クローズすることで、rangeを用いてchannelから取り出すことができる
+クローズすることで、range を用いて channel から取り出すことができる
 
-※クローズしなければ受信待ちによるブロックでdeadlock
+※クローズしなければ受信待ちによるブロックで deadlock
 
-```go
+```golang
 func main() {
     queue := make(chan string, 2)
     queue <- "one"
@@ -297,7 +296,7 @@ func main() {
 
 ## worker
 
-```go
+```golang
 func worker(id int, jobs <-chan int, results chan<- int) {
     for j := range jobs {
         fmt.Println("worker", id, "started  job", j)
@@ -389,10 +388,10 @@ func main() {
 // 8
 ```
 
-- バッファ指定ありの場合は、待ち受け？ バッファが空だからブロック、送信されたものをworkerが受け取るまでのタイムラグ？の間にmainのsleep実行か？
-- バッファ指定なしの場合は、即実行？ 送信側(main)と受信側のgoroutine揃うためブロックされず、workerが受け取ったら即実行
-  - 送信側もgoroutineにすると、起動のタイムラグで先にmainのsleep実行
-- results をバッファ指定なしにした場合は、3回送信時点で受信側がそれ以上取り出そうとしdeadlock
+- バッファ指定ありの場合は、待ち受け？ バッファが空だからブロック、送信されたものを worker が受け取るまでのタイムラグ？の間に main の sleep 実行か？
+- バッファ指定なしの場合は、即実行？ 送信側(main)と受信側の goroutine 揃うためブロックされず、worker が受け取ったら即実行
+  - 送信側も goroutine にすると、起動のタイムラグで先に main の sleep 実行
+- results をバッファ指定なしにした場合は、3 回送信時点で受信側がそれ以上取り出そうとし deadlock
 
 ## fan-out/fan-in
 
@@ -402,14 +401,13 @@ func main() {
 ### sync.WaitGroup
 
 - ファンアウト、ファンインの仕組みを提供
-- 複数のgoroutineを管理
+- 複数の goroutine を管理
 
 メソッド：
 
 - Add：タスク数登録
 - Done：タスク完了
-- Wait：タスク完了の待機 
-
+- Wait：タスク完了の待機
 
 ```go
 func worker(id int) {
@@ -432,11 +430,40 @@ func main() {
 }
 ```
 
+Channel で同様にデータの受け渡しが可能
+
+```golang
+func responseSize(wg *sync.WaitGroup, url string, nums chan int) {
+	defer wg.Done()
+	response, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	nums <- len(body)
+}
+
+func main() {
+	wg := new(sync.WaitGroup)
+	nums := make(chan int)
+	wg.Add(1)
+	go responseSize(wg, "https://www.example.com", nums)
+	fmt.Println(<-nums)
+	wg.Wait()
+	close(nums)
+}
+```
+
 ### errorgroup.Group
 
-```go
+- 基本形
+
+```golang
 func main() {
-	// eg, ctx := errgroup.WithContext(ctx)
 	var eg errgroup.Group
 	for i := 1; i <= 5; i++ {
 		id := i
@@ -445,28 +472,71 @@ func main() {
 			return nil
 		})
 	}
-	err := eg.Wait()
-	if err != nil {
+
+	if err := eg.Wait(); err != nil {
 		fmt.Println("error: ", err)
 	}
 }
 ```
 
+- エラーが発生したときに後続の Goroutine をキャンセルする（context）
+
+```golang
+func main() {
+	eg, ctx := errgroup.WithContext(context.Background())
+
+	for i := 0; i < 100; i++ {
+		i := i
+		eg.Go(func() error {
+			time.Sleep(2 * time.Second) // 長い処理
+
+			select {
+			case <-ctx.Done():
+				fmt.Println("Canceled:", i)
+				return nil
+			default:
+				if i > 90 {
+					fmt.Println("Error:", i)
+					return fmt.Errorf("Error: %d", i)
+				}
+				fmt.Println("End:", i)
+				return nil
+			}
+		})
+	}
+	if err := eg.Wait(); err != nil {
+		log.Fatal(err)
+	}
+}
+```
 
 # refs
 
-[Goのgoroutine, channelをちょっと攻略！](https://qiita.com/taigamikami/items/fc798cdd6a4eaf9a7d5e)
+良き Example
 
-[Go by Example](https://gobyexample.com/)
+- [Go by Example](https://gobyexample.com/)
 
-[GoroutineとChannel](https://zenn.dev/mikankitten/articles/6344d71f4f4920)
+Groutine/Channel
 
-[Goでの並列処理を徹底解剖！](https://zenn.dev/hsaki/books/golang-concurrency/viewer/basicusage)
+- [Go の goroutine, channel をちょっと攻略！](https://qiita.com/taigamikami/items/fc798cdd6a4eaf9a7d5e)
+- [Goroutine と Channel](https://zenn.dev/mikankitten/articles/6344d71f4f4920)
+- [[Go 言語]Channel を使い倒そうぜ！](https://selfnote.work/20201110/programming/how-to-use-channel-on-golang/)
 
-[[Go言語]Channelを使い倒そうぜ！](https://selfnote.work/20201110/programming/how-to-use-channel-on-golang/)
+WaitGroup/ErrGroup
 
-[Go Concurrency Patterns: Pipelines and cancellation](https://go.dev/blog/pipelines)
+- [複数の Goroutine を WaitGroup（ErrGroup）で制御する](https://blog.toshimaru.net/goroutine-with-waitgroup/)
+- [Catch values from Goroutines](https://www.golangprograms.com/catch-return-values-from-goroutines.html)
 
-[Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide)
+golang 並列処理のはまりどころ
 
-[Addvanced Go Concurrency Patterns](https://talks.golang.org/2013/advconc.slide)
+- [errgroup のはまりどころと回避策](https://zenn.dev/ikawaha/articles/20211218-f37638b56e5807)
+
+詳細な解説
+
+- [Go での並列処理を徹底解剖！](https://zenn.dev/hsaki/books/golang-concurrency/viewer/basicusage)
+
+Concurrency Patterns
+
+- [Go Concurrency Patterns: Pipelines and cancellation](https://go.dev/blog/pipelines)
+- [Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide)
+- [Addvanced Go Concurrency Patterns](https://talks.golang.org/2013/advconc.slide)

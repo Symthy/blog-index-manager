@@ -1,0 +1,19 @@
+{
+  "id": "13574176438103789810",
+  "title": "PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい",
+  "page_url": "https://symthy.hatenablog.com/entry/2022/06/19/215508",
+  "top_category": "Job",
+  "categories": [
+    "Job"
+  ],
+  "updated_at": "2022-06-19T21:55:08",
+  "original_doc_id": "20220619215502",
+  "doc_images": {
+    "gantt.png": {
+      "id": "20220619215503",
+      "syntax": "f:id:SYM_simu:20220619215503p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20220619/20220619215503.png",
+      "updated_at": "2022-06-19T21:55:08"
+    }
+  }
+}
