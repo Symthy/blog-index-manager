@@ -55,13 +55,12 @@
   - Product Manage
     - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)
 - Job
+  - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](https://symthy.hatenablog.com/entry/2022/06/11/215213) (2022/06)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](https://symthy.hatenablog.com/entry/2022/06/19/215508) (2022/06)
 - Career
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
 - Others
-  - Job Memo
-    - [ Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](https://symthy.hatenablog.com/entry/2022/06/11/215213) (2022/06)
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)
