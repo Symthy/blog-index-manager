@@ -13,7 +13,8 @@
       "20220522014138": "Golang 並列処理（Gorutine/Channel/WaitGroup/ErrorGroup）",
       "20220525232601": "gRPC (by golang)",
       "20220630133012": "Golang ビルド制約使用時の golps に関する注意事項",
-      "20220701083530": "go-ini では セミコロンが省略される"
+      "20220701083530": "go-ini では セミコロンが省略される",
+      "20220704230622": "golang で windows サービス を開発する"
     },
     "JavaScript": {
       "20220123193618": "JavaScript 基本",

@@ -14,6 +14,7 @@
     - [gRPC (by golang)](https://symthy.hatenablog.com/entry/2022/05/25/232601) (2022/05)
     - [Golang ビルド制約使用時の golps に関する注意事項](https://symthy.hatenablog.com/entry/2022/06/30/133012) (2022/06)
     - [go-ini では セミコロンが省略される](https://symthy.hatenablog.com/entry/2022/07/01/083530) (2022/07)
+    - [golang で windows サービス を開発する](https://symthy.hatenablog.com/entry/2022/07/04/230623) (2022/07)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
     - [JS 高階関数](https://symthy.hatenablog.com/entry/2022/04/03/155620) (2022/04)
