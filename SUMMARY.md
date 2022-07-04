@@ -9,6 +9,8 @@
     - [Golang ポインタ](./docs/Program/Golang/Golang_ポインタ/doc.md)
     - [Golang 並列処理（Gorutine/Channel/WaitGroup/ErrorGroup）](./docs/Program/Golang/Golang_並列処理（Gorutine／Channel／WaitGroup／ErrorGroup）/doc.md)
     - [gRPC (by golang)](./docs/Program/Golang/gRPC_(by_golang)/doc.md)
+    - [Golang ビルド制約使用時の golps に関する注意事項](./docs/Program/Golang/Golang_ビルド制約使用時の_golps_に関する注意事項/doc.md)
+    - [go-ini では セミコロンが省略される](./docs/Program/Golang/go-ini_では_セミコロンが省略される/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
     - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
