@@ -32,9 +32,10 @@ def __replace_xml_escape(content: str) -> str:
 
 
 def build_hatena_blog_entry_xml_body(hatena_id: str, title: str, category: str, content: str,
-                                     is_draft: bool = True) -> str:
+                                     is_draft: bool = True, is_title_escape: bool = False) -> str:
+    # title の escape も行わないと xml parse error が起きて投稿できない時が低確率である
     entry_xml = __BLOG_ENTRY_TEMPLATE.format(
-        title=__replace_xml_escape(title),
+        title=__replace_xml_escape(title) if is_title_escape else title,
         author=hatena_id,
         content=__replace_xml_escape(content),
         update_time=resolve_entry_current_time(),

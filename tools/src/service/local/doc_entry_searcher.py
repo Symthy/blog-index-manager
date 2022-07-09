@@ -16,7 +16,7 @@ from files.conf.category_group_def import CategoryGroupDef
 
 class EntrySearchResults:
     LINE_FORMAT = '{0:<15} {1:<{title_width}} {2:<15} {3:<15} {4:<11}'
-    DEFAULT_TITLE_WIDTH = 32
+    DEFAULT_TITLE_WIDTH = 48
 
     class EntrySearchResult:
         def __init__(self, entry_id, title, group, category, blog_id: Optional[str] = None):
@@ -31,9 +31,10 @@ class EntrySearchResults:
             for char in self.__title:
                 if unicodedata.east_asian_width(char) in "FWA":
                     double_byte_char_count += 1
-            width = EntrySearchResults.DEFAULT_TITLE_WIDTH - double_byte_char_count
-            print(EntrySearchResults.LINE_FORMAT.format(self.__id, self.__title, self.__group, self.__category,
-                                                        self.__is_blog_posted, title_width=width))
+            title_width = EntrySearchResults.DEFAULT_TITLE_WIDTH - double_byte_char_count
+            print(EntrySearchResults.LINE_FORMAT.format(
+                self.__id, self.__title[:EntrySearchResults.DEFAULT_TITLE_WIDTH], self.__group, self.__category,
+                self.__is_blog_posted, title_width=title_width))
 
     def __init__(self):
         self.__results: List[EntrySearchResults.EntrySearchResult] = []

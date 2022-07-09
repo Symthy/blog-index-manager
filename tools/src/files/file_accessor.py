@@ -26,9 +26,10 @@ def read_text_file(file_path: str) -> List[str]:
     try:
         with codecs.open(file_path, mode='r', encoding='utf-8') as f:
             lines = f.readlines()
-            lines_exclusion_empty = list(filter(lambda line: line.replace(' ', '').replace('\n', '') != '', lines))
+            lines_exclusion_empty = list(
+                filter(lambda line: line.replace(' ', '').replace('\r', '').replace('\n', '') != '', lines))
             lines_exclusion_comment = list(filter(lambda line: not line.startswith('#'), lines_exclusion_empty))
-            return [line.replace('\n', '') for line in lines_exclusion_comment]
+            return [line.replace('\r', '').replace('\n', '') for line in lines_exclusion_comment]
     except Exception as e:
         print(f'[Warning] Invalid {file_path}, read failure:', e)
         return []

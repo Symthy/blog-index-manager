@@ -1,3 +1,4 @@
 typing
 requests
 pyyaml
+requests-oauthlib

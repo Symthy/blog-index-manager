@@ -30,8 +30,8 @@ class DumpEntryList(Generic[TM, TS]):
     def push_entry(self, entry: TS):
         self.__entry_id_to_title[entry.id] = entry.title
 
-    def search_by_title(self, keyword) -> List[str]:
-        entry_ids = [eid for eid, title in self.__entry_id_to_title.items() if keyword in title]
+    def search_by_title(self, keyword: str) -> List[str]:
+        entry_ids = [eid for eid, title in self.__entry_id_to_title.items() if keyword.lower() in title.lower()]
         return entry_ids
 
     def build_dump_data(self) -> Dict[str, Any]:

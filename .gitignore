@@ -4,4 +4,6 @@ __pycache__/
 work/
 backup/
 conf/blog.conf
+conf/access_token.conf
+
 out/

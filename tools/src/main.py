@@ -10,6 +10,7 @@ from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import read_blog_config, read_md_file
 from files.md_data_handler import replace_image_link_in_md_data
+from oauth.oauth import execute_oauth, get_hatena_bookmarks
 from options.usage_printer import print_usage
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
@@ -64,9 +65,11 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and (args[1] == '-push' or args[1] == '-p'):
         target_dirs = args[2:] if len(args) > 2 else []
         if len(args) >= 3 and (args[2] == '-all' or args[2] == '-a'):
+            ex_opts: List[str] = args[3:]
             is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
+            is_title_escape = True if len(args) >= 4 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                        category_group_def, is_draft, target_dirs)
+                                        category_group_def, is_draft, is_title_escape, target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
             return
         result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, target_dirs)
@@ -93,6 +96,8 @@ def main(args: List[str], is_debug: bool):
         if len(args) >= 3 and (args[2] == '-title' or args[2] == '-t'):
             search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[3])
             return
+        search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[2])
+        return
     if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
         print('[Error] Unimplemented')
         return
@@ -106,9 +111,11 @@ def main(args: List[str], is_debug: bool):
             print('[Info] Success: blog entries collection')
             return
         if len(args) >= 3 and (args[2] == '-push' or args[2] == '-p'):
-            is_draft = True if len(args) >= 4 and (args[3] == '-draft' or args[3] == '-d') else False
+            ex_opts: List[str] = args[3:]
+            is_draft = True if len(args) >= 4 and ('--draft' in ex_opts or '-d' in ex_opts) else False
+            is_title_escape = True if len(args) >= 4 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                         category_group_def, args[3:], is_draft)
+                                         category_group_def, args[3:], is_draft, is_title_escape)
             print('[Info] Success: pushed specified document to blog.')
             return
         if len(args) >= 3 and (args[2] == '-summary' or args[2] == '-s'):
@@ -136,14 +143,14 @@ def main(args: List[str], is_debug: bool):
     if len(args) >= 2 and args[1] == '-show-blog-summary':
         print(deserialize_blog_entry_grouping_data(category_group_def).convert_md_lines())
         return
-    if len(args) >= 2 and args[1] == '-put-photo':
+    if len(args) >= 3 and args[1] == '-put-photo':
         doc_id = args[2]
         result = push_photo_entries(blog_config, dump_doc_data_accessor.load_entry(doc_id))
         print(result.build_dump_data())
         return
-    if len(args) >= 2 and args[1] == '-put-blog':
+    if len(args) >= 3 and args[1] == '-put-blog':
         doc_id = args[2]
-        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id), False)
+        result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id), False, False)
         print(result.build_dump_data())
         return
     if len(args) >= 2 and args[1] == '-replace-md':
@@ -151,6 +158,12 @@ def main(args: List[str], is_debug: bool):
         blog_entry_id = '13574176438053271362'
         blog_entry = dump_blog_data_accessor.load_entry(blog_entry_id)
         print(replace_image_link_in_md_data(md_data, blog_entry.doc_images))
+        return
+    if len(args) >= 2 and args[1] == '-oauth':
+        execute_oauth(blog_config)
+        return
+    if len(args) >= 2 and args[1] == '-bookmarks':
+        get_hatena_bookmarks(blog_config)
         return
     # usage
     if len(args) >= 2 and (args[1] == '-help' or args[1] == '-h'):
