@@ -96,6 +96,8 @@ def main(args: List[str], is_debug: bool):
         if len(args) >= 3 and (args[2] == '-title' or args[2] == '-t'):
             search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[3])
             return
+        search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[2])
+        return
     if len(args) >= 2 and (args[1] == '-delete' or args[1] == '-d'):
         print('[Error] Unimplemented')
         return
