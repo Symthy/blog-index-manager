@@ -1,12 +1,12 @@
 {
   "id": "20220704230622",
-  "title": "golang で windows サービス を開発する",
-  "dir_path": "./docs/Program/Golang/golang_で_windows_サービス_を開発する/",
+  "title": "golang で windows サービス 開発 (kardianos/service の 実装説明少々)",
+  "dir_path": "./docs/Program/Golang/golang_で_windows_サービス_開発_(kardianos／service_の_実装説明少々)/",
   "doc_file_name": "doc.md",
   "top_category": "Golang",
   "categories": [
     "Golang"
   ],
   "created_at": "2022-07-04T23:06:22",
-  "updated_at": "2022-07-04T23:07:59"
+  "updated_at": "2022-07-09T17:21:57"
 }

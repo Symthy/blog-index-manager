@@ -1,12 +1,12 @@
 {
   "id": "4207112889896139911",
-  "title": "golang で windows サービス を開発する",
+  "title": "golang で windows サービス 開発 (kardianos/service の 実装説明少々)",
   "page_url": "https://symthy.hatenablog.com/entry/2022/07/04/230623",
   "top_category": "Golang",
   "categories": [
     "Golang"
   ],
-  "updated_at": "2022-07-04T23:07:59",
+  "updated_at": "2022-07-09T17:21:58",
   "original_doc_id": "20220704230622",
   "doc_images": {}
 }

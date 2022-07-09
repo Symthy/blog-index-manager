@@ -1,4 +1,4 @@
-# golang で windows サービス を開発する
+# golang で windows サービス 開発 (kardianos/service の 実装説明少々)
 
 ## 前置き
 
@@ -31,9 +31,84 @@ https://github.com/percona/kardianos-service/blob/master/service.go#L292
 
 https://github.com/percona/kardianos-service/blob/master/service_windows.go
 
+- コンストラクタ(New 関数) の引数には、Config がある。これには、サービス名や Description 以外にも、Working Directory、環境変数 等も設定することができる
+
+https://github.com/percona/kardianos-service/blob/master/service.go#L85
+
 - コマンドライン引数はデフォルトで６つ用意してある。 install/unistall で Windows のサービス作成/削除ができ、Start/Stop で サービスの起動/停止ができる。
 
 https://github.com/percona/kardianos-service/blob/master/service.go#L335
+
+### service_windows.go の詳細少々
+
+service.Run() では、自身が用意した struct（以下では、exampleService）の Start と Stop が呼ばれる
+
+https://github.com/percona/kardianos-service/blob/master/service_windows.go#L247
+
+コマンドライン引数に start を指定すれば 自身が用意した Start() が呼ばれ、stop を指定すれば、自身が用意した Stop() が呼ばれる訳だが、その仕掛けが以下の通り。
+
+- コマンドライン引数に install を指定すれば、windows サービスが作成されるが、その際の実行ファイルのパスのデフォルトは 自身（作ったコードをビルドして生成した exe ファイル）。
+
+https://github.com/percona/kardianos-service/blob/master/service_windows.go#L190
+
+https://github.com/percona/kardianos-service/blob/master/service_go1.8.go#L10
+
+- start した際、exe ファイルが 引数なしで実行されることになる。つまり、Run()が実行され、自身が用意した Start()が呼ばれる。そしてプロセスが終了するまで待ちに入る
+
+https://github.com/percona/kardianos-service/blob/master/service_windows.go#L271
+
+- stop した際は、windows サービス停止が行われ、(恐らく)それに伴い終了シグナルが発行され、上記で待ちに入っていた箇所でその通知を受けることで、待ちが終わり、後続に控える Stop() の処理が行われると思われる
+
+https://github.com/percona/kardianos-service/blob/master/service_windows.go#L338
+
+少々分かりにくいが、よくできた仕掛けに思う
+
+```golang
+type exampleService struct {}
+func (e *exampleService) Start(s service.Service) error {
+  // implement service start
+  return nil
+}
+func (e *exampleService) Stop(s service.Service) error {
+  // implement service start
+  return nil
+}
+
+func main() {
+	svcConfig := &service.Config{
+		Name:        "ExampleService",
+		DisplayName: "ExampleService (Go Service Example)",
+		Description: "This is an example Go service.",
+	}
+
+	// Create Exarvice service
+	program := &exarvice{}
+	s, err := service.New(program, svcConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Setup the logger
+	errs := make(chan error, 5)
+	logger, err = s.Logger(errs)
+	if err != nil {
+		log.Fatal()
+	}
+
+	if len(os.Args) > 1 {
+		err = service.Control(s, os.Args[1])
+		if err != nil {
+			fmt.Printf("Failed (%s) : %s\n", os.Args[1], err)
+			return
+		}
+		fmt.Printf("Succeeded (%s)\n", os.Args[1])
+		return
+	}
+
+	// run in terminal
+	s.Run()
+}
+```
 
 ## ソース
 

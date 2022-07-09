@@ -11,7 +11,7 @@
     - [gRPC (by golang)](./docs/Program/Golang/gRPC_(by_golang)/doc.md)
     - [Golang ビルド制約使用時の golps に関する注意事項](./docs/Program/Golang/Golang_ビルド制約使用時の_golps_に関する注意事項/doc.md)
     - [go-ini では セミコロンが省略される](./docs/Program/Golang/go-ini_では_セミコロンが省略される/doc.md)
-    - [golang で windows サービス を開発する](./docs/Program/Golang/golang_で_windows_サービス_を開発する/doc.md)
+    - [golang で windows サービス 開発 (kardianos/service の 実装説明少々)](./docs/Program/Golang/golang_で_windows_サービス_開発_(kardianos／service_の_実装説明少々)/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
     - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
