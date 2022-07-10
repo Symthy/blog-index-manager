@@ -41,7 +41,9 @@
     - [React 副作用/メモ化/レデューサー (TypeScriptコード例付)](https://symthy.hatenablog.com/entry/2022/04/12/132552) (2022/04)
     - [React コードフォーマット（ESLint + Prettier + TypeScript）](https://symthy.hatenablog.com/entry/2022/05/28/180852) (2022/05)
     - [React Drag & Drop メモ](https://symthy.hatenablog.com/entry/2022/05/29/221733) (2022/05)
+    - [Redux 基本](https://symthy.hatenablog.com/entry/2022/07/10/161318) (2022/07)
   - [フロントエンド 技術要素概要集](https://symthy.hatenablog.com/entry/2022/03/27/195235) (2022/03)
+  - [storybook チュートリアル ＆ CDD（コンポーネント駆動開発）](https://symthy.hatenablog.com/entry/2022/07/10/154411) (2022/07)
 - Infra
   - Docker
     - [Docker メモ](https://symthy.hatenablog.com/entry/2022/05/14/015712) (2022/05)
