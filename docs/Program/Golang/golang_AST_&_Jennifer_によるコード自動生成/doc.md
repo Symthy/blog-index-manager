@@ -412,3 +412,14 @@ f.Func().
 ```
 
 部分的にに作って、Add() で任意の要素に付け足すことが可能なため柔軟。
+
+## go での コード生成
+
+- go generate で完結するようにした方が良い
+- コード生成を行うための go ファイルに以下を追加すれば、 `go generate ./...` で実行できる
+
+```golang
+//go:generate go run .
+```
+
+ref: [go generate のベストプラクティス](https://qiita.com/yaegashi/items/d1fd9f7d0c75b2bb7446)

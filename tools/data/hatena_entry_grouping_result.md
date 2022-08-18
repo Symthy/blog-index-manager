@@ -15,6 +15,7 @@
     - [Golang ビルド制約使用時の golps に関する注意事項](https://symthy.hatenablog.com/entry/2022/06/30/133012) (2022/06)
     - [go-ini では セミコロンが省略される](https://symthy.hatenablog.com/entry/2022/07/01/083530) (2022/07)
     - [golang で windows サービス 開発 (kardianos/service の 実装説明少々)](https://symthy.hatenablog.com/entry/2022/07/04/230623) (2022/07)
+    - [golang AST & Jennifer によるコード自動生成](https://symthy.hatenablog.com/entry/2022/08/18/221703) (2022/08)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
     - [JS 高階関数](https://symthy.hatenablog.com/entry/2022/04/03/155620) (2022/04)

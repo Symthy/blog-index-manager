@@ -12,6 +12,7 @@
     - [Golang ビルド制約使用時の golps に関する注意事項](./docs/Program/Golang/Golang_ビルド制約使用時の_golps_に関する注意事項/doc.md)
     - [go-ini では セミコロンが省略される](./docs/Program/Golang/go-ini_では_セミコロンが省略される/doc.md)
     - [golang で windows サービス 開発 (kardianos/service の 実装説明少々)](./docs/Program/Golang/golang_で_windows_サービス_開発_(kardianos／service_の_実装説明少々)/doc.md)
+    - [golang AST & Jennifer によるコード自動生成](./docs/Program/Golang/golang_AST_&_Jennifer_によるコード自動生成/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
     - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
@@ -75,4 +76,3 @@
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](./docs/Others/エンジニアを分類する3タイプから考える自身のタイプとその先と/doc.md)
   - [はてなブログ投稿自動化 メモ](./docs/Others/はてなブログ投稿自動化_メモ/はてなブログ投稿自動化.md)
   - [OpenID Connect 概要まとめ (In progress)](./docs/Others/OpenID_Connect_概要まとめ_(In_progress)/doc.md)
-  - [golang AST & Jennifer によるコード自動生成](./docs/Others/golang_AST_&_Jennifer_によるコード自動生成/doc.md)
