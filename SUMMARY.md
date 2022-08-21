@@ -13,6 +13,7 @@
     - [go-ini では セミコロンが省略される](./docs/Program/Golang/go-ini_では_セミコロンが省略される/doc.md)
     - [golang で windows サービス 開発 (kardianos/service の 実装説明少々)](./docs/Program/Golang/golang_で_windows_サービス_開発_(kardianos／service_の_実装説明少々)/doc.md)
     - [golang AST & Jennifer によるコード自動生成](./docs/Program/Golang/golang_AST_&_Jennifer_によるコード自動生成/doc.md)
+    - [Golang：API 実行 と httptest](./docs/Program/Golang/Golang：API_実行_と_httptest/doc.md)
   - JavaScript
     - [JavaScript 基本](./docs/Program/JavaScript/JavaScript_基本/doc.md)
     - [JS 高階関数](./docs/Program/JavaScript/JS_高階関数/doc.md)
@@ -53,6 +54,8 @@
   - [RPM Tips Stack](./docs/Infra/RPM_Tips_Stack/doc.md)
 - Web
 - Git
+  - Github
+    - [Github プロフィールのカスタマイズ](./docs/Git/Github/Github_プロフィールのカスタマイズ/doc.md)
   - [Git 追跡解除](./docs/Git/Git_追跡解除/Git_追跡解除.md)
   - [Git Tips Link Stack](./docs/Git/Git_Tips_Link_Stack/doc.md)
 - VSCode

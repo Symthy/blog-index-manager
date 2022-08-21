@@ -15,7 +15,8 @@
       "20220630133012": "Golang ビルド制約使用時の golps に関する注意事項",
       "20220701083530": "go-ini では セミコロンが省略される",
       "20220704230622": "golang で windows サービス 開発 (kardianos/service の 実装説明少々)",
-      "20220817213232": "golang AST & Jennifer によるコード自動生成"
+      "20220817213232": "golang AST & Jennifer によるコード自動生成",
+      "20220821194621": "Golang：API 実行 と httptest"
     },
     "JavaScript": {
       "20220123193618": "JavaScript 基本",
@@ -77,6 +78,9 @@
   },
   "Web": {},
   "Git": {
+    "Github": {
+      "20220818232858": "Github プロフィールのカスタマイズ"
+    },
     "-": {
       "20220123193918": "Git 追跡解除",
       "20220514005712": "Git Tips Link Stack"

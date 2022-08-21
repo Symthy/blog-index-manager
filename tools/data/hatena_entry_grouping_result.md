@@ -16,6 +16,7 @@
     - [go-ini では セミコロンが省略される](https://symthy.hatenablog.com/entry/2022/07/01/083530) (2022/07)
     - [golang で windows サービス 開発 (kardianos/service の 実装説明少々)](https://symthy.hatenablog.com/entry/2022/07/04/230623) (2022/07)
     - [golang AST & Jennifer によるコード自動生成](https://symthy.hatenablog.com/entry/2022/08/18/221703) (2022/08)
+    - [Golang：API 実行 と httptest](https://symthy.hatenablog.com/entry/2022/08/21/194621) (2022/08)
   - JavaScript
     - [JavaScript 基本](https://symthy.hatenablog.com/entry/2022/01/23/193618) (2022/01)
     - [JS 高階関数](https://symthy.hatenablog.com/entry/2022/04/03/155620) (2022/04)
@@ -52,6 +53,8 @@
   - [RPM Tips Stack](https://symthy.hatenablog.com/entry/2022/05/14/005630) (2022/05)
 - Web
 - Git
+  - Github
+    - [Github プロフィールのカスタマイズ](https://symthy.hatenablog.com/entry/2022/08/18/232904) (2022/08)
   - [Git 追跡解除](https://symthy.hatenablog.com/entry/2022/01/23/194009) (2022/01)
   - [Git Tips Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005712) (2022/05)
 - VSCode
