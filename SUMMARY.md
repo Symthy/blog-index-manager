@@ -20,6 +20,7 @@
   - Java
     - [Java Assertj + Mockito](./docs/Program/Java/Java_Assertj_+_Mockito/doc.md)
     - [Gson Serialize (Object -> String) での時刻フォーマット指定方法](./docs/Program/Java/Gson_Serialize_(Object_-＞_String)_での時刻フォーマット指定方法/doc.md)
+    - [Java - HttpClient への SSL 実装での javax.net.ssl.\* プロパティについて (+Quarkus 少々)](./docs/Program/Java/Java_-_HttpClient_への_SSL_実装での_javax.net.ssl.\＊_プロパティについて_(+Quarkus_少々)/doc.md)
   - Python
     - [Python 色々メモ](./docs/Program/Python/Python_色々メモ/python_基本.md)
   - Shell
@@ -73,6 +74,8 @@
 - Career
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)
+  - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](./docs/Portfolio/【gRPC】Connect_が作られた背景概要／これまでの_gRPC-Web／Connect_でできること/doc.md)
+  - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](./docs/Portfolio/某社フロントエンドコーディング試験を題材とした_React_学習記（作成時の考慮事項まとめ）/doc.md)
 - Others
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](./docs/Others/Refactor/Refactor_Diary_1_(Java：_APIレスポンス解析)/doc.md)

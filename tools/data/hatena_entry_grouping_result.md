@@ -5,6 +5,7 @@
   - Java
     - [Java Assertj + Mockito](https://symthy.hatenablog.com/entry/2022/01/29/233929) (2022/02)
     - [Gson Serialize (Object -> String) での時刻フォーマット指定方法](https://symthy.hatenablog.com/entry/2022/02/01/211144) (2022/02)
+    - [Java - HttpClient への SSL 実装での javax.net.ssl.\* プロパティについて (+Quarkus 少々)](https://symthy.hatenablog.com/entry/2022/11/15/002425) (2022/11)
   - Golang
     - [Golang Generics](https://symthy.hatenablog.com/entry/2022/01/23/193352) (2022/01)
     - [Golang コード自動生成](https://symthy.hatenablog.com/entry/2022/03/01/235231) (2022/03)
@@ -70,6 +71,8 @@
 - Career
 - Portfolio
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
+  - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](https://symthy.hatenablog.com/entry/2022/09/24/160309) (2022/09)
+  - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](https://symthy.hatenablog.com/entry/2022/11/08/001801) (2022/11)
 - Others
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
