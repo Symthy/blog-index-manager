@@ -45,8 +45,15 @@ def build_hatena_blog_entry_xml_body(hatena_id: str, title: str, category: str, 
     return entry_xml
 
 
+__ADD_TEXT_TO_SUMMARY_TEMPLATE = """目指していた INPUT:OUTPUT = 1:1以上 の理想形は [Link & TechTips Stack](https://protective-metatarsal-484.notion.site/Link-TechTips-Stack-bbcc6dfc9bd44256afc542cf9858ad52)
+の形なのかもしれない（※仮挿入） 本ブログと並列運用(更新不定期)
+
+---
+"""
+
 def get_blog_summary_index_template() -> str:
-    return """本ページは投稿記事一覧です。 (自動更新)
+    return __ADD_TEXT_TO_SUMMARY_TEMPLATE + """
+本ページは投稿記事一覧です。 (自動更新)
 
 {md_lines}
 

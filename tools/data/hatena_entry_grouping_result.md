@@ -48,6 +48,7 @@
     - [React 実践のために調べまくったこと書き綴り まとめメモ](https://symthy.hatenablog.com/entry/2022/07/24/175816) (2022/07)
   - [フロントエンド 技術要素概要集](https://symthy.hatenablog.com/entry/2022/03/27/195235) (2022/03)
   - [storybook チュートリアル ＆ CDD（コンポーネント駆動開発）](https://symthy.hatenablog.com/entry/2022/07/10/154411) (2022/07)
+  - [フロントエンド E2E テスト + MSW (Playwright/Cypress 試行) メモ](https://symthy.hatenablog.com/entry/2022/11/19/152009) (2022/11)
 - Infra
   - Docker
     - [Docker メモ](https://symthy.hatenablog.com/entry/2022/05/14/015712) (2022/05)

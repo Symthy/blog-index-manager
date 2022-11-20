@@ -49,6 +49,7 @@
     - [React 実践のために調べまくったこと書き綴り まとめメモ](./docs/FrontEnd/React/React_実践のために調べまくったこと書き綴り_まとめメモ/doc.md)
   - [フロントエンド 技術要素概要集](./docs/FrontEnd/フロントエンド_技術要素概要集/doc.md)
   - [storybook チュートリアル ＆ CDD（コンポーネント駆動開発）](./docs/FrontEnd/storybook_チュートリアル_＆_CDD（コンポーネント駆動開発）/doc.md)
+  - [フロントエンド E2E テスト + MSW (Playwright/Cypress 試行) メモ](./docs/FrontEnd/フロントエンド_E2E_テスト_+_MSW_(Playwright／Cypress_試行)_メモ/doc.md)
 - Infra
   - Docker
     - [Docker メモ](./docs/Infra/Docker/Docker_メモ/doc.md)

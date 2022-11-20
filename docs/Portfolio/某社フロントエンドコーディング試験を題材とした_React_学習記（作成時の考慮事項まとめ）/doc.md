@@ -1,7 +1,5 @@
 # 某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）
 
-※部分的に記載中。近日中に記載
-
 ## はじめに
 
 何番煎じになっているか分からないフロントエンドはチョットダケワカル者が React 学習のために、[ゆめみ社様のフロントエンドコーディング試験](https://notion.yumemi.co.jp/0e9ef27b55704d7882aab55cc86c999d)を一から作ってみた
@@ -38,10 +36,6 @@
 元々 React の学習の優先順位は下げていたため１年位先の予定であったが、業務で必要になりそうだったために今回その優先順位を入れ替え前倒しで学習に取り組んだ。
 
 ※ React を選んだ理由は、過去個人で Vue を勉強したが肌に合わず挫折し、その後、某書で読んだ「HTML/CSS/JS (構造/見た目/動き) の分離は技術の分離であり関心の分離でない」といったような言葉(この通りであったかはうろ覚え)に衝撃を受けつつ激しく納得し、試しに React＆JSX に触れたらとても肌にあったこと。
-
-## コーディング Tips
-
-Todo：せっかくなので調べたことをまとめる
 
 ## フォルダ構成/コンポーネント構成
 
@@ -504,9 +498,65 @@ export const TitleBodyLayout = ({
 
 ## テスト
 
-Todo: 近日記載
+用意するテストは以下（一部残課題行き）
 
-現状ロジックのテストは入れている（Github Actions で実行）
+- ユニットテスト → カスタム hooks や 関数 のロジックのテスト (Jest & testing-library)
+- コンポーネントテスト → コンポーネント単位の動作テスト (testing-library or cypress) ※予定:未実装
+- E2E テスト (API はモック) → インテグレーションテスト (Cypress)
+- シナリオテスト → Github Pages にて可能
+- Visual Regression Test → 画面差分確認 (Chromatic)
+- リグレッションテスト → 未実装（保留）
+
+補足事項
+
+- ユニットテスト＋ E2E テストで主要な機能のテストは概ねカバーできているためコンポーネントテストの優先度を下げている
+- E2E テストにて、使用 API の仕様はそう変わらない点とエラーケースのテストが網羅できない点から、API モックを使用。故に実物を使用するリグレッションテストは効果が薄いため保留。
+
+E2E テストに関しては詰まりどころがあったため記載する。
+
+- 実際の画面を操作してコードを自動生成できる Playwright を最初は使用（API モックは MSW）
+- Playwright にてテスト時の MSW のレスポンス上書き設定（デフォルトは正常系、異常系テストのため rest.once()で一度だけエラーを返すよう上書き）がうまくいかず
+- MSW のドキュメントに Cypress での例があるため、Cypress なら確実と思い乗り換え ref: https://mswjs.io/docs/api/setup-worker/use
+- 乗り換えだけでは足りず右記の対応が必要であった ref: [Cypress issues when using window.msw](https://github.com/mswjs/msw/issues/1052) ※Playwright も同じかもしれない(未試行)。戻すのも手間なため Cypress で続行
+- ベストプラクティスに従い、HTML 要素の取得のために `data-test` 要素を追加。 ref: [Cypress - Best Practice](https://docs.cypress.io/guides/references/best-practices#Selecting-Elements)
+- `data-test` 要素はあくまで e2e テスト用のため、以下のようなコードを用意して本番環境に含めないようにした
+
+```typescript
+export const makeAttrForTest = (label: string) => {
+  if (import.meta.env.VITE_E2E_MODE) {
+    return { "data-test": label };
+  }
+  return {};
+};
+```
+
+- 上記コードでは、(アプリを Native ESM に対応させてないのもあり) Jest でのテスト実行がうまくいかず vite-plugin-env-compatible を使用してみるも GithubPages や Chromatic でうまくいかず
+- 最終的に環境変数の参照は ReactDOM.createRoot を行う main.ts に隔離し、(e2e 実行かをアプリ全体の状態と捉えて…) useContext を用いて値を渡すようにした
+
+```typescript
+export const EnabledE2EContext = createContext(false);
+export const useEnabledE2EMode = (): boolean => useContext(EnabledE2EContext);
+// provider への import.meta.env.VITE_E2E_MODE === 'true' の結果を渡す
+```
+
+```typescript
+export const useMakeAttrForTest = () => {
+  const isEnabledE2E = useEnabledE2EMode();
+
+  return (label: string) => {
+    if (isEnabledE2E) {
+      return { "data-test": label };
+    }
+    return {};
+  };
+};
+```
+
+Jest がまだ Native ESM に対応しきっていないが、Vitest はまだ v1 でもないため、Native ESM に対応するのは保留とし、最終的に Jest を使うこととしている。Vite で babel-plugin-remove-attributes のような実用レベルの方法が見つからなかったため、上記のような対応とした。
+
+※テストに関しては以下等が参考になりそう
+
+ref: [メルペイフロントエンドのテスト自動化方針](https://engineering.mercari.com/blog/entry/20211208-test-automation-policy-in-merpay-frontend/)
 
 ## Github Pages
 
@@ -574,30 +624,26 @@ const htmlPlugin = () => {
 
 ## その他参考になりそうなもの
 
-Todo: 近日記載
-
 - [フロントエンドのデザインパターン](https://zenn.dev/morinokami/books/learning-patterns-1/viewer/introduction)
 
 ※ コードを置いてるリポジトリ（https://github.com/Symthy/react-clone-yumemi-exam）に作成するにあたって色々調べたことはほぼ memo_xxx.md に記載している。参考までに
 
 ## 残課題
 
-Todo: 近日記載
+改善タスク(残課題)：
 
-改善タスク：
-
-- テスト (コンポーネント単位のテスト、E2E テスト※主に画面遷移)
+- テスト (コンポーネント単位のテスト)
 - Jotai → Context に変更
 - エラー型付け ref: https://labs.septeni.co.jp/entry/2020/07/23/100000#%E3%81%BE%E3%81%A8%E3%82%81
 - react-dev-tool warning 解消
 - 開発環境改善 ref: https://qiita.com/kztmk_media_pep/items/11d063a155d414a102b1
 
-Suspsense について
+※ Suspsense について
 
 - useQueries の対応が完全ではない？ようなので導入見送り
   ref: [TanStack/query#1523](https://github.com/TanStack/query/issues/1523)
 - そもそも Suspsense 導入できるコンポーネントが 1/3 のため導入するメリットも今はあまりない（必要になったらで良い）
 
-## さいごに
+使用したライブラリに関しては色々断片ではあるものの基本的な所は押さえることができた上、完全独力にて概ね仕上げることができたため、今後開発するものの礎となるだろう。
 
-Todo
+以上
