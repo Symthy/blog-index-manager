@@ -27,32 +27,32 @@ USAGE:
   <command> [OPTIONS]
 
 OPTIONS:
-  -i, --init                             initialize docs directory (don't delete exist file and dir).
-  -n, --new [<OPTS>]                     new document set under "work" dir (create dir, md file and category file).
+  -i, --init                            initialize docs directory (don't delete exist file and dir).
+  -n, --new [<OPTS>]                    new document set under "work" dir (create dir, md file and category file).
     OPTS (can also specify the following together):                                
-      -t,  --title <DocTitle>                specified document title (default: "doc").
-      -c,  --category <CategoryName>         specified category (default: empty value).
-  -s, --search <OPTS>                    search document entry (show entry id, title, group, category).
+      -t, --title <DocTitle>                specified document title (default: "doc").
+      -c, --category <CategoryName>         specified category (default: empty value).
+  -s, --search <OPTS>                   search document entry (show entry id, title, group, category).
     OPTS:
-      -g,  --group <Group Name>              search by group name.
-      -c,  --category <Category Name>        search by category name.
-      -t,  --title <Keyword>                 search by title keyword (partial match). 
-  -p, --push [<OPTS>] <DirName>          push document set from "work" dir to "docs" dir.
+      -g, --group <Group Name>              search by group name.
+      -c, --category <Category Name>        search by category name.
+      -t, --title <Keyword>                 search by title keyword (partial match). 
+  -p, --push [<OPTS>] <DirName>         push document set from "work" dir to "docs" dir.
     OPTS: 
-      -a,  --all                         in addition to the above, post your blog.
-      -d,  --draft                      post as draft entry.
-      -pu, --pickup                     post as pickup entry.
-      -te, --title-escape               escape the entry title.
+      -a, --all                         in addition to the above, post your blog.
+      -d, --draft                       post as draft entry.
+      -pu,--pickup                      post as pickup entry.
+      -te,--title-escape                escape the entry title.
   -r, --retrieve [<OPTS>] <DocEntryID>  retrieve document set from "docs" dir to "work" dir (and backup).
     OPTS: 
       -c, --cancel                      cancel retrieve (move the backup back to "docs" dir).
   -b, --blog <OPTS>                     operation to your blog.
     OPTS (can't also specify the following together):                                
-      -p,  --push <DocEntryID>               post specified document to your blog.
-      -d,  --draft                      post as draft entry.
-      -pu, --pickup                     post as pickup entry.
-      -te, --title-escape               escape the entry title.
-      -c,  --collect                    collect all blog entries from your blog.
+      -p, --push <DocEntryID>               post specified document to your blog.
+      -d, --draft                       post as draft entry.
+      -pu,--pickup                      post as pickup entry.
+      -te,--title-escape                escape the entry title.
+  -bc,--blog-collect                    collect all blog entries from your blog. (experimental function)
   -h, --help                            show usage.
 """
 
@@ -125,10 +125,6 @@ def execute_command(args: List[str]):
 
     # external
     if len(args) >= 2 and (args[1] == '--blog' or args[1] == '-b'):
-        if len(args) >= 3 and (args[2] == '--collect' or args[2] == '-c'):
-            collect_hatena_entry_local_list(api_executor, dump_blog_data_accessor, category_group_def)
-            print('[Info] Success: blog entries collection')
-            return
         if len(args) >= 3 and (args[2] == '--push' or args[2] == '-p'):
             ex_opts: List[str] = args[3:]
             is_draft = True if len(ex_opts) >= 1 and ('--draft' in ex_opts or '-d' in ex_opts) else False
@@ -145,6 +141,10 @@ def execute_command(args: List[str]):
             else:
                 print('[Error] Failure: blog summary page updated')
             return
+    if len(args) >= 2 and (args[1] == '--blog-collect' or args[2] == '-bc'):
+        collect_hatena_entry_local_list(api_executor, dump_blog_data_accessor, category_group_def)
+        print('[Info] Success: blog entries collection')
+        return
 
     # hidden option. for testing
     if len(args) >= 2 and args[1] == '--wsse':
