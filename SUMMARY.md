@@ -77,6 +77,7 @@
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)
   - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](./docs/Portfolio/【gRPC】Connect_が作られた背景概要／これまでの_gRPC-Web／Connect_でできること/doc.md)
   - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](./docs/Portfolio/某社フロントエンドコーディング試験を題材とした_React_学習記（作成時の考慮事項まとめ）/doc.md)
+  - [PokeRest 設計＆今後の方針 【執筆中】](./docs/Portfolio/PokeRest_設計＆今後の方針_【執筆中】/doc.md)
 - Others
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](./docs/Others/Refactor/Refactor_Diary_1_(Java：_APIレスポンス解析)/doc.md)

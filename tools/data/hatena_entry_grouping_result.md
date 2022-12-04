@@ -33,6 +33,7 @@
     - [DDD 実践メモ](https://symthy.hatenablog.com/entry/2022/02/20/230658) (2022/03)
   - GraphQL
     - [GraphQLについてまとめる](https://symthy.hatenablog.com/entry/2022/05/06/230418) (2022/05)
+    - [GraphQL 設計に関する知識メモ 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/25/074855) (2022/11)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)
@@ -74,6 +75,7 @@
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
   - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](https://symthy.hatenablog.com/entry/2022/09/24/160309) (2022/09)
   - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](https://symthy.hatenablog.com/entry/2022/11/08/001801) (2022/11)
+  - [PokeRest 設計＆今後の方針 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/27/225949) (2022/11)
 - Others
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
