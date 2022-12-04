@@ -9,12 +9,12 @@ from files.files_operator import get_dir_names_in_target_dir, get_exist_dir_name
     translate_win_files_unusable_char, move_dir
 
 
-def move_documents_to_docs_dir(move_from_to_path_dict: Dict[str, str]):
-    for move_from_dir_path, move_to_dir_path in move_from_to_path_dict.items():
-        move_dir(move_from_dir_path, move_to_dir_path)
+def move_documents_to_docs_dir(moving_from_to_path_dict: Dict[str, str]):
+    for from_dir_path, to_dir_path in moving_from_to_path_dict.items():
+        move_dir(from_dir_path, to_dir_path)
 
 
-def resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGroupDef, target_dir_names: List[str]) \
+def resolve_moving_from_and_to_dir_path(category_group_def: CategoryGroupDef, target_dir_names: List[str]) \
         -> Dict[str, str]:
     # return: key:move_from_path value: move_to_path
     target_dir_path_to_name_dict = __resolve_target_dir_names(target_dir_names)
@@ -29,13 +29,13 @@ def resolve_move_from_and_move_to_dir_path_dict(category_group_def: CategoryGrou
         if doc_title is None:
             print(f'[Warn] empty doc title (dir: {target_dir_path_to_name_dict[move_from_dir_path]})')
             continue
-        move_to_dir_path = __resolve_move_to_dir_name_and_path(category_group_def, move_from_dir_path, doc_title)
+        move_to_dir_path = __resolve_move_to_dir_path(category_group_def, move_from_dir_path, doc_title)
         path_dict[move_from_dir_path] = move_to_dir_path
     return path_dict
 
 
-def __resolve_move_to_dir_name_and_path(category_group_def: CategoryGroupDef, move_from_dir_path: str,
-                                        doc_title: str) -> str:
+def __resolve_move_to_dir_path(category_group_def: CategoryGroupDef, move_from_dir_path: str,
+                               doc_title: str) -> str:
     doc_category = __resolve_doc_category(move_from_dir_path)  # default category: Others
     group_dir = ''
     if not __category_is_group(doc_category, category_group_def):

@@ -17,17 +17,19 @@ class DocEntry(IEntry):
     FIELD_DOC_FILE_NAME = 'doc_file_name'
     FIELD_TOP_CATEGORY = 'top_category'
     FIELD_CATEGORIES = 'categories'
+    FIELD_PICKUP = 'pickup'
     FIELD_CREATED_AT = 'created_at'
     FIELD_UPDATED_AT = 'updated_at'
 
     def __init__(self, docs_id: str, title: str, dir_path: str, doc_file_name: str, categories: List[str],
-                 created_at: Optional[datetime], updated_at: Optional[datetime] = None):
+                 is_pickup: bool = False, created_at: Optional[datetime] = None, updated_at: Optional[datetime] = None):
         self.__id = docs_id
         self.__title = title
         self.__dir_path = dir_path
         self.__doc_file_name = doc_file_name
         self.__top_category = categories[0] if not len(categories) == 0 else NON_CATEGORY_GROUP_NAME
         self.__categories = categories
+        self.__pickup = is_pickup
         self.__created_at: Optional[datetime] = created_at
         self.__updated_at: Optional[datetime] = updated_at
 
@@ -56,11 +58,15 @@ class DocEntry(IEntry):
         return self.__top_category
 
     @property
-    def created_at(self):
+    def is_pickup(self) -> bool:
+        return self.__pickup
+
+    @property
+    def created_at(self) -> str:
         return convert_datetime_to_entry_time_str(self.__created_at)
 
     @property
-    def updated_at(self):
+    def updated_at(self) -> str:
         return convert_datetime_to_entry_time_str(self.__updated_at)
 
     @property
@@ -81,29 +87,45 @@ class DocEntry(IEntry):
             DocEntry.FIELD_DOC_FILE_NAME: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DOC_FILE_NAME),
             DocEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TOP_CATEGORY),
             DocEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CATEGORIES),
+            DocEntry.FIELD_PICKUP: resolve_dump_field_data(self, json_data, DocEntry.FIELD_PICKUP),
             DocEntry.FIELD_CREATED_AT: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CREATED_AT),
             DocEntry.FIELD_UPDATED_AT: resolve_dump_field_data(self, json_data, DocEntry.FIELD_UPDATED_AT),
         }
 
     @classmethod
-    def init_from_dump_data(cls, dump_data: Dict[str, any]) -> DocEntry:
+    def restore_from_json_data(cls, dump_json_data: Dict[str, any]) -> DocEntry:
         return DocEntry(
-            dump_data[DocEntry.FIELD_ID],
-            dump_data[DocEntry.FIELD_TITLE],
-            dump_data[DocEntry.FIELD_DIR_PATH],
-            dump_data[DocEntry.FIELD_DOC_FILE_NAME],
-            dump_data[DocEntry.FIELD_CATEGORIES],
-            convert_entry_time_str_to_datetime(dump_data[DocEntry.FIELD_CREATED_AT]),
-            convert_entry_time_str_to_datetime(dump_data[DocEntry.FIELD_UPDATED_AT])
+            dump_json_data[DocEntry.FIELD_ID],
+            dump_json_data[DocEntry.FIELD_TITLE],
+            dump_json_data[DocEntry.FIELD_DIR_PATH],
+            dump_json_data[DocEntry.FIELD_DOC_FILE_NAME],
+            dump_json_data[DocEntry.FIELD_CATEGORIES],
+            # field added later
+            dump_json_data[DocEntry.FIELD_PICKUP] if DocEntry.FIELD_PICKUP in dump_json_data else False,
+            convert_entry_time_str_to_datetime(dump_json_data[DocEntry.FIELD_CREATED_AT]),
+            convert_entry_time_str_to_datetime(dump_json_data[DocEntry.FIELD_UPDATED_AT])
         )
 
 
 class DocEntries(IEntries):
     def __init__(self, entries: List[DocEntry] = None):
-        # Todo: examination. use dict? see
+        # Todo: Need to consider later. Is it better to use dict? (low priority)
         self.__entries: List[DocEntry] = []
         if entries is not None:
             self.__entries: List[DocEntry] = entries
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        if not len(self.__entries) == len(other.__entries):
+            return False
+        for entry in self.__entries:
+            other_entry = other.get_entry(entry.id)
+            if other_entry is None:
+                return False
+            if not entry.__dict__ == other_entry.__dict__:
+                return False
+        return True
 
     @property
     def entry_list(self) -> List[DocEntry]:
@@ -117,6 +139,12 @@ class DocEntries(IEntries):
             if entry.id == target_entry_id:
                 return True
         return False
+
+    def get_entry(self, entry_id) -> Optional[DocEntry]:
+        for entry in self.__entries:
+            if entry.id == entry_id:
+                return entry
+        return None
 
     def __add_entry(self, blog_entry: DocEntry):
         self.__entries.append(blog_entry)

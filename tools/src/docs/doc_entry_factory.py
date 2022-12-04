@@ -10,18 +10,18 @@ from files.files_operator import get_dir_name_from_dir_path, get_file_name_from_
 from ltime.time_resolver import get_current_datetime, convert_datetime_to_time_sequence
 
 
-def new_doc_entries(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
-                    move_from_path_to_move_to_path_dict: Dict[str, str]) -> DocEntries:
+def build_doc_entries(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
+                      moving_from_and_to_path_dict: Dict[str, str], is_pickup: bool = False) -> DocEntries:
     docs_entry_list = []
-    for move_from_path, move_to_path in move_from_path_to_move_to_path_dict.items():
-        docs_entry_opt = new_doc_entry(dump_doc_data_accessor, move_from_path, move_to_path)
+    for from_path, to_path in moving_from_and_to_path_dict.items():
+        docs_entry_opt = build_doc_entry(dump_doc_data_accessor, from_path, to_path, is_pickup)
         if docs_entry_opt is not None:
             docs_entry_list.append(docs_entry_opt)
     return DocEntries(docs_entry_list)
 
 
-def new_doc_entry(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry], target_dir_path: str,
-                  move_to_path: str) -> Optional[DocEntry]:
+def build_doc_entry(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry], target_dir_path: str,
+                    to_path: str, is_pickup: bool = False) -> Optional[DocEntry]:
     created_datetime: datetime = get_current_datetime()
     md_file_path: Optional[str] = get_md_file_path_in_target_dir(target_dir_path)
     dir_name = get_dir_name_from_dir_path(target_dir_path)
@@ -42,6 +42,6 @@ def new_doc_entry(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEn
     created_at = created_datetime
     updated_at = None
     if dump_doc_data_accessor.has_entry(entry_id):
-        created_at = None  # use existed time in dump file
+        created_at = None  # use time in dump file
         updated_at = get_current_datetime()
-    return DocEntry(entry_id, doc_title, move_to_path, doc_file_name, categories, created_at, updated_at)
+    return DocEntry(entry_id, doc_title, to_path, doc_file_name, categories, is_pickup, created_at, updated_at)

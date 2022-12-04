@@ -87,7 +87,7 @@ def execute_command(args: List[str]):
             is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                        category_group_def, is_draft, is_title_escape, target_dirs)
+                                        category_group_def, target_dirs, is_draft, is_title_escape, is_pickup)
             print('[Info] Success: pushed document to docs dir and blog.')
             return
         result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, target_dirs)

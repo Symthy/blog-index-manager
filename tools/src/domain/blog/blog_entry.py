@@ -104,7 +104,7 @@ class BlogEntry(IEntry):
         }
 
     @classmethod
-    def init_from_dump_data(cls, dump_data: Dict[str, any]) -> BlogEntry:
+    def restore_from_json_data(cls, dump_data: Dict[str, any]) -> BlogEntry:
         return BlogEntry(
             dump_data[BlogEntry.FIELD_ID],
             dump_data[BlogEntry.FIELD_TITLE],

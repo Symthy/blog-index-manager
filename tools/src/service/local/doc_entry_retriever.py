@@ -1,7 +1,7 @@
 from typing import List
 
 from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, DOCS_DIR_PATH_TEMP_FILE
-from docs.doc_entry_factory import new_doc_entry
+from docs.doc_entry_factory import build_doc_entry
 from docs.doc_set_accessor import resolve_target_entry_dir_path_in_work
 from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
 from domain.doc.doc_entry import DocEntry, DocEntries
@@ -38,7 +38,7 @@ def cancel_retrieving_document(dump_doc_data_accessor: IDumpEntriesAccessor[DocE
         master_path_temp_file = f'{target_dir_path}{DOCS_DIR_PATH_TEMP_FILE}'
         master_dir_path = read_file_first_line(master_path_temp_file)
         delete_file(master_path_temp_file)
-        doc_entry = new_doc_entry(dump_doc_data_accessor, target_dir_path, master_dir_path)
+        doc_entry = build_doc_entry(dump_doc_data_accessor, target_dir_path, master_dir_path)
         move_dir(target_dir_path, master_dir_path)
         # delete entry dir during retrieve in work dir
         dir_path_in_work_opt = resolve_target_entry_dir_path_in_work(doc_entry_id)
