@@ -5,7 +5,7 @@ from typing import List, Optional
 import unicodedata
 
 from common.constant import NON_CATEGORY_GROUP_NAME
-from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
+from docs.docs_grouping_deserializer import deserialize_grouping_doc_entries
 from domain.doc.doc_entry import DocEntries, DocEntry
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from domain.interface import IEntry, IEntries
@@ -77,8 +77,10 @@ class EntrySearchResults:
         self.__print_entry_search_results()
 
 
-def search_doc_entry_by_group(category_group_def: CategoryGroupDef, group: str):
-    grouping_data: GroupToCategorizedEntriesMap = deserialize_doc_entry_grouping_data(category_group_def)
+def search_doc_entry_by_group(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
+                              category_group_def: CategoryGroupDef, group: str):
+    grouping_data: GroupToCategorizedEntriesMap = deserialize_grouping_doc_entries(dump_doc_data_accessor,
+                                                                                   category_group_def)
     if not category_group_def.has_group_case_insensitive(group):
         print(f'[Info] Nothing specified group: {group}')
         return
@@ -86,14 +88,16 @@ def search_doc_entry_by_group(category_group_def: CategoryGroupDef, group: str):
     EntrySearchResults.init_by_single_group(group, entries).print_search_results()
 
 
-def search_doc_entry_by_category(category_group_def: CategoryGroupDef, category: str):
+def search_doc_entry_by_category(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
+                                 category_group_def: CategoryGroupDef, category: str):
     def print_entries_in_category(group_name: str, category_name: str):
         entries: List[IEntry] = grouping_data.get_entries(group_name, category_name)
         if len(entries) == 0:
             print(f'[Info] Nothing docs of specified category: {category_name}')
         EntrySearchResults.init_by_single_group(group_name, entries).print_search_results()
 
-    grouping_data: GroupToCategorizedEntriesMap = deserialize_doc_entry_grouping_data(category_group_def)
+    grouping_data: GroupToCategorizedEntriesMap = deserialize_grouping_doc_entries(dump_doc_data_accessor,
+                                                                                   category_group_def)
     is_exist_category = category_group_def.has_category(category)
     group = category_group_def.get_belongs_group(category)
     if not is_exist_category and group == NON_CATEGORY_GROUP_NAME:

@@ -109,7 +109,7 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
         self.__category_to_entries[category] = category_to_entries
 
     @classmethod
-    def deserialize_entry_grouping_data(cls, dump_entries_accessor: IDumpEntriesAccessor,
+    def deserialize_categorized_entries(cls, dump_entries_accessor: IDumpEntriesAccessor,
                                         category_to_entries_obj: Optional[Dict[str, Dict[str, str]]] = None) \
             -> CategoryToEntriesMap:
         self = CategoryToEntriesMap()

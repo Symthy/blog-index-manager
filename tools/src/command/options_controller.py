@@ -1,6 +1,6 @@
 from typing import List
 
-from blogs.blog_grouping_deserializer import deserialize_blog_entry_grouping_data
+from blogs.blog_grouping_deserializer import deserialize_grouping_blog_entries
 from blogs.dump_blog_entries_accessor import DumpBlogEntriesAccessor
 from blogs.hatena.blog_api_executor import HatenaBlogApiExecutor
 from common.constant import BLOG_CONF_PATH
@@ -11,9 +11,10 @@ from files.md_data_handler import replace_image_link_in_md_data
 from main import show_hatena_blog_entry, show_hatena_photo_entry
 from oauth.oauth import execute_oauth, get_hatena_bookmarks
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
+from service.entry_summary_factory import EntrySummaryFactory
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
-from service.external.blog_entry_index_updater import update_blog_entry_summary_file
 from service.external.blog_entry_pusher import put_hatena_summary_page, push_photo_entries, push_blog_entry
+from service.external.blog_entry_summary_updater import update_blog_entry_summary_file
 from service.local.doc_entry_generator import new_local_document_set
 from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
@@ -67,6 +68,7 @@ def execute_command(args: List[str]):
     dump_blog_data_accessor = DumpBlogEntriesAccessor()
     dump_doc_data_accessor = DumpDocEntriesAccessor()
     category_group_def = CategoryGroupDef.load_category_group_def_yaml()
+    entry_summary_factory = EntrySummaryFactory(dump_doc_data_accessor, dump_blog_data_accessor)
 
     # TODO: refactor and add validation. use argparse? (no use docopt. because last commit is old)
     # local
@@ -87,10 +89,13 @@ def execute_command(args: List[str]):
             is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                        category_group_def, target_dirs, is_draft, is_title_escape, is_pickup)
+                                        category_group_def, entry_summary_factory, is_draft, is_title_escape, is_pickup,
+                                        target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
             return
-        result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, target_dirs)
+        ex_opts: List[str] = args[2:]
+        is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
+        result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, is_pickup, target_dirs)
         if result is None:
             print('[Warn] Non-exist specified document in work dir.')
         else:
@@ -131,7 +136,7 @@ def execute_command(args: List[str]):
             is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                         category_group_def, args[3:], is_draft, is_title_escape)
+                                         entry_summary_factory, args[3:], is_draft, is_title_escape)
             print('[Info] Success: pushed specified document to blog.')
             return
         if len(args) >= 3 and (args[2] == '--summary' or args[2] == '-s'):
@@ -151,7 +156,7 @@ def execute_command(args: List[str]):
         print(api_executor.build_request_header())
         return
     if len(args) >= 2 and args[1] == '--update-summary':
-        update_blog_entry_summary_file(dump_blog_data_accessor, category_group_def)
+        update_blog_entry_summary_file(dump_blog_data_accessor)
         return
     if len(args) >= 3 and args[1] == '--get-blog':
         hatena_blog_entry_id = args[2]
@@ -162,7 +167,7 @@ def execute_command(args: List[str]):
         show_hatena_photo_entry(blog_config, hatena_photo_entry_id)
         return
     if len(args) >= 2 and args[1] == '--show-blog-summary':
-        print(deserialize_blog_entry_grouping_data(category_group_def).convert_md_lines())
+        print(deserialize_grouping_blog_entries(category_group_def).convert_md_lines())
         return
     if len(args) >= 3 and args[1] == '--put-photo':
         doc_id = args[2]

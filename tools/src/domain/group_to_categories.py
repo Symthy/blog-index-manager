@@ -8,7 +8,7 @@ from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSe
 from domain.interface import IConvertibleMarkdownLines, IEntry, IEntries
 from dump.interface import IDumpEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
-from files.file_accessor import dump_json, load_json
+from files.file_accessor import dump_json
 
 DUMP_NON_CATEGORY_KEY = '-'
 
@@ -226,15 +226,15 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         self.__group_to_categorized_entries[group] = group_to_categorized_entries
 
     @classmethod
-    def deserialize_entry_grouping_data(cls, dump_entries_accessor: IDumpEntriesAccessor,
-                                        category_group_def: CategoryGroupDef) -> GroupToCategorizedEntriesMap:
-        # Todo: doc only process. fix: generalization? or doc only?
-        group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]] = load_json(LOCAL_DOCS_ENTRY_GROUPING_PATH)
+    def deserialize_grouping_entries_data(cls, dump_entries_accessor: IDumpEntriesAccessor,
+                                          category_group_def: CategoryGroupDef,
+                                          group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]]) \
+            -> GroupToCategorizedEntriesMap:
         self = GroupToCategorizedEntriesMap(category_group_def)
         for group in category_group_def.groups:
             category_to_entries = group_to_categorized_entries[group] if group in group_to_categorized_entries else None
-            category_to_entries_map = CategoryToEntriesMap.deserialize_entry_grouping_data(dump_entries_accessor,
-                                                                                           category_to_entries)
+            category_to_entries_map = CategoryToEntriesMap.deserialize_categorized_entries(
+                dump_entries_accessor, category_to_entries)
             group_to_categorized_entries_set = \
                 GroupToCategorizedEntriesSet.deserialize_entry_grouping_data(group, category_to_entries_map)
             self.__add_group_to_categorized_entries(group, group_to_categorized_entries_set)

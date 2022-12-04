@@ -3,7 +3,7 @@ from typing import List
 from common.constant import BACKUP_DIR_PATH, WORK_DIR_PATH, DOCS_DIR_PATH_TEMP_FILE
 from docs.doc_entry_factory import build_doc_entry
 from docs.doc_set_accessor import resolve_target_entry_dir_path_in_work
-from docs.docs_grouping_deserializer import deserialize_doc_entry_grouping_data
+from docs.docs_grouping_deserializer import deserialize_grouping_doc_entries
 from domain.doc.doc_entry import DocEntry, DocEntries
 from dump.interface import IDumpEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
@@ -11,9 +11,11 @@ from files.file_accessor import write_text_line, read_file_first_line
 from files.files_operator import copy_dir, move_dir, delete_dir, get_dir_name_from_dir_path, delete_file
 
 
+# Todo: refactor. split filesystem operation process. move to docs_backuper etc.
+
 def retrieve_document_from_docs(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
                                 category_group_def: CategoryGroupDef, entry_ids: List[str]):
-    group_to_categorized_entries = deserialize_doc_entry_grouping_data(category_group_def)
+    group_to_categorized_entries = deserialize_grouping_doc_entries(category_group_def)
     for doc_entry_id in entry_ids:
         if not dump_doc_data_accessor.has_entry(doc_entry_id):
             print(f'[Error] Nothing specified document (id: {doc_entry_id})')
@@ -32,7 +34,7 @@ def retrieve_document_from_docs(dump_doc_data_accessor: IDumpEntriesAccessor[Doc
 
 def cancel_retrieving_document(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
                                category_group_def: CategoryGroupDef, entry_ids: List[str]):
-    group_to_categorized_entries = deserialize_doc_entry_grouping_data(category_group_def)
+    group_to_categorized_entries = deserialize_grouping_doc_entries(category_group_def)
     for doc_entry_id in entry_ids:
         target_dir_path = f'{BACKUP_DIR_PATH}{doc_entry_id}/'
         master_path_temp_file = f'{target_dir_path}{DOCS_DIR_PATH_TEMP_FILE}'

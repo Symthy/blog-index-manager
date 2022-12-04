@@ -146,6 +146,13 @@ class DocEntries(IEntries):
                 return entry
         return None
 
+    def get_pickup_entries(self) -> List[DocEntry]:
+        pickup_entries: List[DocEntry] = []
+        for entry in self.__entries:
+            if entry.is_pickup:
+                pickup_entries.append(entry)
+        return pickup_entries
+
     def __add_entry(self, blog_entry: DocEntry):
         self.__entries.append(blog_entry)
 
