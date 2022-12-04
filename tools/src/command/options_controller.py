@@ -40,18 +40,20 @@ OPTIONS:
   -p, --push [<OPTS>] <DirName>          push document set from "work" dir to "docs" dir.
     OPTS: 
       -a,  --all                         in addition to the above, post your blog.
-      -d,  --draft                      post as draft.
+      -d,  --draft                      post as draft entry.
+      -pu, --pickup                     post as pickup entry.
       -te, --title-escape               escape the entry title.
-  -r, --retrieve [<OPTS>] <DocEntryID>   retrieve document set from "docs" dir to "work" dir (and backup).
+  -r, --retrieve [<OPTS>] <DocEntryID>  retrieve document set from "docs" dir to "work" dir (and backup).
     OPTS: 
-      -c, --cancel                       cancel retrieve (move the backup back to "docs" dir).
-  -b, --blog <OPTS>                      operation to your blog.
+      -c, --cancel                      cancel retrieve (move the backup back to "docs" dir).
+  -b, --blog <OPTS>                     operation to your blog.
     OPTS (can't also specify the following together):                                
       -p,  --push <DocEntryID>               post specified document to your blog.
-      -c,  --collect                         collect all blog entries from your blog.
-      -d,  --draft                      post as draft.
+      -d,  --draft                      post as draft entry.
+      -pu, --pickup                     post as pickup entry.
       -te, --title-escape               escape the entry title.
-  -h, --help                             show usage.
+      -c,  --collect                    collect all blog entries from your blog.
+  -h, --help                            show usage.
 """
 
 
@@ -59,7 +61,7 @@ def print_usage():
     print(USAGE_CONTENT)
 
 
-def execute_command(options: [str]):
+def execute_command(args: List[str]):
     blog_config = read_blog_config(BLOG_CONF_PATH)
     api_executor = HatenaBlogApiExecutor(blog_config)
     dump_blog_data_accessor = DumpBlogEntriesAccessor()
@@ -68,21 +70,22 @@ def execute_command(options: [str]):
 
     # TODO: refactor and add validation. use argparse? (no use docopt. because last commit is old)
     # local
-    if len(options) >= 2 and (options[1] == '--init' or options[1] == '-i'):
+    if len(args) >= 2 and (args[1] == '--init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
         print('[Info] Success: created \"docs\" dir')
         return
-    if len(options) >= 2 and (options[1] == '--new' or options[1] == '-n'):
-        created_dir_name_opt = new_local_document_set(options)
+    if len(args) >= 2 and (args[1] == '--new' or args[1] == '-n'):
+        created_dir_name_opt = new_local_document_set(args)
         if created_dir_name_opt is not None:
             print(f'[Info] Success: created \"{created_dir_name_opt}\" dir in work dir')
         return
-    if len(options) >= 2 and (options[1] == '--push' or options[1] == '-p'):
-        target_dirs = options[2:] if len(options) > 2 else []
-        if len(options) >= 3 and (options[2] == '--all' or options[2] == '-a'):
-            ex_opts: List[str] = options[3:]
-            is_draft = True if len(options) >= 4 and (options[3] == '--draft' or options[3] == '-d') else False
-            is_title_escape = True if len(options) >= 4 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
+    if len(args) >= 2 and (args[1] == '--push' or args[1] == '-p'):
+        target_dirs = args[2:] if len(args) > 2 else []
+        if len(args) >= 3 and (args[2] == '--all' or args[2] == '-a'):
+            ex_opts: List[str] = args[3:]
+            is_draft = True if len(ex_opts) >= 1 and ('--draft' in ex_opts or '-d' in ex_opts) else False
+            is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
+            is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
                                         category_group_def, is_draft, is_title_escape, target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
@@ -93,48 +96,49 @@ def execute_command(options: [str]):
         else:
             print('[Info] Success: pushed document to docs dir.')
         return
-    if len(options) >= 2 and (options[1] == '--retrieve' or options[1] == '-r'):
-        if len(options) >= 3 and (options[2] == '--cancel' or options[2] == '-c'):
-            cancel_retrieving_document(dump_doc_data_accessor, category_group_def, options[3:])
+    if len(args) >= 2 and (args[1] == '--retrieve' or args[1] == '-r'):
+        if len(args) >= 3 and (args[2] == '--cancel' or args[2] == '-c'):
+            cancel_retrieving_document(dump_doc_data_accessor, category_group_def, args[3:])
             print('[Info] Success: retrieve cancel.')
         else:
-            retrieve_document_from_docs(dump_doc_data_accessor, category_group_def, options[2:])
+            retrieve_document_from_docs(dump_doc_data_accessor, category_group_def, args[2:])
             print('[Info] Success: retrieve document to work dir.')
         return
-    if len(options) >= 2 and (options[1] == '--search' or options[1] == '-s'):
-        if len(options) >= 3 and (options[2] == '--group' or options[2] == '-g'):
-            search_doc_entry_by_group(category_group_def, options[3])
+    if len(args) >= 2 and (args[1] == '--search' or args[1] == '-s'):
+        if len(args) >= 3 and (args[2] == '--group' or args[2] == '-g'):
+            search_doc_entry_by_group(category_group_def, args[3])
             return
-        if len(options) >= 3 and (options[2] == '--category' or options[2] == '-c'):
-            search_doc_entry_by_category(category_group_def, options[3])
+        if len(args) >= 3 and (args[2] == '--category' or args[2] == '-c'):
+            search_doc_entry_by_category(category_group_def, args[3])
             return
-        if len(options) >= 3 and (options[2] == '--title' or options[2] == '-t'):
-            search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, options[3])
+        if len(args) >= 3 and (args[2] == '--title' or args[2] == '-t'):
+            search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[3])
             return
-        search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, options[2])
+        search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[2])
         return
-    if len(options) >= 2 and (options[1] == '--delete' or options[1] == '-d'):
+    if len(args) >= 2 and (args[1] == '--delete' or args[1] == '-d'):
         print('[Error] Unimplemented')
         return
-    if len(options) >= 2 and (options[1] == '--organize' or options[1] == '-o'):
+    if len(args) >= 2 and (args[1] == '--organize' or args[1] == '-o'):
         print('[Error] Unimplemented')
         return
 
     # external
-    if len(options) >= 2 and (options[1] == '--blog' or options[1] == '-b'):
-        if len(options) >= 3 and (options[2] == '--collect' or options[2] == '-c'):
+    if len(args) >= 2 and (args[1] == '--blog' or args[1] == '-b'):
+        if len(args) >= 3 and (args[2] == '--collect' or args[2] == '-c'):
             collect_hatena_entry_local_list(api_executor, dump_blog_data_accessor, category_group_def)
             print('[Info] Success: blog entries collection')
             return
-        if len(options) >= 3 and (options[2] == '--push' or options[2] == '-p'):
-            ex_opts: List[str] = options[3:]
-            is_draft = True if len(options) >= 4 and ('--draft' in ex_opts or '-d' in ex_opts) else False
-            is_title_escape = True if len(options) >= 4 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
+        if len(args) >= 3 and (args[2] == '--push' or args[2] == '-p'):
+            ex_opts: List[str] = args[3:]
+            is_draft = True if len(ex_opts) >= 1 and ('--draft' in ex_opts or '-d' in ex_opts) else False
+            is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
+            is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                         category_group_def, options[3:], is_draft, is_title_escape)
+                                         category_group_def, args[3:], is_draft, is_title_escape)
             print('[Info] Success: pushed specified document to blog.')
             return
-        if len(options) >= 3 and (options[2] == '--summary' or options[2] == '-s'):
+        if len(args) >= 3 and (args[2] == '--summary' or args[2] == '-s'):
             is_success = put_hatena_summary_page(api_executor, category_group_def)
             if is_success:
                 print('[Info] Success: blog summary page updated')
@@ -143,48 +147,48 @@ def execute_command(options: [str]):
             return
 
     # hidden option. for testing
-    if len(options) >= 2 and options[1] == '--wsse':
+    if len(args) >= 2 and args[1] == '--wsse':
         print(api_executor.build_request_header())
         return
-    if len(options) >= 2 and options[1] == '--update-summary':
+    if len(args) >= 2 and args[1] == '--update-summary':
         update_blog_entry_summary_file(dump_blog_data_accessor, category_group_def)
         return
-    if len(options) >= 3 and options[1] == '--get-blog':
-        hatena_blog_entry_id = options[2]
+    if len(args) >= 3 and args[1] == '--get-blog':
+        hatena_blog_entry_id = args[2]
         show_hatena_blog_entry(blog_config, hatena_blog_entry_id)
         return
-    if len(options) >= 3 and options[1] == '--get-photo':
-        hatena_photo_entry_id = options[2]
+    if len(args) >= 3 and args[1] == '--get-photo':
+        hatena_photo_entry_id = args[2]
         show_hatena_photo_entry(blog_config, hatena_photo_entry_id)
         return
-    if len(options) >= 2 and options[1] == '--show-blog-summary':
+    if len(args) >= 2 and args[1] == '--show-blog-summary':
         print(deserialize_blog_entry_grouping_data(category_group_def).convert_md_lines())
         return
-    if len(options) >= 3 and options[1] == '--put-photo':
-        doc_id = options[2]
+    if len(args) >= 3 and args[1] == '--put-photo':
+        doc_id = args[2]
         result = push_photo_entries(blog_config, dump_doc_data_accessor.load_entry(doc_id))
         print(result.build_dump_data())
         return
-    if len(options) >= 3 and options[1] == '--put-blog':
-        doc_id = options[2]
+    if len(args) >= 3 and args[1] == '--put-blog':
+        doc_id = args[2]
         result = push_blog_entry(blog_config, dump_doc_data_accessor.load_entry(doc_id), False, False)
         print(result.build_dump_data())
         return
-    if len(options) >= 2 and options[1] == '--replace-md':
+    if len(args) >= 2 and args[1] == '--replace-md':
         md_data = read_md_file('./docs/Program/Golang/Golang_Generics/doc.md')
         blog_entry_id = '13574176438053271362'
         blog_entry = dump_blog_data_accessor.load_entry(blog_entry_id)
         print(replace_image_link_in_md_data(md_data, blog_entry.doc_images))
         return
-    if len(options) >= 2 and options[1] == '--oauth':
+    if len(args) >= 2 and args[1] == '--oauth':
         execute_oauth(blog_config)
         return
-    if len(options) >= 2 and options[1] == '--bookmarks':
+    if len(args) >= 2 and args[1] == '--bookmarks':
         get_hatena_bookmarks(blog_config)
         return
 
     # usage
-    if len(options) >= 2 and (options[1] == '--help' or options[1] == '-h'):
+    if len(args) >= 2 and (args[1] == '--help' or args[1] == '-h'):
         print_usage()
         return
     print_usage()
