@@ -30,7 +30,7 @@ def get_md_file_name_in_target_dir(target_dir_path: str) -> Optional[str]:
     return None
 
 
-def resolve_target_entry_dir_path_in_work(entry_id: str) -> Optional[str]:
+def resolve_entry_dir_path_in_work(entry_id: str) -> Optional[str]:
     return __resolve_target_entry_dir_path(WORK_DIR_PATH, entry_id)
 
 

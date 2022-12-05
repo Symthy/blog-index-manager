@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from docs.doc_entry_factory import build_doc_entries
-from docs.docs_backuper import remove_backup
+from docs.docs_backuper import remove_backup_doc_entries
 from docs.docs_movers import resolve_moving_from_and_to_dir_path, move_documents_to_docs_dir
 from docs.docs_writer import save_doc_entries
 from domain.doc.doc_entry import DocEntries, DocEntry
@@ -20,7 +20,7 @@ def push_documents_to_docs(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntri
     # Todo: specifiable entry id
     # Todo: validate dir name
     new_doc_entries = build_doc_entries(dump_doc_data_accessor, moving_from_and_to_path_dict, is_pickup)
-    remove_backup(new_doc_entries)
+    remove_backup_doc_entries(new_doc_entries)
 
     save_doc_entries(dump_doc_data_accessor, category_group_def, new_doc_entries)
     update_doc_entry_summary_file(entry_summary_factory)

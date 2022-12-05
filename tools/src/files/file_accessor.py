@@ -16,7 +16,7 @@ def read_blog_config(config_path):
     return BlogConfig(conf_parser)
 
 
-def read_file_first_line(file_path: str):
+def read_file_first_line(file_path: str) -> str:
     with codecs.open(file_path, mode='r', encoding='utf-8') as f:
         line = f.readline()
     return line.lstrip('#').strip()
