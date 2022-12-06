@@ -4,6 +4,8 @@ from blogs.blog_grouping_deserializer import deserialize_grouping_blog_entries
 from blogs.dump_blog_entries_accessor import DumpBlogEntriesAccessor
 from blogs.hatena.blog_api_executor import HatenaBlogApiExecutor
 from common.constant import BLOG_CONF_PATH
+from docs.docs_backuper import DocsBackuper
+from docs.docs_grouping_data_deserializer import DocsGroupingDataDeserializer
 from docs.dump_doc_entries_accessor import DumpDocEntriesAccessor
 from files.conf.category_group_def import CategoryGroupDef
 from files.file_accessor import read_blog_config, read_md_file
@@ -13,11 +15,11 @@ from oauth.oauth import execute_oauth, get_hatena_bookmarks
 from service.entry_pusher import push_entry_from_docs_to_blog, push_entry_to_docs_and_blog
 from service.entry_summary_factory import EntrySummaryFactory
 from service.external.blog_entry_collector import collect_hatena_entry_local_list
-from service.external.blog_entry_pusher import put_hatena_summary_page, push_photo_entries, push_blog_entry
-from service.external.blog_entry_summary_updater import update_blog_entry_summary_file
+from service.external.blog_entry_pusher import push_photo_entries, push_blog_entry
+from service.external.blog_entry_summary_updater import update_blog_entry_summary_file, put_hatena_summary_page
 from service.local.doc_entry_generator import new_local_document_set
 from service.local.doc_entry_pusher import push_documents_to_docs
-from service.local.doc_entry_retriever import retrieve_document_from_docs, cancel_retrieving_document
+from service.local.doc_entry_retriever import DocEntryRetriever
 from service.local.doc_entry_searcher import search_doc_entry_by_group, search_doc_entry_by_category, \
     search_doc_entry_by_title
 from service.local.docs_initializer import initialize_docs_dir
@@ -68,9 +70,12 @@ def execute_command(args: List[str]):
     dump_blog_data_accessor = DumpBlogEntriesAccessor()
     dump_doc_data_accessor = DumpDocEntriesAccessor()
     category_group_def = CategoryGroupDef.load_category_group_def_yaml()
-    entry_summary_factory = EntrySummaryFactory(dump_doc_data_accessor, dump_blog_data_accessor)
+    grouping_doc_entries_deserializer = DocsGroupingDataDeserializer(dump_doc_data_accessor, category_group_def)
+    entry_summary_factory = EntrySummaryFactory(dump_doc_data_accessor, dump_blog_data_accessor, category_group_def,
+                                                grouping_doc_entries_deserializer)
+    docs_backuper = DocsBackuper()
 
-    # TODO: refactor and add validation. use argparse? (no use docopt. because last commit is old)
+    # TODO: refactor and add validation. use argparse (no use docopt. because last commit is old)
     # local
     if len(args) >= 2 and (args[1] == '--init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
@@ -95,26 +100,29 @@ def execute_command(args: List[str]):
             return
         ex_opts: List[str] = args[2:]
         is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
-        result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, is_pickup, target_dirs)
+        result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, entry_summary_factory,
+                                        docs_backuper, is_pickup, target_dirs)
         if result is None:
             print('[Warn] Non-exist specified document in work dir.')
         else:
             print('[Info] Success: pushed document to docs dir.')
         return
     if len(args) >= 2 and (args[1] == '--retrieve' or args[1] == '-r'):
+        doc_entry_retriever = DocEntryRetriever(dump_doc_data_accessor, docs_backuper,
+                                                grouping_doc_entries_deserializer)
         if len(args) >= 3 and (args[2] == '--cancel' or args[2] == '-c'):
-            cancel_retrieving_document(dump_doc_data_accessor, category_group_def, args[3:])
+            doc_entry_retriever.cancel_retrieving_document(args[3:])
             print('[Info] Success: retrieve cancel.')
         else:
-            retrieve_document_from_docs(dump_doc_data_accessor, category_group_def, args[2:])
+            doc_entry_retriever.retrieve_document_from_docs(args[2:])
             print('[Info] Success: retrieve document to work dir.')
         return
     if len(args) >= 2 and (args[1] == '--search' or args[1] == '-s'):
         if len(args) >= 3 and (args[2] == '--group' or args[2] == '-g'):
-            search_doc_entry_by_group(category_group_def, args[3])
+            search_doc_entry_by_group(category_group_def, grouping_doc_entries_deserializer, args[3])
             return
         if len(args) >= 3 and (args[2] == '--category' or args[2] == '-c'):
-            search_doc_entry_by_category(category_group_def, args[3])
+            search_doc_entry_by_category(category_group_def, grouping_doc_entries_deserializer, args[3])
             return
         if len(args) >= 3 and (args[2] == '--title' or args[2] == '-t'):
             search_doc_entry_by_title(dump_doc_data_accessor, category_group_def, args[3])
@@ -134,20 +142,19 @@ def execute_command(args: List[str]):
             ex_opts: List[str] = args[3:]
             is_draft = True if len(ex_opts) >= 1 and ('--draft' in ex_opts or '-d' in ex_opts) else False
             is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
-            is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_from_docs_to_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
                                          entry_summary_factory, args[3:], is_draft, is_title_escape)
             print('[Info] Success: pushed specified document to blog.')
             return
         if len(args) >= 3 and (args[2] == '--summary' or args[2] == '-s'):
-            is_success = put_hatena_summary_page(api_executor, category_group_def)
+            is_success = put_hatena_summary_page(api_executor, entry_summary_factory)
             if is_success:
                 print('[Info] Success: blog summary page updated')
             else:
                 print('[Error] Failure: blog summary page updated')
             return
     if len(args) >= 2 and (args[1] == '--blog-collect' or args[2] == '-bc'):
-        collect_hatena_entry_local_list(api_executor, dump_blog_data_accessor, category_group_def)
+        collect_hatena_entry_local_list(api_executor, dump_blog_data_accessor, entry_summary_factory)
         print('[Info] Success: blog entries collection')
         return
 
@@ -156,7 +163,7 @@ def execute_command(args: List[str]):
         print(api_executor.build_request_header())
         return
     if len(args) >= 2 and args[1] == '--update-summary':
-        update_blog_entry_summary_file(dump_blog_data_accessor)
+        update_blog_entry_summary_file(entry_summary_factory)
         return
     if len(args) >= 3 and args[1] == '--get-blog':
         hatena_blog_entry_id = args[2]
@@ -167,7 +174,7 @@ def execute_command(args: List[str]):
         show_hatena_photo_entry(blog_config, hatena_photo_entry_id)
         return
     if len(args) >= 2 and args[1] == '--show-blog-summary':
-        print(deserialize_grouping_blog_entries(category_group_def).convert_md_lines())
+        print(deserialize_grouping_blog_entries(dump_blog_data_accessor, category_group_def).convert_md_lines())
         return
     if len(args) >= 3 and args[1] == '--put-photo':
         doc_id = args[2]

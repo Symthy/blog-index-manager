@@ -88,6 +88,9 @@ class CategoryGroupDef:
             self.__grouping_categories[group].print_data()
 
     @classmethod
-    def load_category_group_def_yaml(cls) -> CategoryGroupDef:
-        json_data = load_yaml(CATEGORY_GROUP_YAML_PATH)  # return list
+    def load_category_group_def_yaml(cls, yml_path: str = None) -> CategoryGroupDef:
+        category_group_yml_path = CATEGORY_GROUP_YAML_PATH
+        if yml_path is not None:
+            category_group_yml_path = yml_path
+        json_data = load_yaml(category_group_yml_path)  # return list
         return CategoryGroupDef(json_data)

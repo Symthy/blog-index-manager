@@ -1,33 +1,35 @@
 from typing import List
 
-from docs.docs_backuper import sava_backup_doc_entry, retrieve_backup_doc_entry
-from docs.docs_grouping_deserializer import deserialize_grouping_doc_entries
+from docs.docs_backuper import DocsBackuper
+from docs.docs_grouping_data_deserializer import DocsGroupingDataDeserializer
 from domain.doc.doc_entry import DocEntry, DocEntries
 from domain.group_to_categories import GroupToCategorizedEntriesMap
 from dump.interface import IDumpEntriesAccessor
-from files.conf.category_group_def import CategoryGroupDef
 
 
-def retrieve_document_from_docs(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
-                                category_group_def: CategoryGroupDef, entry_ids: List[str]):
-    grouping_doc_entries: GroupToCategorizedEntriesMap = deserialize_grouping_doc_entries(
-        dump_doc_data_accessor, category_group_def)
-    for doc_entry_id in entry_ids:
-        if not dump_doc_data_accessor.has_entry(doc_entry_id):
-            print(f'[Error] Nothing specified document (id: {doc_entry_id})')
-            return
-        target_doc_entry = dump_doc_data_accessor.load_entry(doc_entry_id)
-        sava_backup_doc_entry(target_doc_entry)
-        grouping_doc_entries.remove_entry(category_group_def, target_doc_entry)
-    grouping_doc_entries.dump_docs_data()
+class DocEntryRetriever:
 
+    def __init__(self, dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
+                 docs_backuper: DocsBackuper, grouping_doc_entries_deserializer: DocsGroupingDataDeserializer):
+        self.__dump_doc_data_accessor = dump_doc_data_accessor
+        self.__docs_backuper = docs_backuper
+        self.__grouping_doc_entries_deserializer = grouping_doc_entries_deserializer
 
-def cancel_retrieving_document(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, DocEntry],
-                               category_group_def: CategoryGroupDef, entry_ids: List[str]):
-    group_to_categorized_entries: GroupToCategorizedEntriesMap = deserialize_grouping_doc_entries(
-        dump_doc_data_accessor, category_group_def)
-    for doc_entry_id in entry_ids:
-        retrieve_backup_doc_entry(doc_entry_id)
-        doc_entry = dump_doc_data_accessor.load_entry(doc_entry_id)
-        group_to_categorized_entries.add_entry(category_group_def, doc_entry)
-    group_to_categorized_entries.dump_docs_data()
+    def retrieve_document_from_docs(self, entry_ids: List[str]):
+        grouping_doc_entries: GroupToCategorizedEntriesMap = self.__grouping_doc_entries_deserializer.execute()
+        for doc_entry_id in entry_ids:
+            if not self.__dump_doc_data_accessor.has_entry(doc_entry_id):
+                print(f'[Error] Nothing specified document (id: {doc_entry_id})')
+                return
+            target_doc_entry = self.__dump_doc_data_accessor.load_entry(doc_entry_id)
+            self.__docs_backuper.sava_backup_doc_entry(target_doc_entry)
+            grouping_doc_entries.remove_entry(target_doc_entry)
+        grouping_doc_entries.dump_docs_data()
+
+    def cancel_retrieving_document(self, entry_ids: List[str]):
+        group_to_categorized_entries: GroupToCategorizedEntriesMap = self.__grouping_doc_entries_deserializer.execute()
+        for doc_entry_id in entry_ids:
+            self.__docs_backuper.retrieve_backup_doc_entry(doc_entry_id)
+            doc_entry = self.__dump_doc_data_accessor.load_entry(doc_entry_id)
+            group_to_categorized_entries.add_entry(doc_entry)
+        group_to_categorized_entries.dump_docs_data()

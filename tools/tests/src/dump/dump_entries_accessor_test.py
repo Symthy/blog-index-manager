@@ -1,19 +1,17 @@
-import os
-
 import pytest
 
 from domain.doc.doc_entry import DocEntry, DocEntries
 from dump.dump_entries_accessor import DumpEntriesAccessor
 from dump.dump_entry_accessor import DumpEntryAccessor
 from ltime.time_resolver import convert_entry_time_str_to_datetime
+from tools.tests.fixture.path_builder import build_test_data_path
 
 
 @pytest.fixture
 def docs_entries_accessor():
-    current_dir = os.getcwd()
-    dump_dir_path = os.path.join(current_dir, '../../test_data/tools/data/local_entry_data/'.replace('/', os.sep))
+    dump_dir_path = build_test_data_path('dump/data/local_entry_data/')
     docs_entry_accessor = DumpEntryAccessor(dump_dir_path, DocEntry.restore_from_json_data)
-    entry_list_path = os.path.join(current_dir, '../../test_data/tools/data/local_entry_list.json'.replace('/', os.sep))
+    entry_list_path = build_test_data_path('dump/data/local_entry_list.json')
     return DumpEntriesAccessor(entry_list_path, docs_entry_accessor, DocEntries.new_instance)
 
 

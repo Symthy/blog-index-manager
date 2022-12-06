@@ -118,6 +118,7 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
 
 class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
     def __init__(self, category_group_def: CategoryGroupDef, category_to_entries_map: CategoryToEntriesMap = None):
+        self.__category_group_def = category_group_def
         self.__sorted_groups: List[str] = []
         self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}  # key: group
         # initialize process
@@ -163,17 +164,17 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
         categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
         return categorized_entries.get_entries(None if category is None else category)
 
-    def add_entry(self, category_group_def: CategoryGroupDef, entry: IEntry):
-        group = category_group_def.get_belongs_group(entry.top_category)
+    def add_entry(self, entry: IEntry):
+        group = self.__category_group_def.get_belongs_group(entry.top_category)
         categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
         categorized_entries.add_entry(entry)
 
-    def add_entries(self, category_group_def: CategoryGroupDef, entries: IEntries):
+    def add_entries(self, entries: IEntries):
         for entry in entries.entry_list:
-            self.add_entry(category_group_def, entry)
+            self.add_entry(entry)
 
-    def remove_entry(self, category_group_def: CategoryGroupDef, entry: IEntry):
-        group = category_group_def.get_belongs_group(entry.top_category)
+    def remove_entry(self, entry: IEntry):
+        group = self.__category_group_def.get_belongs_group(entry.top_category)
         categorized_entries: GroupToCategorizedEntriesSet = self.__group_to_categorized_entries[group]
         categorized_entries.remove_entry(entry.top_category, entry.id)
 
