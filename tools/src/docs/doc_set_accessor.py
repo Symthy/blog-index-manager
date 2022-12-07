@@ -30,14 +30,15 @@ def get_md_file_name_in_target_dir(target_dir_path: str) -> Optional[str]:
     return None
 
 
-def resolve_entry_dir_path_in_work(entry_id: str) -> Optional[str]:
-    return __resolve_target_entry_dir_path(WORK_DIR_PATH, entry_id)
+# Todo: refactor classify
+def resolve_entry_dir_path_in_work(entry_id: str, work_dir_path: str = WORK_DIR_PATH) -> Optional[str]:
+    return __resolve_target_entry_dir_path(work_dir_path, entry_id)
 
 
 def __resolve_target_entry_dir_path(target_dir_path: str, entry_id: str) -> Optional[str]:
     files = os.listdir(target_dir_path)
     for dir_name in files:
-        dir_path = f'{target_dir_path}{dir_name}'
+        dir_path = os.path.join(target_dir_path, dir_name)
         if not is_dir(dir_path):
             continue
         id_opt = get_id_from_id_file(dir_path)

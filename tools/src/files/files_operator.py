@@ -27,7 +27,7 @@ def make_new_file(new_file_path: str, write_data: str = ''):
 
 
 def copy_dir(target_dir_path: str, copy_to_dir_path: str):
-    shutil.copytree(target_dir_path, copy_to_dir_path)
+    shutil.copytree(target_dir_path.replace('/', os.sep), copy_to_dir_path.replace('/', os.sep))
 
 
 def delete_dir(target_dir_path: str):

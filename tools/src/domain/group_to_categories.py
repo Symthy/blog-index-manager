@@ -3,7 +3,6 @@ from __future__ import annotations
 from functools import reduce
 from typing import List, Dict, Optional
 
-from common.constant import LOCAL_DOCS_ENTRY_GROUPING_PATH
 from domain.category_to_entries import CategoryToEntriesMap, CategoryToEntriesSet, NON_CATEGORY_GROUP_NAME
 from domain.interface import IConvertibleMarkdownLines, IEntry, IEntries
 from dump.interface import IDumpEntriesAccessor
@@ -117,8 +116,10 @@ class GroupToCategorizedEntriesSet(IConvertibleMarkdownLines):
 
 
 class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
-    def __init__(self, category_group_def: CategoryGroupDef, category_to_entries_map: CategoryToEntriesMap = None):
+    def __init__(self, category_group_def: CategoryGroupDef, category_to_entries_map: CategoryToEntriesMap = None,
+                 grouping_data_dump_file_path: str = None):
         self.__category_group_def = category_group_def
+        self.__grouping_data_dump_file_path = grouping_data_dump_file_path
         self.__sorted_groups: List[str] = []
         self.__group_to_categorized_entries: Dict[str, GroupToCategorizedEntriesSet] = {}  # key: group
         # initialize process
@@ -188,10 +189,12 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
                 lines = lines + __get_entries_for_md().convert_md_lines()
         return lines
 
+    # Todo: refactor outside
     def dump_docs_data(self):
-        self.dump_all_data(LOCAL_DOCS_ENTRY_GROUPING_PATH)
+        self.dump_all_data()
 
-    def dump_all_data(self, file_path):
+    # Todo: refactor outside
+    def dump_all_data(self):
         def build_entries_dump_data(entry_list: List[IEntry]):
             dump_entries = {}
             for entry in entry_list:
@@ -218,8 +221,10 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
                 dump_groups[group] = dump_categories_and_entries
             return dump_groups
 
+        if self.__grouping_data_dump_file_path is None:
+            return
         dump_all_data = build_group_to_categorized_entries_dump_data()
-        dump_json(file_path, dump_all_data)
+        dump_json(self.__grouping_data_dump_file_path, dump_all_data)
 
     def __add_group_to_categorized_entries(self, group: str,
                                            group_to_categorized_entries: GroupToCategorizedEntriesSet):
@@ -229,9 +234,10 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
     @classmethod
     def deserialize_grouping_entries_data(cls, dump_entries_accessor: IDumpEntriesAccessor,
                                           category_group_def: CategoryGroupDef,
-                                          group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]]) \
+                                          group_to_categorized_entries: Dict[str, Dict[str, Dict[str, str]]],
+                                          grouping_data_dump_file_path: str) \
             -> GroupToCategorizedEntriesMap:
-        self = GroupToCategorizedEntriesMap(category_group_def)
+        self = GroupToCategorizedEntriesMap(category_group_def, None, grouping_data_dump_file_path)
         for group in category_group_def.groups:
             category_to_entries = group_to_categorized_entries[group] if group in group_to_categorized_entries else None
             category_to_entries_map = CategoryToEntriesMap.deserialize_categorized_entries(
