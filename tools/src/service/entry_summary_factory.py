@@ -33,11 +33,11 @@ class EntrySummaryFactory:
         blog_entries: BlogEntries = self.__dump_blog_data_accessor.load_entries(blog_entry_ids)
         return blog_entries
 
-    def build_doc_entry_summary(self):
+    def build_doc_entry_summary(self) -> EntrySummary:
         grouping_entries_map = self.__grouping_doc_entries_deserializer.execute()
-        EntrySummary(self.resolve_pickup_doc_entries(), grouping_entries_map)
+        return EntrySummary(self.resolve_pickup_doc_entries(), grouping_entries_map)
 
-    def build_blog_entry_summary(self):
+    def build_blog_entry_summary(self) -> EntrySummary:
         grouping_entries_map = deserialize_grouping_blog_entries(self.__dump_blog_data_accessor,
                                                                  self.__category_group_def)
         return EntrySummary(self.resolve_pickup_blog_entries(), grouping_entries_map)

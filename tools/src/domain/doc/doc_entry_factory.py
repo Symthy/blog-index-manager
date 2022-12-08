@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import Optional, Dict
 
-from common.constant import ID_FILE_NAME_HEADER, CATEGORY_FILE_NAME
-from docs.doc_set_accessor import get_md_file_path_in_target_dir, get_doc_title_from_md_file, get_id_from_id_file
+from common.constant import CATEGORY_FILE_NAME
+from docs.doc_set_accessor import get_md_file_path_in_target_dir, get_doc_title_from_md_file, get_id_from_id_file, \
+    write_id_file
 from domain.doc.doc_entry import DocEntry, DocEntries
 from dump.interface import IDumpEntriesAccessor
-from files.file_accessor import write_text_line, read_text_file
+from files.file_accessor import read_text_file
 from files.files_operator import get_dir_name_from_dir_path, get_file_name_from_file_path
 from ltime.time_resolver import get_current_datetime, convert_datetime_to_time_sequence
 
@@ -35,8 +36,7 @@ def build_doc_entry(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, Doc
     entry_id: Optional[str] = get_id_from_id_file(target_dir_path)
     if entry_id is None:
         entry_id = convert_datetime_to_time_sequence(created_datetime)
-        id_file_path = f'{target_dir_path}/{ID_FILE_NAME_HEADER}{entry_id}'
-        write_text_line(id_file_path, entry_id)
+        write_id_file(target_dir_path, entry_id)
     doc_file_name = get_file_name_from_file_path(md_file_path)
     categories = read_text_file(target_dir_path + CATEGORY_FILE_NAME)
     created_at = created_datetime

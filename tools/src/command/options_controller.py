@@ -22,6 +22,8 @@ from service.local.doc_entry_pusher import push_documents_to_docs
 from service.local.doc_entry_retriever import DocEntryRetriever
 from service.local.doc_entry_searcher import search_doc_entry_by_group, search_doc_entry_by_category, \
     search_doc_entry_by_title
+from service.local.doc_entry_summary_writer import DocEntrySummaryWriter
+from service.local.doc_entry_updater import DocEntryUpdater
 from service.local.docs_initializer import initialize_docs_dir
 
 USAGE_CONTENT = """Document and Blog Entry Manager
@@ -49,6 +51,9 @@ OPTIONS:
   -r, --retrieve [<OPTS>] <DocEntryID>  retrieve document set from "docs" dir to "work" dir (and backup).
     OPTS: 
       -c, --cancel                      cancel retrieve (move the backup back to "docs" dir).
+  -d, --docs <OPTS>
+    OPTS (can't also specify the following together):
+      -pu, --pickup <DocEntryID>            toggle on/off of pickup in specified entry.                
   -b, --blog <OPTS>                     operation to your blog.
     OPTS (can't also specify the following together):                                
       -p, --push <DocEntryID>               post specified document to your blog.
@@ -73,10 +78,10 @@ def execute_command(args: List[str]):
     grouping_doc_entries_deserializer = DocsGroupingDataDeserializer(dump_doc_data_accessor, category_group_def)
     entry_summary_factory = EntrySummaryFactory(dump_doc_data_accessor, dump_blog_data_accessor, category_group_def,
                                                 grouping_doc_entries_deserializer)
+    doc_entry_summary_writer = DocEntrySummaryWriter(entry_summary_factory)
     docs_backuper = DocsBackuper()
 
     # TODO: refactor and add validation. use argparse (no use docopt. because last commit is old)
-    # local
     if len(args) >= 2 and (args[1] == '--init' or args[1] == '-i'):
         initialize_docs_dir(category_group_def)
         print('[Info] Success: created \"docs\" dir')
@@ -94,13 +99,14 @@ def execute_command(args: List[str]):
             is_title_escape = True if len(ex_opts) >= 1 and ('--title-escape' in ex_opts or '-te' in ex_opts) else False
             is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
             push_entry_to_docs_and_blog(api_executor, dump_blog_data_accessor, dump_doc_data_accessor,
-                                        category_group_def, entry_summary_factory, is_draft, is_title_escape, is_pickup,
-                                        target_dirs)
+                                        category_group_def, entry_summary_factory, doc_entry_summary_writer,
+                                        docs_backuper, grouping_doc_entries_deserializer,
+                                        is_draft, is_title_escape, is_pickup, target_dirs)
             print('[Info] Success: pushed document to docs dir and blog.')
             return
         ex_opts: List[str] = args[2:]
         is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
-        result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, entry_summary_factory,
+        result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, doc_entry_summary_writer,
                                         docs_backuper, grouping_doc_entries_deserializer, is_pickup, target_dirs)
         if result is None:
             print('[Warn] Non-exist specified document in work dir.')
@@ -135,6 +141,12 @@ def execute_command(args: List[str]):
     if len(args) >= 2 and (args[1] == '--organize' or args[1] == '-o'):
         print('[Error] Unimplemented')
         return
+
+    # local
+    if len(args) >= 2 and (args[1] == '--docs' or args == '-d'):
+        doc_entry_updater = DocEntryUpdater(dump_doc_data_accessor, doc_entry_summary_writer)
+        if len(args) >= 3 and (args[2] == '--pickup' or args[2] == '-pu'):
+            doc_entry_updater.update_pickup()
 
     # external
     if len(args) >= 2 and (args[1] == '--blog' or args[1] == '-b'):

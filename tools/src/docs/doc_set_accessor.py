@@ -2,7 +2,7 @@ import os
 from typing import Optional, List
 
 from common.constant import ID_FILE_NAME_HEADER, WORK_DIR_PATH
-from files.file_accessor import read_file_first_line
+from files.file_accessor import read_file_first_line, write_text_line
 from files.files_operator import get_file_paths_in_target_dir, is_file, get_files, is_dir
 
 
@@ -63,3 +63,8 @@ def get_image_file_paths_in_target_dir(target_dir_path: str) -> List[str]:
                 file_path.endswith('.svg'):
             image_file_paths.append(file_path)
     return image_file_paths
+
+
+def write_id_file(target_dir_path: str, entry_id: str):
+    id_file_path = f'{target_dir_path}/{ID_FILE_NAME_HEADER}{entry_id}'
+    write_text_line(id_file_path, entry_id)
