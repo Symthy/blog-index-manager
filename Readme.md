@@ -23,11 +23,12 @@
 ## Tool introduction
 
 required: Docker
+
 ### Initialize settings
 
-必要があれば、以下定義(Category Group 定義)を編集
+以下定義(ドキュメントをツリー構造で管理する上での Group(親) と Category(子) の 定義)を編集
 
-- tools/definitions/category_group.yml
+- conf/category_group.yml
 
 以下を実行
 
@@ -35,10 +36,11 @@ required: Docker
 ./initialize.sh
 ```
 
-以下を編集
+以下に自身のはてなブログの情報を設定
 
 - conf/blog.conf
-- tools/definitions/category_group.yml
+
+※ SUMMARY_ENTRY_ID には サマリーページとする1記事のIDを設定
 
 ### How to run tool
 
@@ -81,11 +83,11 @@ created by Python3 (最低限動確済)
 - document set: 1記事分のフォルダ及びフォルダに格納されるファイル一式を指す
     - 初期生成(-i, -init オプション)にてworkフォルダ直下に生成されるフォルダ（initialize.shで実行）
     - フォルダ名：初期生成時は現在時刻の数列。登録後は記事タイトルとなる。
-      - doc.md: 記事本体（ファイル名は変更可能）
-        - ファイル内の先頭行 "# ～" のうち "～" の部分を記事タイトルとして扱う
-      - category.txt: 記事に付与するカテゴリ用ファイル
-      - images: 記事に使用する画像を配置するためのフォルダ（ここに配置されなかったものは無効）
-      - .id_xxxxx: 内部的に付与するID (-p, -push実行時に付与。削除厳禁)
+        - doc.md: 記事本体（ファイル名は変更可能）
+            - ファイル内の先頭行 "# ～" のうち "～" の部分を記事タイトルとして扱う
+        - category.txt: 記事に付与するカテゴリ用ファイル
+        - images: 記事に使用する画像を配置するためのフォルダ（ここに配置されなかったものは無効）
+        - .id_xxxxx: 内部的に付与するID (-p, -push実行時に付与。削除厳禁)
 
 ### Usage:
 
@@ -96,25 +98,36 @@ USAGE:
   <command> [OPTIONS]
 
 OPTIONS:
-  -i, -init                            initialize docs directory (don't delete exist file and dir).
-  -n, -new [<OPTS>]                    new document set under "work" dir (create dir and files).
-    OPTS (can also specify the following together):
-      -t, -title <DocTitle>                specified document title (default: "Document").
-      -c, -category <CategoryName>         specified category (default: empty value).
-  -s, -search <OPTS>                   search document entry (show entry id, title, group, category).
+  -i, --init                            initialize docs directory (don't delete exist file and dir).
+  -n, --new [<OPTS>]                    new document set under "work" dir (create dir, md file and category file).
+    OPTS (can also specify the following together):                                
+      -t, --title <DocTitle>                specified document title (default: "doc").
+      -c, --category <CategoryName>         specified category (default: empty value).
+  -s, --search <OPTS>                   search document entry (show entry id, title, group, category).
     OPTS:
-      -g, -group <Group Name>              search by group name.
-      -c, -category <Category Name>        search by category name.
-      -t, -title <Keyword>                 search by title keyword (partial match).
-  -p, -push [<OPTS>] <DirName>         push document set from "work" dir to "docs" dir.
-    OPTS: -a, -all                         in addition to the above, post your blog.
-  -r, -retrieve [<OPTS>] <DocEntryID>  retrieve document set from "docs" dir to "work" dir (and backup).
-    OPTS: -c, -cancel                      cancel retrieve (move the backup back to "docs" dir).
-  -b, -blog <OPTS>                     operation to your blog.
+      -g, --group <Group Name>              search by group name.
+      -c, --category <Category Name>        search by category name.
+      -t, --title <Keyword>                 search by title keyword (partial match). 
+  -p, --push [<OPTS>] <DirName>         push document set from "work" dir to "docs" dir.
+    OPTS: 
+      -a, --all                         in addition to the above, post your blog.
+      -d, --draft                       post as draft entry.
+      -pu,--pickup                      post as pickup entry.
+      -te,--title-escape                escape the entry title.
+  -r, --retrieve [<OPTS>] <DocEntryID>  retrieve document set from "docs" dir to "work" dir (and backup).
+    OPTS: 
+      -c, --cancel                      cancel retrieve (move the backup back to "docs" dir).
+  -d, --docs <OPTS>
     OPTS (can't also specify the following together):
-      -c, -collect                         collect all blog entries from your blog.
-      -p, -push <DocEntryID>               post specified document to your blog.
-  -h, -help                            show usage.
+      -pu, --pickup <DocEntryID>            toggle on/off of pickup in specified entry.                
+  -b, --blog <OPTS>                     operation to your blog.
+    OPTS (can't also specify the following together):                                
+      -p, --push <DocEntryID>               post specified document to your blog.
+      -d, --draft                       post as draft entry.
+      -pu,--pickup                      post as pickup entry.
+      -te,--title-escape                escape the entry title.
+  -bc,--blog-collect                    collect all blog entries from your blog. (experimental function)
+  -h, --help                            show usage.
 ```
 
 機能一覧
@@ -146,13 +159,9 @@ Doc Entry ID    Doc Entry Title                  Group Name      Category Name  
 
 ※ ひとまずローカル -> ブログへの一方通行
 
-追加機能メモ
-
-- push時、id指定
-- push時、指定directory存在チェック
-- docsから管理用データ更新
-- ブログ投稿済み記事をdocsフォルダに保存(markdownのみサポート)
-
 ## used third party tools
 
-- HonBook (予定)
+候補
+
+- HonBook
+- [Obsidian](https://zenn.dev/usagizmo/articles/beb73159edbe68)
