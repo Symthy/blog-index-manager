@@ -101,7 +101,7 @@ def execute_command(args: List[str]):
         ex_opts: List[str] = args[2:]
         is_pickup = True if len(ex_opts) >= 1 and ('--pickup' in ex_opts or '-pu' in ex_opts) else False
         result = push_documents_to_docs(dump_doc_data_accessor, category_group_def, entry_summary_factory,
-                                        docs_backuper, is_pickup, target_dirs)
+                                        docs_backuper, grouping_doc_entries_deserializer, is_pickup, target_dirs)
         if result is None:
             print('[Warn] Non-exist specified document in work dir.')
         else:

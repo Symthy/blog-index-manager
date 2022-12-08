@@ -28,22 +28,25 @@ class GroupingCategories:
 class CategoryGroupDef:
     def __init__(self, json_data: List):
         self.__group_to_categories: Dict[str, List[str]] = {}
-        self.__grouping_categories: Dict[str, GroupingCategories] = {}
+        self.__group_to_grouping_categories: Dict[str, GroupingCategories] = {}
         self.__all_group_and_category: List[str] = []
         self.__category_to_group = {}  # key: category only. don't include group in key
         for json_field_group in json_data:
             if isinstance(json_field_group, str):
                 self.__group_to_categories[json_field_group] = []
-                self.__grouping_categories[json_field_group] = GroupingCategories(json_field_group)
+                self.__group_to_grouping_categories[json_field_group] = GroupingCategories(json_field_group)
                 self.__all_group_and_category.append(json_field_group)
             elif isinstance(json_field_group, dict):
                 for group, categories in json_field_group.items():
                     self.__group_to_categories[group] = categories
-                    self.__grouping_categories[group] = GroupingCategories(group, categories)
+                    self.__group_to_grouping_categories[group] = GroupingCategories(group, categories)
                     self.__all_group_and_category.append(group)
                     self.__all_group_and_category.extend(categories)
                     for category in categories:
                         self.__category_to_group[category] = group
+        if NON_CATEGORY_GROUP_NAME not in self.__group_to_categories.keys():
+            self.__group_to_categories[NON_CATEGORY_GROUP_NAME] = []
+            self.__group_to_grouping_categories[NON_CATEGORY_GROUP_NAME] = GroupingCategories(NON_CATEGORY_GROUP_NAME)
 
     @property
     def groups(self) -> List[str]:
@@ -55,7 +58,7 @@ class CategoryGroupDef:
 
     @property
     def grouping_categories(self) -> List[GroupingCategories]:
-        return [self.__grouping_categories[group] for group in self.groups]
+        return [self.__group_to_grouping_categories[group] for group in self.groups]
 
     def has_group_or_category(self, name) -> bool:
         return name in self.__all_group_and_category
@@ -73,7 +76,7 @@ class CategoryGroupDef:
         return name in self.categories
 
     def get_categories(self, group: str) -> List[str]:
-        return self.__grouping_categories[group].categories
+        return self.__group_to_grouping_categories[group].categories
 
     def get_belongs_group(self, category: str) -> str:
         if category in self.__category_to_group:
@@ -85,12 +88,10 @@ class CategoryGroupDef:
     def print_data(self):
         # for debug
         for group in self.groups:
-            self.__grouping_categories[group].print_data()
+            self.__group_to_grouping_categories[group].print_data()
 
     @classmethod
-    def load_category_group_def_yaml(cls, yml_path: str = None) -> CategoryGroupDef:
-        category_group_yml_path = CATEGORY_GROUP_YAML_PATH
-        if yml_path is not None:
-            category_group_yml_path = yml_path
+    def load_category_group_def_yaml(cls, yml_path: str = CATEGORY_GROUP_YAML_PATH) -> CategoryGroupDef:
+        category_group_yml_path = yml_path
         json_data = load_yaml(category_group_yml_path)  # return list
         return CategoryGroupDef(json_data)

@@ -93,7 +93,9 @@ class CategoryToEntriesMap(IConvertibleMarkdownLines):
     def is_exist_category(self, category) -> bool:
         return category in self.__category_to_entries
 
-    def get_category_to_entries_set(self, category: str = None) -> CategoryToEntriesSet:
+    def get_category_to_entries_set(self, category: str) -> Optional[CategoryToEntriesSet]:
+        if category not in self.__category_to_entries:
+            return None
         return self.__category_to_entries[category]
 
     def convert_md_lines(self) -> List[str]:

@@ -152,9 +152,11 @@ class GroupToCategorizedEntriesMap(IConvertibleMarkdownLines):
                                                 category_to_entries_map: CategoryToEntriesMap):
         for category in category_to_entries_map.categories:
             if not category_group_def.has_group_or_category(category):
-                category_to_entries_set = category_to_entries_map.get_category_to_entries_set(category)
+                category_to_entries_set_opt = category_to_entries_map.get_category_to_entries_set(category)
+                if category_to_entries_set_opt is None:
+                    continue
                 self.__group_to_categorized_entries[NON_CATEGORY_GROUP_NAME].add_category_to_entries_set(
-                    category_to_entries_set)
+                    category_to_entries_set_opt)
 
     def has_group(self, group) -> bool:
         return group in self.__group_to_categorized_entries
