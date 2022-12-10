@@ -49,7 +49,7 @@ def __resolve_target_entry_dir_path(target_dir_path: str, entry_id: str) -> Opti
 
 def get_md_file_path_in_target_dir(target_dir_path: str) -> Optional[str]:
     me_file_name_opt = get_md_file_name_in_target_dir(target_dir_path)
-    return target_dir_path + me_file_name_opt if me_file_name_opt is not None else None
+    return os.path.join(target_dir_path, me_file_name_opt) if me_file_name_opt is not None else None
     # files = glob.glob(f'{target_dir_path}/*' + extension)
     # return files[0] if len(files) > 0 else None
 

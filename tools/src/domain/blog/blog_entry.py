@@ -6,7 +6,7 @@ from typing import List, Optional, Dict
 from common.constant import NON_CATEGORY_GROUP_NAME
 from domain.blog.photo_entry import PhotoEntries
 from domain.interface import IEntries, IEntry
-from dump.entry_data_dumper import resolve_dump_field_data
+from dump.entry_data_dumper import resolve_dump_str_field
 from ltime.time_resolver import convert_datetime_to_entry_time_str, \
     convert_datetime_to_month_day_str, convert_entry_time_str_to_datetime
 
@@ -93,13 +93,13 @@ class BlogEntry(IEntry):
 
     def build_dump_data(self, json_data: Optional[object] = None) -> object:
         return {
-            BlogEntry.FIELD_ID: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_ID),
-            BlogEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TITLE),
-            BlogEntry.FIELD_PAGE_URL: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_PAGE_URL),
-            BlogEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_TOP_CATEGORY),
-            BlogEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_CATEGORIES),
-            BlogEntry.FIELD_UPDATED_AT: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_UPDATED_AT),
-            BlogEntry.FIELD_ORIGINAL_DOC_ID: resolve_dump_field_data(self, json_data, BlogEntry.FIELD_ORIGINAL_DOC_ID),
+            BlogEntry.FIELD_ID: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_ID),
+            BlogEntry.FIELD_TITLE: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_TITLE),
+            BlogEntry.FIELD_PAGE_URL: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_PAGE_URL),
+            BlogEntry.FIELD_TOP_CATEGORY: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_TOP_CATEGORY),
+            BlogEntry.FIELD_CATEGORIES: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_CATEGORIES),
+            BlogEntry.FIELD_UPDATED_AT: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_UPDATED_AT),
+            BlogEntry.FIELD_ORIGINAL_DOC_ID: resolve_dump_str_field(self, json_data, BlogEntry.FIELD_ORIGINAL_DOC_ID),
             BlogEntry.FIELD_DOC_IMAGES: self.__doc_images.build_dump_data(),
         }
 

@@ -1,0 +1,13 @@
+{
+  "id": "20221201030000",
+  "title": "test doc 4",
+  "dir_path": "./test_data/service/local/pusher/docs/Others/test_doc_4",
+  "doc_file_name": "doc.md",
+  "top_category": "",
+  "categories": [
+    ""
+  ],
+  "pickup": false,
+  "created_at": "2022-12-01T03:00:00",
+  "updated_at": ""
+}

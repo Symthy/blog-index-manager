@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from typing import Optional, Dict
 
@@ -18,6 +19,9 @@ def build_doc_entries(dump_doc_data_accessor: IDumpEntriesAccessor[DocEntries, D
         docs_entry_opt = build_doc_entry(dump_doc_data_accessor, from_path, to_path, is_pickup)
         if docs_entry_opt is not None:
             docs_entry_list.append(docs_entry_opt)
+        # It is necessary to wait for more than 1 second when registering multiple entry.
+        # because entry id is datetime (minimum unit is seconds)...
+        time.sleep(1)
     return DocEntries(docs_entry_list)
 
 

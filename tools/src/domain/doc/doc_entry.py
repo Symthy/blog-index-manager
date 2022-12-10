@@ -5,7 +5,7 @@ from typing import List, Optional, Dict
 
 from common.constant import NON_CATEGORY_GROUP_NAME
 from domain.interface import IEntry, IEntries
-from dump.entry_data_dumper import resolve_dump_field_data
+from dump.entry_data_dumper import resolve_dump_str_field, resolve_dump_bool_field
 from ltime.time_resolver import convert_datetime_to_month_day_str, convert_datetime_to_entry_time_str, \
     convert_entry_time_str_to_datetime
 
@@ -34,23 +34,23 @@ class DocEntry(IEntry):
         self.__updated_at: Optional[datetime] = updated_at
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.__id
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.__title
 
     @property
-    def dir_path(self):
+    def dir_path(self) -> str:
         return self.__dir_path
 
     @property
-    def doc_file_name(self):
+    def doc_file_name(self) -> str:
         return self.__doc_file_name
 
     @property
-    def categories(self):
+    def categories(self) -> List[str]:
         return self.__categories
 
     @property
@@ -58,7 +58,7 @@ class DocEntry(IEntry):
         return self.__top_category
 
     @property
-    def is_pickup(self) -> bool:
+    def pickup(self) -> bool:
         return self.__pickup
 
     @property
@@ -80,16 +80,17 @@ class DocEntry(IEntry):
         return f'- [{self.title}]({self.dir_path}{self.doc_file_name})'
 
     def build_dump_data(self, json_data=None) -> object:
+        # Todo: refactor
         return {
-            DocEntry.FIELD_ID: resolve_dump_field_data(self, json_data, DocEntry.FIELD_ID),
-            DocEntry.FIELD_TITLE: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TITLE),
-            DocEntry.FIELD_DIR_PATH: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DIR_PATH),
-            DocEntry.FIELD_DOC_FILE_NAME: resolve_dump_field_data(self, json_data, DocEntry.FIELD_DOC_FILE_NAME),
-            DocEntry.FIELD_TOP_CATEGORY: resolve_dump_field_data(self, json_data, DocEntry.FIELD_TOP_CATEGORY),
-            DocEntry.FIELD_CATEGORIES: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CATEGORIES),
-            DocEntry.FIELD_PICKUP: resolve_dump_field_data(self, json_data, DocEntry.FIELD_PICKUP),
-            DocEntry.FIELD_CREATED_AT: resolve_dump_field_data(self, json_data, DocEntry.FIELD_CREATED_AT),
-            DocEntry.FIELD_UPDATED_AT: resolve_dump_field_data(self, json_data, DocEntry.FIELD_UPDATED_AT),
+            DocEntry.FIELD_ID: resolve_dump_str_field(self, json_data, DocEntry.FIELD_ID),
+            DocEntry.FIELD_TITLE: resolve_dump_str_field(self, json_data, DocEntry.FIELD_TITLE),
+            DocEntry.FIELD_DIR_PATH: resolve_dump_str_field(self, json_data, DocEntry.FIELD_DIR_PATH),
+            DocEntry.FIELD_DOC_FILE_NAME: resolve_dump_str_field(self, json_data, DocEntry.FIELD_DOC_FILE_NAME),
+            DocEntry.FIELD_TOP_CATEGORY: resolve_dump_str_field(self, json_data, DocEntry.FIELD_TOP_CATEGORY),
+            DocEntry.FIELD_CATEGORIES: resolve_dump_str_field(self, json_data, DocEntry.FIELD_CATEGORIES),
+            DocEntry.FIELD_PICKUP: resolve_dump_bool_field(self, json_data, DocEntry.FIELD_PICKUP),
+            DocEntry.FIELD_CREATED_AT: resolve_dump_str_field(self, json_data, DocEntry.FIELD_CREATED_AT),
+            DocEntry.FIELD_UPDATED_AT: resolve_dump_str_field(self, json_data, DocEntry.FIELD_UPDATED_AT),
         }
 
     @classmethod
@@ -131,6 +132,9 @@ class DocEntries(IEntries):
     def entry_list(self) -> List[DocEntry]:
         return self.__entries
 
+    def size(self) -> int:
+        return len(self.__entries)
+
     def is_empty(self) -> bool:
         return len(self.__entries) == 0
 
@@ -149,7 +153,7 @@ class DocEntries(IEntries):
     def get_pickup_entries(self) -> List[DocEntry]:
         pickup_entries: List[DocEntry] = []
         for entry in self.__entries:
-            if entry.is_pickup:
+            if entry.pickup:
                 pickup_entries.append(entry)
         return pickup_entries
 

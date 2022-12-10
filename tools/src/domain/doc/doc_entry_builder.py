@@ -13,7 +13,7 @@ class DocEntryBuilder:
             self.__dir_path = doc_entry.dir_path
             self.__doc_file_name = doc_entry.doc_file_name
             self.__categories = doc_entry.categories
-            self.__pickup = doc_entry.is_pickup
+            self.__pickup = doc_entry.pickup
             self.__created_at: Optional[datetime] = convert_entry_time_str_to_datetime(doc_entry.created_at)
             self.__updated_at: Optional[datetime] = convert_entry_time_str_to_datetime(doc_entry.updated_at)
 
