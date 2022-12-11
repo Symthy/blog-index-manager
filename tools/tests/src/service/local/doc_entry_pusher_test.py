@@ -100,3 +100,4 @@ def test_push_documents_to_docs(mocker):
             assert False
         assert os.path.exists(
             f'./test_data/service/local/pusher/data/local_entry_data/{entry.id}.json'.replace('/', os.sep))
+    # Todo: validate in file
