@@ -5,7 +5,7 @@ __pycache__/
 
 conf/blog.conf
 conf/access_token.conf
-SUMMARY.md
+./SUMMARY.md
 out/
 
 tools/data/hatena_entry_data/
