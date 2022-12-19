@@ -1,0 +1,19 @@
+{
+  "id": "4207112889946390937",
+  "title": "【マイクロサービス】可観測性と OpenTelemetry (基本のみ)",
+  "page_url": "https://symthy.hatenablog.com/entry/2022/12/19/134942",
+  "top_category": "MicroArchit",
+  "categories": [
+    "MicroArchit"
+  ],
+  "updated_at": "2022-12-19T13:49:43",
+  "original_doc_id": "20221219134936",
+  "doc_images": {
+    "image1.png": {
+      "id": "20221219134936",
+      "syntax": "f:id:SYM_simu:20221219134936p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20221219/20221219134936.png",
+      "updated_at": "2022-12-19T13:49:42"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 - Architecture
   - MicroArchit
     - [マイクロサービスアーキテクチャ メモ](https://symthy.hatenablog.com/entry/2022/05/11/190352) (2022/05)
+    - [【マイクロサービス】可観測性と OpenTelemetry (基本のみ)](https://symthy.hatenablog.com/entry/2022/12/19/134942) (2022/12)
 - Program
   - Java
     - [Java Assertj + Mockito](https://symthy.hatenablog.com/entry/2022/01/29/233929) (2022/02)
@@ -65,8 +66,6 @@
 - Tools
 - Roadmap
 - Management
-  - Product Manage
-    - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)
 - Job
   - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](https://symthy.hatenablog.com/entry/2022/06/11/215213) (2022/06)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](https://symthy.hatenablog.com/entry/2022/06/19/215508) (2022/06)
@@ -77,6 +76,8 @@
   - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](https://symthy.hatenablog.com/entry/2022/11/08/001801) (2022/11)
   - [PokeRest 設計＆今後の方針 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/27/225949) (2022/11)
 - Others
+  - Product Manage
+    - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)

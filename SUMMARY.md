@@ -1,6 +1,7 @@
 - Architecture
   - MicroArchit
     - [マイクロサービスアーキテクチャ メモ](./docs/Architecture/MicroArchit/マイクロサービスアーキテクチャ_メモ/doc.md)
+    - [【マイクロサービス】可観測性と OpenTelemetry (基本のみ)](./docs/Architecture/MicroArchit/【マイクロサービス】可観測性と_OpenTelemetry_(基本のみ)/doc.md)
 - Program
   - Golang
     - [Golang Generics](./docs/Program/Golang/Golang_Generics/doc.md)
@@ -67,8 +68,6 @@
 - Roadmap
   - [Front End Road Map](./docs/Roadmap/Front_End_Road_Map/FrotEnd_RoadMap.md)
 - Management
-  - Product Manage
-    - [プロダクトマネジメント Link Stack](./docs/Management/Product Manage/プロダクトマネジメント_Link_Stack/doc.md)
 - Job
   - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](./docs/Job/Job：_Golang_で_ログローテートと設定ファイル読み込み改修_取捨選択＆実装/doc.md)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](./docs/Job/PlantUML_ガントチャート_を活用してスクラムでのプチ進捗管理を行い見える化を進めたい/doc.md)
@@ -77,7 +76,6 @@
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](./docs/Portfolio/個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記/doc.md)
   - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](./docs/Portfolio/【gRPC】Connect_が作られた背景概要／これまでの_gRPC-Web／Connect_でできること/doc.md)
   - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](./docs/Portfolio/某社フロントエンドコーディング試験を題材とした_React_学習記（作成時の考慮事項まとめ）/doc.md)
-  - [PokeRest 設計＆今後の方針 【執筆中】](./docs/Portfolio/PokeRest_設計＆今後の方針_【執筆中】/doc.md)
 - Others
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](./docs/Others/Refactor/Refactor_Diary_1_(Java：_APIレスポンス解析)/doc.md)
