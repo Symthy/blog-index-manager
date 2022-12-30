@@ -74,12 +74,14 @@
   - [個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記](https://symthy.hatenablog.com/entry/2022/01/23/192229) (2022/01)
   - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](https://symthy.hatenablog.com/entry/2022/09/24/160309) (2022/09)
   - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](https://symthy.hatenablog.com/entry/2022/11/08/001801) (2022/11)
-  - [PokeRest 設計＆今後の方針 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/27/225949) (2022/11)
+  - [PokeRest 設計＆今後の方針 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/27/225949) (2022/12)
 - Others
   - Product Manage
     - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)
   - Refactor
     - [Refactor Diary 1 (Java: APIレスポンス解析)](https://symthy.hatenablog.com/entry/2022/05/21/005909) (2022/05)
+  - 振り返り
+    - [2022 振り返り](https://symthy.hatenablog.com/entry/2022/12/30/224927) (2022/12)
   - [エンジニアを分類する3タイプから考える自身のタイプとその先と](https://symthy.hatenablog.com/entry/2022/03/07/005532) (2022/03)
   - [はてなブログ投稿自動化 メモ](https://symthy.hatenablog.com/entry/2022/05/14/001912) (2022/05)
   - [OpenID Connect 概要まとめ (In progress)](https://symthy.hatenablog.com/entry/2022/05/26/003822) (2022/05)
