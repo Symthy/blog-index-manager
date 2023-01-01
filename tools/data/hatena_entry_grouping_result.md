@@ -75,6 +75,7 @@
   - [【gRPC】Connect が作られた背景概要／これまでの gRPC-Web／Connect でできること](https://symthy.hatenablog.com/entry/2022/09/24/160309) (2022/09)
   - [某社フロントエンドコーディング試験を題材とした React 学習記（作成時の考慮事項まとめ）](https://symthy.hatenablog.com/entry/2022/11/08/001801) (2022/11)
   - [PokeRest 設計＆今後の方針 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/27/225949) (2022/12)
+  - [Git Review Comment Acumulator 企画/設計](https://symthy.hatenablog.com/entry/2022/12/31/161648) (2022/12)
 - Others
   - Product Manage
     - [プロダクトマネジメント Link Stack](https://symthy.hatenablog.com/entry/2022/05/14/005653) (2022/05)

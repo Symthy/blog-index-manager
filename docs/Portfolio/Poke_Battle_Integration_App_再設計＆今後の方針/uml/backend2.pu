@@ -1,0 +1,64 @@
+@startuml
+
+node Server {
+    interface _ as ServerEntrance
+    component "Nginx" as ApiGateway << subsystem >> 
+    ServerEntrance --> ApiGateway
+
+    component "User Battle Data Mgmt Service" as UserBattleServ << subsystem >> {
+        component "App Root Module" as AppRootModule 
+        
+        package 認証要 #line.dotted; {
+            component "Battle Data Mgmt Module" as BattleMgmtModule
+            component "User Authorication Module" as AuthModule
+            AppRootModule --> BattleMgmtModule
+            AppRootModule -> AuthModule
+        }
+
+        package 認証不要 as nonAuth1 #line.dotted; {
+            component "Damage Calculation Module" as DamangeCalcModule
+            AppRootModule --> DamangeCalcModule
+        }
+
+        component "Base Data Adaptor Module" as BaseDataAdaptorModule
+        BattleMgmtModule --> BaseDataAdaptorModule
+        DamangeCalcModule --> BaseDataAdaptorModule
+    }
+    ApiGateway --> AppRootModule
+    AppRootModule -> BaseDataAdaptorModule
+
+    package 認証不要 as nonAuth2 #line.dotted; {
+        component "Base Data Cache Service" as CacheServ << subsystem >>
+        interface gRPC as gRPCCacheServ
+        gRPCCacheServ -- CacheServ
+    }
+    BaseDataAdaptorModule -( gRPCCacheServ
+
+    database DB {
+        database BaseDataSchema #line.dotted;
+        database UserDatanSchema
+        database BattleDataSchema
+
+        note bottom of BaseDataSchema
+            用意するか未定
+        end note
+    }
+    CacheServ --> BaseDataSchema
+    AuthModule --> UserDatanSchema
+    BattleMgmtModule --> BattleDataSchema
+
+}
+
+
+Client --( ServerEntrance
+
+CacheServ -(0- PokeAPI
+AuthModule -(0- ThirdPartyAuth
+
+node PokeAPI {
+}
+
+node "Third Party Auth API" as ThirdPartyAuth {
+}
+
+@enduml

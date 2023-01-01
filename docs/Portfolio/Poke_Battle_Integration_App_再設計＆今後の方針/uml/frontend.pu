@@ -1,0 +1,60 @@
+@startuml
+
+node "Client(WebBrowser)" as Client {
+    component SPA {
+        package ログイン不要 #line.dotted; {
+            component 基本データ検索表示 as BaseView
+            component ダメージ計算 as DamageView
+            component 対戦用ダメ計 as BattleCalcView
+
+            BaseView - DamageView
+        }
+        package 両対応 #line.dotted; { 
+            component 育成個体管理 as TrainedView
+            component パーティ管理 as PartyView
+
+            TrainedView - PartyView
+        }
+        note bottom 
+            保存先：
+            ゲストはIndexedDBのみ
+            ログインユーザはServer選択可
+        end note
+        BaseView -- TrainedView
+
+        package ログイン要 #line.dotted; { 
+            component 対戦記録 as RecordView
+        }
+        BattleCalcView ---- TrainedView
+        BattleCalcView -- PartyView
+        BattleCalcView -- RecordView
+        PartyView - RecordView
+
+        interface ダメ計
+        interface 基本データ
+        component DamageCalcApiClient
+        component BaseDataApiClient
+        DamageView ----( ダメ計
+        BattleCalcView ----( ダメ計
+        BaseView ----( 基本データ
+        ダメ計 -- DamageCalcApiClient
+        基本データ -- BaseDataApiClient
+        
+        component GraphQLApiClient
+        interface GraphQL
+        PartyView ---( GraphQL
+        TrainedView ---( GraphQL
+        RecordView --( GraphQL
+        GraphQL - GraphQLApiClient
+    }
+    database IndexedDB
+    TrainedView ..> IndexedDB
+
+}
+interface Server
+
+DamageCalcApiClient --( Server
+BaseDataApiClient --( Server
+GraphQLApiClient --( Server
+
+@enduml

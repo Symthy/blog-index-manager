@@ -1,0 +1,44 @@
+@startuml
+
+actor レビューイ as revuey
+actor レビュアー as reviewer
+reviewer -|> revuey
+
+
+actor Github
+actor Gitlab
+
+
+rectangle Application {
+
+    package Github/Gitlab_Access as Git {
+        usecase ユーザ情報を確認する as uc1
+        usecase リポジトリを閲覧する as uc2
+        usecase PRorMRを閲覧する as uc3
+        usecase コメントを閲覧する as uc4
+        usecase 表示を絞る as uc5
+
+        uc2 <.. uc3 : extends
+        uc3 <.. uc4 : extends
+        uc2 <. uc5 : include
+        uc3 <. uc5 : include
+        uc4 <. uc5 : include
+    }
+
+    package Unique {
+        usecase 特定のコメントを保存する as uce1
+        usecase 保存したコメントを検索する as uce2
+        usecase タグ付けする as uce3
+
+        uce1 <... uce2 : include
+        uce1 <.. uce3 : include
+    }
+
+}
+revuey --> uc1
+revuey --> uc2
+revuey -> uce1
+
+Github <-- Git
+Gitlab <-- Git
+@enduml

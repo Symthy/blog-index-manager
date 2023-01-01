@@ -1,0 +1,77 @@
+@startuml
+
+component Webブラウザ as Frontend {
+
+    component SPA {
+        component ログイン画面 as loginView
+        note right
+            アクセストークン入力
+        end note
+
+        component 保存コメント表示画面 as StockedCommentView {
+            component 一覧表示 as listView
+            component エクスポート as exporter
+            listView -> exporter
+        }
+
+        component レビュー指摘閲覧画面 as GitView {
+            component リポジトリ選択 as repositoryView
+            component "PR/MR選択" as prmrView
+            component レビューコメント一覧 as commentView
+
+            component sideView [コメント保存
+            サイドビュー]
+        }
+
+        component GithubClient
+        component GitlabClient
+
+        loginView ..> GithubClient
+        loginView ..> GitlabClient
+
+        loginView --> StockedCommentView
+        StockedCommentView <---> GitView
+        repositoryView --> prmrView
+        prmrView --> commentView
+        commentView --> sideView
+
+        GitView ..> GithubClient
+        GitView ...> GitlabClient
+
+        component DataStoreClient
+        StockedCommentView .> DataStoreClient
+        sideView .> DataStoreClient
+    }
+
+    interface DBWrapper
+    database IndexedDB
+    DBWrapper - IndexedDB
+}
+
+node Backend #line.dashed; {
+    component Hasura
+    database postgres
+
+    Hasura -> postgres
+}
+note top of Backend
+使用は任意で
+切替可とする
+end note
+interface GraphQL as MyGraphQL
+MyGraphQL --> Hasura
+
+component Github
+interface GraphQL as GithubGraphQL
+GithubGraphQL )- Github
+
+component Gitlab
+interface GraphQL as GitlabGraphQL
+GitlabGraphQL )- Gitlab
+
+
+GithubClient --> GithubGraphQL
+GitlabClient --> GitlabGraphQL
+DataStoreClient --( DBWrapper
+DataStoreClient --( MyGraphQL
+@enduml

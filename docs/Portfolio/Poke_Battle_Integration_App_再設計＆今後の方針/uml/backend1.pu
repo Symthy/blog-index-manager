@@ -1,0 +1,67 @@
+@startuml
+
+node Server {
+    interface _ as ServerEntrance
+    component "Nginx" as ApiGateway << subsystem >> 
+    ServerEntrance --> ApiGateway
+
+    component "Middle Query Service" as MiddleServ << subsystem >> 
+    interface GraphQL as GraphQLMiddleServ
+    GraphQLMiddleServ - MiddleServ
+    ApiGateway -( GraphQLMiddleServ
+
+    package 認証不要 #line.dotted; {
+        component "Base Data Cache Service" as CacheServ << subsystem >>
+        interface gRPC as ConnectCacheServ
+        ConnectCacheServ -- CacheServ
+
+        component "Damage Calculation Service" as DamangeCalcServ << subsystem >>
+        interface API as DamageCalcAPI
+        DamageCalcAPI -- DamangeCalcServ
+        DamangeCalcServ --( ConnectCacheServ
+        
+    }
+    MiddleServ --( ConnectCacheServ
+
+    package 認証要 #line.dotted; { 
+        component "Battle Data Mgmt Service" as BattleMgmtServ << subsystem >>
+        interface GraphQL as GraphQLBattleMgmtServ
+        GraphQLBattleMgmtServ -- BattleMgmtServ
+
+        component "User Authorication Service" as AuthServ << subsystem >>
+        interface API as UserAPI
+        UserAPI -- AuthServ
+    }
+    MiddleServ --( GraphQLBattleMgmtServ
+
+    database DB {
+        database BaseDataSchema #line.dotted;
+        database UserDatanSchema
+        database BattleDataSchema
+        note bottom of BaseDataSchema
+            用意するか未定
+        end note
+    }
+    CacheServ --> BaseDataSchema
+    AuthServ --> UserDatanSchema
+    BattleMgmtServ --> BattleDataSchema
+
+    ApiGateway --( UserAPI
+    ApiGateway -( DamageCalcAPI
+
+    MiddleServ -( UserAPI
+    BattleMgmtServ -( ConnectCacheServ
+}
+
+Client --( ServerEntrance
+
+CacheServ -(0- PokeAPI
+AuthServ -(0- ThirdPartyAuth
+
+node PokeAPI {
+}
+
+node "Third Party Auth API" as ThirdPartyAuth {
+}
+
+@enduml
