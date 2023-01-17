@@ -1,12 +1,12 @@
 {
   "id": "20221115002425",
-  "title": "Java - HttpClient への SSL 実装での javax.net.ssl.\\* プロパティについて (+Quarkus 少々)",
-  "dir_path": "./docs/Program/Java/Java_-_HttpClient_への_SSL_実装での_javax.net.ssl.\\＊_プロパティについて_(+Quarkus_少々)/",
+  "title": "Java - HttpClient への SSL 実装での javax.net.ssl プロパティについて (+Quarkus 少々)",
+  "dir_path": "./docs/Program/Java/Java_-_HttpClient_への_SSL_実装での_javax.net.ssl_プロパティについて_(+Quarkus_少々)/",
   "doc_file_name": "doc.md",
   "top_category": "Java",
   "categories": [
     "Java"
   ],
   "created_at": "2022-11-15T00:24:25",
-  "updated_at": ""
+  "updated_at": "2023-01-18T00:33:15"
 }

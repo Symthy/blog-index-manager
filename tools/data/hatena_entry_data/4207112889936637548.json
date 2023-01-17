@@ -1,12 +1,12 @@
 {
   "id": "4207112889936637548",
-  "title": "Java - HttpClient への SSL 実装での javax.net.ssl.\\* プロパティについて (+Quarkus 少々)",
+  "title": "Java - HttpClient への SSL 実装での javax.net.ssl プロパティについて (+Quarkus 少々)",
   "page_url": "https://symthy.hatenablog.com/entry/2022/11/15/002425",
   "top_category": "Java",
   "categories": [
     "Java"
   ],
-  "updated_at": "2022-11-15T00:24:25",
+  "updated_at": "2023-01-18T00:33:16",
   "original_doc_id": "20221115002425",
   "doc_images": {}
 }

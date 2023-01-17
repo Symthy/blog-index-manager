@@ -1,4 +1,4 @@
-# Java - HttpClient への SSL 実装での javax.net.ssl.\* プロパティについて (+Quarkus 少々)
+# Java - HttpClient への SSL 実装での javax.net.ssl プロパティについて (+Quarkus 少々)
 
 ## 前提知識メモ
 
@@ -100,6 +100,8 @@ NetHttpTransport.Builder に何もセットせず、すぐさま build() して�
 
 ※推測の域を出ないため要確認
 
+追記：javax.net.ssl.\* のシステムプロパティでトラストストアは適用できた。
+
 ■ 蛇足：Apache HttpComponents HttpClient
 
 ちょっと参考になりそうなのを見つけたためリンクのみ添付
@@ -124,12 +126,20 @@ ref: [プロパティ quarkus.http.ssl.certificate.key-store-file が機能せ�
 
 故に、実行時に javax.net.ssl.\* のシステムプロパティでトラストストア等を適用する必要がありそう。 ※それでもダメだった場合はソース上でトラストストア等を直接読み込んで、上記で触れた google-client-java-api では NetHttpTransport.Builder にセットすれば適用できそう。
 
+追記：javax.net.ssl.\* のシステムプロパティでトラストストアは適用されたため、トラストストアを読み込んで NetHttpTransport.Builder にセットするような処理を自前で用意する必要はなかった。
+
 また、認証局に OpenID Connect の認証を行うための仕組みが用意されており、OpenID Connect 時に使用する証明書を指定するためのプロパティが上記とは別に用意されている。
 
 [OPENID CONNECT (OIDC) AUTHORIZATION CODE FLOW MECHANISM](https://quarkus.io/guides/security-openid-connect-web-authentication)
+
+ただ、こちらのプロパティを使用すると、パスワードの指定も必須になってしまう。
+
+OIDC の際も、上記プロパティの指定が無ければ、javax.net.ssl.\* のシステムプロパティで適用されたトラストストアを使用し、こちらのケースではパスワード指定必須でないため、パスワード指定を避けたい場合はシステムプロパティを使用すると良い。
 
 ## さいごに
 
 SSL の実装を行ったことがこれまでなく、参考になりそうなとあるサービスのコードを見ていて、証明書検証有効時には特に証明書を読み込むような処理もなく、無効時には https://gist.github.com/kazuhira-r/bb3ca27bc6194ff4900e のような実質検証を行わないような実装となっており、Why? というところからスタートしてからここまで調べ、恐らく javax.net.ssl.truststore 等で証明書適用できる、できなかった場合の代替案としてどういう風にすれば適用できるかまで見れたのでひとまず良しとする。
 
 推測があっていたかは後日追記するかもしれない。
+
+追記：推測は合っていた

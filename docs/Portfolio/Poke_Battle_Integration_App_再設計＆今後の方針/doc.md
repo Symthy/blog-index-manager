@@ -1,10 +1,10 @@
 # Poke Battle Integration App 再設計＆今後の方針
 
-旧名：PokeRest から改名（REST API を止めたため）
+旧名：PokeRest から改名（リポジトリ：https://github.com/Symthy/poke-battle-data-mgmt-serv）
 
 ポ〇モン対戦のためのサービス開発
 
-最低限執筆完了。必要に応じて今後追記
+半年近くに渡っての開発での失敗、それを踏まえての構成再設計＆今後の方針を定義。合わせて何に立ち向かうのかを記載する。
 
 ## 背景/向き合う課題
 
