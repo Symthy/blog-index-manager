@@ -1,5 +1,5 @@
 {
-  "updated_time": "2023-01-18T00:33:15",
+  "updated_time": "2023-02-11T22:36:58",
   "entries": {
     "20220123190520": "個人用ドキュメント＆ブログ管理ツール(ガチめ)作成記",
     "20220123193352": "Golang Generics",
@@ -59,6 +59,7 @@
     "20221127225942": "Poke Battle Integration App 再設計＆今後の方針",
     "20221219134936": "【マイクロサービス】可観測性と OpenTelemetry (基本のみ)",
     "20221230224920": "2022 振り返り",
-    "20221231161635": "Git Review Comment Acumulator 企画/設計"
+    "20221231161635": "Git Review Comment Acumulator 企画/設計",
+    "20230211223658": "urql による Github & Gitlab の マルチクライアント 実現（サンプル）"
   }
 }
