@@ -48,6 +48,7 @@
     - [React Drag & Drop メモ](https://symthy.hatenablog.com/entry/2022/05/29/221733) (2022/05)
     - [Redux 基本](https://symthy.hatenablog.com/entry/2022/07/10/161318) (2022/07)
     - [React 実践のために調べまくったこと書き綴り まとめメモ](https://symthy.hatenablog.com/entry/2022/07/24/175816) (2022/07)
+    - [urql による Github ＆ Gitlab の マルチクライアント 実現（サンプル）](https://symthy.hatenablog.com/entry/2023/02/12/150031) (2023/02)
   - [フロントエンド 技術要素概要集](https://symthy.hatenablog.com/entry/2022/03/27/195235) (2022/03)
   - [storybook チュートリアル ＆ CDD（コンポーネント駆動開発）](https://symthy.hatenablog.com/entry/2022/07/10/154411) (2022/07)
   - [フロントエンド E2E テスト + MSW (Playwright/Cypress 試行) メモ](https://symthy.hatenablog.com/entry/2022/11/19/152009) (2022/11)
@@ -66,6 +67,8 @@
 - Tools
 - Roadmap
 - Management
+- StudyMeeting
+  - [データ指向アプリケーションデザイン 勉強会メモ](https://symthy.hatenablog.com/entry/2023/02/24/162653) (2023/02)
 - Job
   - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](https://symthy.hatenablog.com/entry/2022/06/11/215213) (2022/06)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](https://symthy.hatenablog.com/entry/2022/06/19/215508) (2022/06)

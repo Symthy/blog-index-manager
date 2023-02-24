@@ -1,4 +1,4 @@
-# urql による Github & Gitlab の マルチクライアント 実現（サンプル）
+# urql による Github ＆ Gitlab の マルチクライアント 実現（サンプル）
 
 ## はじめに
 

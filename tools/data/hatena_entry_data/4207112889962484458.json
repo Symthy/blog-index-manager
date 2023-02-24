@@ -1,0 +1,19 @@
+{
+  "id": "4207112889962484458",
+  "title": "urql による Github ＆ Gitlab の マルチクライアント 実現（サンプル）",
+  "page_url": "https://symthy.hatenablog.com/entry/2023/02/12/150031",
+  "top_category": "React",
+  "categories": [
+    "React"
+  ],
+  "updated_at": "2023-02-12T15:00:31",
+  "original_doc_id": "20230211223658",
+  "doc_images": {
+    "githab_gitlab_repositories.png": {
+      "id": "20230212150024",
+      "syntax": "f:id:SYM_simu:20230212150024p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230212/20230212150024.png",
+      "updated_at": "2023-02-12T15:00:31"
+    }
+  }
+}

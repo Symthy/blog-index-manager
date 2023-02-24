@@ -1,12 +1,12 @@
 {
   "id": "20230211223658",
-  "title": "urql による Github & Gitlab の マルチクライアント 実現（サンプル）",
-  "dir_path": "./docs/FrontEnd/React/urql_による_Github_&_Gitlab_の_マルチクライアント_実現（サンプル）/",
+  "title": "urql による Github ＆ Gitlab の マルチクライアント 実現（サンプル）",
+  "dir_path": "./docs/FrontEnd/React/urql_による_Github_＆_Gitlab_の_マルチクライアント_実現（サンプル）/",
   "doc_file_name": "doc.md",
   "top_category": "React",
   "categories": [
     "React"
   ],
   "created_at": "2023-02-11T22:36:58",
-  "updated_at": ""
+  "updated_at": "2023-02-12T14:57:30"
 }
