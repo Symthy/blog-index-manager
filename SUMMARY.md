@@ -71,6 +71,7 @@
 - Management
 - StudyMeeting
   - [データ指向アプリケーションデザイン 勉強会メモ](./docs/StudyMeeting/データ指向アプリケーションデザイン_勉強会メモ/doc.md)
+  - [分岐を低減する interface 設計](./docs/StudyMeeting/分岐を低減する_interface_設計/doc.md)
 - Job
   - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](./docs/Job/Job：_Golang_で_ログローテートと設定ファイル読み込み改修_取捨選択＆実装/doc.md)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](./docs/Job/PlantUML_ガントチャート_を活用してスクラムでのプチ進捗管理を行い見える化を進めたい/doc.md)
