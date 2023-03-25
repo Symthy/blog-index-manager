@@ -16,6 +16,7 @@
     - TDD
     - DDD
     - GraphQL
+    - gRPC
 - BackEnd:
     - DB
     - SQL

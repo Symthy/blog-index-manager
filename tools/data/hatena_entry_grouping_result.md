@@ -35,6 +35,8 @@
   - GraphQL
     - [GraphQLについてまとめる](https://symthy.hatenablog.com/entry/2022/05/06/230418) (2022/05)
     - [GraphQL 設計に関する知識メモ 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/25/074855) (2022/11)
+  - gRPC
+    - [gRPC：buf とは、buf でできること](https://symthy.hatenablog.com/entry/2023/03/26/010229) (2023/03)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)
@@ -69,6 +71,7 @@
 - Management
 - StudyMeeting
   - [データ指向アプリケーションデザイン 勉強会メモ](https://symthy.hatenablog.com/entry/2023/02/24/162653) (2023/02)
+  - [分岐を低減する interface 設計 勉強会メモ](https://symthy.hatenablog.com/entry/2023/03/05/165434) (2023/03)
 - Job
   - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](https://symthy.hatenablog.com/entry/2022/06/11/215213) (2022/06)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](https://symthy.hatenablog.com/entry/2022/06/19/215508) (2022/06)

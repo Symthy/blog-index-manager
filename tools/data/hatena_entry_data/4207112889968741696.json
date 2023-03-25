@@ -1,0 +1,79 @@
+{
+  "id": "4207112889968741696",
+  "title": "分岐を低減する interface 設計 勉強会メモ",
+  "page_url": "https://symthy.hatenablog.com/entry/2023/03/05/165434",
+  "top_category": "StudyMeeting",
+  "categories": [
+    "StudyMeeting"
+  ],
+  "updated_at": "2023-03-05T16:54:40",
+  "original_doc_id": "20230305164801",
+  "doc_images": {
+    "interface設計_0_題材仕様.png": {
+      "id": "20230305165319",
+      "syntax": "f:id:SYM_simu:20230305165319p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165319.png",
+      "updated_at": "2023-03-05T16:53:26"
+    },
+    "interface設計_10_全体構成.png": {
+      "id": "20230305165326",
+      "syntax": "f:id:SYM_simu:20230305165326p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165326.png",
+      "updated_at": "2023-03-05T16:53:33"
+    },
+    "interface設計_1_目的達成手段.png": {
+      "id": "20230305165333",
+      "syntax": "f:id:SYM_simu:20230305165333p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165333.png",
+      "updated_at": "2023-03-05T16:53:40"
+    },
+    "interface設計_2_構造ツリー.png": {
+      "id": "20230305165339",
+      "syntax": "f:id:SYM_simu:20230305165339p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165339.png",
+      "updated_at": "2023-03-05T16:53:47"
+    },
+    "interface設計_3_構造ツリー2.png": {
+      "id": "20230305165346",
+      "syntax": "f:id:SYM_simu:20230305165346p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165346.png",
+      "updated_at": "2023-03-05T16:53:53"
+    },
+    "interface設計_4_目的達成手段ツリー.png": {
+      "id": "20230305165353",
+      "syntax": "f:id:SYM_simu:20230305165353p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165353.png",
+      "updated_at": "2023-03-05T16:54:00"
+    },
+    "interface設計_5_仕様の分類.png": {
+      "id": "20230305165400",
+      "syntax": "f:id:SYM_simu:20230305165400p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165400.png",
+      "updated_at": "2023-03-05T16:54:08"
+    },
+    "interface設計_6_目的を抽象化.png": {
+      "id": "20230305165407",
+      "syntax": "f:id:SYM_simu:20230305165407p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165407.png",
+      "updated_at": "2023-03-05T16:54:14"
+    },
+    "interface設計_7_目的を抽象化2.png": {
+      "id": "20230305165414",
+      "syntax": "f:id:SYM_simu:20230305165414p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165414.png",
+      "updated_at": "2023-03-05T16:54:21"
+    },
+    "interface設計_8_目的を抽象化3.png": {
+      "id": "20230305165421",
+      "syntax": "f:id:SYM_simu:20230305165421p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165421.png",
+      "updated_at": "2023-03-05T16:54:28"
+    },
+    "interface設計_9_目的を抽象化4.png": {
+      "id": "20230305165427",
+      "syntax": "f:id:SYM_simu:20230305165427p:image",
+      "image_url": "https://cdn-ak.f.st-hatena.com/images/fotolife/S/SYM_simu/20230305/20230305165427.png",
+      "updated_at": "2023-03-05T16:54:34"
+    }
+  }
+}

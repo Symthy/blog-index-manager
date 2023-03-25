@@ -34,6 +34,8 @@
     - [DDD 実践メモ](./docs/Development/DDD/DDD_実践メモ/doc.md)
   - GraphQL
     - [GraphQLについてまとめる](./docs/Development/GraphQL/GraphQLについてまとめる/doc.md)
+  - gRPC
+    - [gRPC：buf とは、buf でできること](./docs/Development/gRPC/gRPC：buf_とは、buf_でできること/doc.md)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](./docs/BackEnd/ElasticStack/Elasticsearch_メモ/doc.md)
@@ -71,7 +73,7 @@
 - Management
 - StudyMeeting
   - [データ指向アプリケーションデザイン 勉強会メモ](./docs/StudyMeeting/データ指向アプリケーションデザイン_勉強会メモ/doc.md)
-  - [分岐を低減する interface 設計](./docs/StudyMeeting/分岐を低減する_interface_設計/doc.md)
+  - [分岐を低減する interface 設計 勉強会メモ](./docs/StudyMeeting/分岐を低減する_interface_設計_勉強会メモ/doc.md)
 - Job
   - [Job: Golang で ログローテートと設定ファイル読み込み改修 取捨選択＆実装](./docs/Job/Job：_Golang_で_ログローテートと設定ファイル読み込み改修_取捨選択＆実装/doc.md)
   - [PlantUML ガントチャート を活用してスクラムでのプチ進捗管理を行い見える化を進めたい](./docs/Job/PlantUML_ガントチャート_を活用してスクラムでのプチ進捗管理を行い見える化を進めたい/doc.md)
