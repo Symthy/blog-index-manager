@@ -1,0 +1,12 @@
+{
+  "id": "20230402151126",
+  "title": "gPRC: Protocol Buffers スタイル規約 & API ベストプラクティスまとめ",
+  "dir_path": "./docs/Development/gRPC/gPRC：_Protocol_Buffers_スタイル規約_&_API_ベストプラクティスまとめ/",
+  "doc_file_name": "doc.md",
+  "top_category": "gRPC",
+  "categories": [
+    "gRPC"
+  ],
+  "created_at": "2023-04-02T15:11:26",
+  "updated_at": ""
+}

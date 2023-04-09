@@ -35,8 +35,9 @@
   - GraphQL
     - [GraphQLについてまとめる](https://symthy.hatenablog.com/entry/2022/05/06/230418) (2022/05)
     - [GraphQL 設計に関する知識メモ 【執筆中】](https://symthy.hatenablog.com/entry/2022/11/25/074855) (2022/11)
+    - [GraphQL Code Generator まとめ](https://symthy.hatenablog.com/entry/2023/04/09/175659) (2023/04)
   - gRPC
-    - [gRPC：buf とは、buf でできること](https://symthy.hatenablog.com/entry/2023/03/26/010229) (2023/03)
+    - [gRPC：buf とは、buf でできること](https://symthy.hatenablog.com/entry/2023/03/26/010229) (2023/04)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)

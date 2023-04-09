@@ -45,19 +45,82 @@ Creating shim for 'buf'.
 PS C:\Users\sym>
 ```
 
-## 初期設定
+## 初期設定＆各種設定ファイル
 
-buf.yaml の作成
+モジュールの初期化　※buf.yaml が自動作成される
 
 ```bash
  buf mod init
 ```
 
+更新　※ buf.lock が自動生成/更新される
+
+```
+buf mod update
+```
+
+buf.gen.yaml と buf.work.yaml を作成
+
+### 設定ファイル
+
+- buf.yaml：モジュールの定義。名前、依存関係、lint や breaking の設定の定義
+  - buf mod init で作成。後は手で更新
+  - https://buf.build/docs/configuration/v1/buf-yaml/
+- buf.lock：モジュールの依存関係マニフェスト
+  - buf mod update で更新（手では触らない？）
+- buf.gen.yaml：buf generate コマンドで直接動作するローカルプラグインテンプレートの定義
+  - 手で作成
+  - https://buf.build/docs/configuration/v1/buf-gen-yaml/
+- buf.work.yaml：高度なローカル開発機能であるワークスペースの定義
+  - 手で作成
+  - https://buf.build/docs/configuration/v1/buf-work-yaml/
+
+### フォルダ構成例
+
+```sh
+.
+├── buf.work.yaml
+├── buf.gen.yaml
+├── paymentapis
+│   ├── acme
+│   │   └── payment
+│   │       └── v2
+│   │           └── payment.proto
+│   └── buf.yaml
+└── petapis
+    ├── acme
+    │   └── pet
+    │       └── v1
+    │           └── pet.proto
+    └── buf.yaml
+```
+
+```
+.
+├── buf.work.yaml
+├── buf.gen.yaml
+├── proto/
+│   ├── buf.md
+│   ├── buf.yaml
+│   ├── google
+│   │   └── type
+│   │       └── datetime.proto
+│   └── pet
+│       └── v1
+│           └── pet.proto
+```
+
 ## buf でできること
+
+サブコマンド一覧
+
+https://buf.build/docs/reference/cli/buf/
 
 ### 破壊的変更検出
 
 Protobuf スキーマの以前のバージョンを現在のバージョンと比較する
+
+設定は buf.yaml の breaking に行う。常に設定を行うこと推奨されている： https://buf.build/docs/breaking/overview/
 
 - git の main ブランチとの比較（buf.yaml がルートディレクトリ直下にある前提）
 

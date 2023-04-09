@@ -34,8 +34,11 @@
     - [DDD 実践メモ](./docs/Development/DDD/DDD_実践メモ/doc.md)
   - GraphQL
     - [GraphQLについてまとめる](./docs/Development/GraphQL/GraphQLについてまとめる/doc.md)
+    - [GraphQL Code Generator まとめ](./docs/Development/GraphQL/GraphQL_Code_Generator_まとめ/doc.md)
+    - [GraphQL 設計に関する知識メモ 【執筆中】](./docs/Development/GraphQL/GraphQL_設計に関する知識メモ_【執筆中】/doc.md)
   - gRPC
     - [gRPC：buf とは、buf でできること](./docs/Development/gRPC/gRPC：buf_とは、buf_でできること/doc.md)
+    - [gPRC: Protocol Buffers スタイル規約 & API ベストプラクティスまとめ](./docs/Development/gRPC/gPRC：_Protocol_Buffers_スタイル規約_&_API_ベストプラクティスまとめ/doc.md)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](./docs/BackEnd/ElasticStack/Elasticsearch_メモ/doc.md)
