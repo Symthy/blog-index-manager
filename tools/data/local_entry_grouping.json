@@ -46,12 +46,12 @@
     },
     "GraphQL": {
       "20220506230412": "GraphQLについてまとめる",
-      "20230409175658": "GraphQL Code Generator まとめ",
-      "20221125074848": "GraphQL 設計に関する知識メモ 【執筆中】"
+      "20221125074848": "GraphQL 設計に関する知識メモ 【執筆中】",
+      "20230409175658": "GraphQL Code Generator まとめ"
     },
     "gRPC": {
       "20230326010228": "gRPC：buf とは、buf でできること",
-      "20230402151126": "gPRC: Protocol Buffers スタイル規約 & API ベストプラクティスまとめ"
+      "20230520124944": "gPRC: Protocol Buffers スタイル規約 ＆ API ベストプラクティスまとめ"
     }
   },
   "BackEnd": {

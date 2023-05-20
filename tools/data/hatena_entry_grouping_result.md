@@ -38,6 +38,7 @@
     - [GraphQL Code Generator まとめ](https://symthy.hatenablog.com/entry/2023/04/09/175659) (2023/04)
   - gRPC
     - [gRPC：buf とは、buf でできること](https://symthy.hatenablog.com/entry/2023/03/26/010229) (2023/04)
+    - [gPRC: Protocol Buffers スタイル規約 ＆ API ベストプラクティスまとめ](https://symthy.hatenablog.com/entry/2023/05/20/124944) (2023/05)
 - BackEnd
   - ElasticStack
     - [Elasticsearch メモ](https://symthy.hatenablog.com/entry/2022/02/28/213158) (2022/02)

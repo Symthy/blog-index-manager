@@ -18,8 +18,8 @@
     └── foo
         └── bar
             ├── bat
-            │   └── v1
-            │       └── bat.proto // package foo.bar.bat.v1
+            │   └── v1
+            │       └── bat.proto // package foo.bar.bat.v1
             └── baz
                 └── v1
                     ├── baz.proto         // package foo.bar.baz.v1
@@ -224,7 +224,7 @@ service FooService {
 }
 ```
 
-※（議論の余地はあるが）RPC のストリーミングを避けることを推奨する。（これらは確かに非常に価値のある特定のユースケースを持っていますが、全体としては多くの問題を引き起こし、RPC フレームワークのロジックをスタックに押し上げるため、通常はより信頼性の高いアーキテクチャの開発を妨げる）
+※（議論の余地はあるが）RPC のストリーミングを避けることを推奨する。（これらは確かに非常に価値のある特定のユースケースを持っていますが、全 体としては多くの問題を引き起こし、RPC フレームワークのロジックをスタックに押し上げるため、通常はより信頼性の高いアーキテクチャの開発を妨げる）
 
 ## Proto ベストプラクティス
 
@@ -241,7 +241,7 @@ service FooService {
   - 以下の共通型、共有型を埋め込むことを強く推奨
     - Well-Known Types
       - [duration](https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/duration.proto)：符号付き固定長の時間スパン (例：42s)
-      - [timestamp](https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/timestamp.proto)：例  2017-01-15T01:30:15.01Z
+      - [timestamp](https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/timestamp.proto)：例 2017-01-15T01:30:15.01Z
       - [field_mask](https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/field_mask.proto)：指定のフィールドのみ取るためのもの
     - Common Types
       - [interval](https://github.com/googleapis/googleapis/blob/master/google/type/interval.proto)： 時間間隔（例：2017-01-15T01:30:15.01Z - 2017-01-16T02:30:15.01Z）
@@ -252,7 +252,7 @@ service FooService {
       - [money](https://github.com/googleapis/googleapis/blob/master/google/type/money.proto)： 例 42 USD
       - [postal_address](https://github.com/googleapis/googleapis/blob/master/google/type/postal_address.proto)：郵便の住所
       - [color](https://github.com/googleapis/googleapis/blob/master/google/type/color.proto)：RGBA カラースペース
-      - [month](https://github.com/googleapis/googleapis/blob/master/google/type/month.proto) ：例 April
+      - [month](https://github.com/googleapis/googleapis/blob/master/google/type/month.proto) ：例 April
   - 完全に適した共通型がすでに存在する場合、コード内で `int32 timestamp_seconds_since_epoch` や `int64 timeout_millis` を使用しない
 - 広く使用されることを期待する Message Type や Enum は別のファイルに定義し、誰でも簡単に使えるようにする
 - 削除されたフィールドのタグ番号は予約（reserved）して、後で誤って再使用しないようにする
@@ -282,7 +282,7 @@ ref: https://protobuf.dev/programming-guides/api/
   - コードをレイヤー化し、モジュールが client protos、storage protos、translation のいずれかを処理するように分ける
 - 例外
   - proto フィールドが google.type や google.protobuf のような一般的な型であれば、その型をストレージと API の両方として使用可
-  - 極めてパフォーマンスに敏感であれば、柔軟性を実行速度と引き換えにする価値があるかもしれない（ミリ秒単位のレイテンシーで数百万 QPS を実現？）
+  - 極めてパフォーマンスに敏感であれば、柔軟性を実行速度と引き換えにする価値があるかもしれない（ミリ秒単位のレイテンシーで数百万 QPS を実 現？）
   - 以下が全て当てはまる
     - サービスがストレージシステム
     - クライアントの構造化データに基づいた意思決定ができない
@@ -301,7 +301,7 @@ ref: https://protobuf.dev/programming-guides/api/
 ### トップレベルのリクエストまたはレスポンスの proto にプリミティブ型（基本のデータ型）を含めない
 
 - トップレベルの proto は、ほとんどの場合、独立して成長できる他のメッセージのコンテナである必要がある
-- 必要なプリミティブ型が 1 つだけの場合でも、メッセージにラップすることで、その型を拡張し、類似した値を返す他のメソッド間で型を共有するための明確なパスが得られる
+- 必要なプリミティブ型が 1 つだけの場合でも、メッセージにラップすることで、その型を拡張し、類似した値を返す他のメソッド間で型を共有するた めの明確なパスが得られる
 
 ```proto
 message MultiplicationResponse {
@@ -380,9 +380,9 @@ message InternalFooRef {
 
 ### Web-Safe Encoding Binary Proto Serialization で不透明なデータを文字列でエンコードする
 
-- クライアントから見えるフィールドの不透明なデータ(継続トークン、シリアル化された ID、バージョン情報など)をエンコードする場合は、クライアントが不透明な Blob として扱う必要があることを文書化する。
+- クライアントから見えるフィールドの不透明なデータ(継続トークン、シリアル化された ID、バージョン情報など)をエンコードする場合は、クライア ントが不透明な Blob として扱う必要があることを文書化する。
 - これらのフィールドには、必ずバイナリ形式のプロトシリアライゼーションを使用し、テキスト形式や独自の工夫をしない。不透明なフィールドにエンコードされたデータを拡張する必要がある場合、まだ使用していなければ、プロトコルバッファのシリアル化を再発明することになるため。
-- 不透明なフィールドに入るフィールドを保持する内部 proto を定義し (フィールドが 1 つだけ必要な場合でも) 、この内部 proto をバイトにシリアル化し、その結果を web-safe base-64 で文字列フィールドにエンコードします。
+- 不透明なフィールドに入るフィールドを保持する内部 proto を定義し (フィールドが 1 つだけ必要な場合でも) 、この内部 proto をバイトにシリア ル化し、その結果を web-safe base-64 で文字列フィールドにエンコードします。
 - プロトシリアライゼーションを使用するまれな例外：非常に時折、慎重に構築された代替形式からのコンパクトさの勝利は価値がある。
 
 ### クライアントが構築または解析すると予想される文字列内のデータをエンコードしない
@@ -408,7 +408,7 @@ JavaScript クライアントには、API のフィールドで HTML や JSON �
 
 具体的な 3 つの危険性：
 
-- 「スクラッピー」 な非 Web クライアントは、HTML や JSON を解析して、フォーマットを変更した場合の脆弱性や、解析が悪い場合の脆弱性につながるデータを取得することになる
+- 「スクラッピー」 な非 Web クライアントは、HTML や JSON を解析して、フォーマットを変更した場合の脆弱性や、解析が悪い場合の脆弱性につなが るデータを取得することになる
 - Web クライアントは、その HTML がサニタイズされずに返された場合、XSS エクスプロイトに対して脆弱になる。
 - 返されるタグとクラスは、特定のスタイルシートと DOM 構造を想定しているが、リリースごとに構造が変化し、JavaScript クライアントがサーバーより古くなると、サーバーが返す HTML が古いクライアントで正しくレンダリングされなくなるバージョンスキューの問題が発生するリスクがある。（リリース頻度の高いプロジェクトでは、これはエッジケースではない）
 
@@ -424,7 +424,7 @@ JavaScript クライアントには、API のフィールドで HTML や JSON �
 以前は応答プロトコルでデバッグデータを返すのが一般的でしたが、今はより良い方法がある
 
 - RPC レスポンス拡張（「サイドチャネル」とも呼ばれる）により、あるプロトでクライアントインタフェースを記述し、別のプロトでデバッグサーフェスを記述することができる
-- （同様に応答 proto で実験名を返すのは、以前はログ記録の利便性があり、不文律の契約では、クライアントは後続のアクションでそれらの実験を送り返していた）同じことを実現する方法は、分析パイプラインでログの結合を行うこと。
+- （同様に応答 proto で実験名を返すのは、以前はログ記録の利便性があり、不文律の契約では、クライアントは後続のアクションでそれらの実験を送 り返していた）同じことを実現する方法は、分析パイプラインでログの結合を行うこと。
 
 １つの例外:
 
@@ -604,8 +604,8 @@ message ListFooRequest {
 
 ### Batch/Multi-phase リクエスト
 
-- 可能な限り、Mutations を 原始的なものにする。さらに重要なのは、Mutations を冪等性にすること。部分的な失敗の完全な再試行は、データを破損したり複製したりしてはならない。
-- 時に、パフォーマンス上の理由から、複数の操作をカプセル化した単一の RPC が必要になることがある。部分的な失敗の場合（あるものが成功し、あるものが失敗した場合）クライアントに知らせるのが一番。
+- 可能な限り、Mutations を 原始的なものにする。さらに重要なのは、Mutations を冪等性にすること。部分的な失敗の完全な再試行は、データを破損 したり複製したりしてはならない。
+- 時に、パフォーマンス上の理由から、複数の操作をカプセル化した単一の RPC が必要になることがある。部分的な失敗の場合（あるものが成功し、あ るものが失敗した場合）クライアントに知らせるのが一番。
 - RPC を failed に設定し、成功と失敗の両方の詳細を RPC status proto で返すことを検討する。
 
 ### 小さなデータを返す/操作するメソッドを作成し、クライアントが複数の要求をまとめて UI を構成することを期待する
@@ -702,7 +702,7 @@ RPC サービスは、エラーを調査するために RPC 境界で注意を�
 例：
 
 引数をとらない ProductService.GetProducts を呼び出すクライアントを考える。
-GetProducts の一部として、ProductService はすべての製品を取得し、各製品に対して LocaleService.LocaliseNutritionFacts を呼び出すかもしれない。
+GetProducts の一部として、ProductService はすべての製品を取得し、各製品に対して LocaleService.LocaliseNutritionFacts を呼び出すかもしれな い。
 
 ```
 digraph toy_example {
@@ -719,11 +719,11 @@ ProductService の実装が不適切な場合、LocaleService に誤った引数
 
 ProductService が不用意に呼び出し側にエラーを返すと、ステータスコードが RPC 境界を越えて伝播するため、クライアントは INVALID_ARGUMENT を受け取る。しかし、クライアントは ProductService.GetProducts に何の引数も渡していない。つまり、このエラーは役に立たないどころか、大きな混乱を招くことになる
 
-その代わりに、ProductService は、RPC 境界（つまり、実装している ProductService RPC ハンドラ）で受け取ったエラーを照会する必要がある。呼び出し元から無効な引数を受け取った場合は、INVALID_ARGUMENT を返すようにする。下流のものが無効な引数を受け取った場合、INVALID_ARGUMENT を INTERNAL に変換してから呼び出し元にエラーを返すべきである。
+その代わりに、ProductService は、RPC 境界（つまり、実装している ProductService RPC ハンドラ）で受け取ったエラーを照会する必要がある。呼び 出し元から無効な引数を受け取った場合は、INVALID_ARGUMENT を返すようにする。下流のものが無効な引数を受け取った場合、INVALID_ARGUMENT を INTERNAL に変換してから呼び出し元にエラーを返すべきである。
 
 不用意にステータスエラーを伝播させると、混乱を招き、デバッグに多大なコストがかかることになる。さらに悪いことに、すべてのサービスがクライアントエラーを転送し、何のアラートも発生させないという、見えない停止につながる可能性がある。
 
-一般的なルールとして、RPC の境界では、エラーを問い合わせ、適切なステータスコードで、意味のあるステータスエラーを呼び出し側に返すように注意する。意味を伝えるために、各 RPC メソッドは、どのような状況でどのようなエラーコードを返すかを文書化する必要がある。各メソッドの実装は、文書化された API 契約に準拠する必要がある。
+一般的なルールとして、RPC の境界では、エラーを問い合わせ、適切なステータスコードで、意味のあるステータスエラーを呼び出し側に返すように注意する。意味を伝えるために、各 RPC メソッドは、どのような状況でどのようなエラーコードを返すかを文書化する必要がある。各メソッドの実装は、文 書化された API 契約に準拠する必要がある。
 
 ### Reapeated フィールドの Tips
 
@@ -769,13 +769,13 @@ message BatchEquationSolverResponse {
   repeated double solved_complex_values;
 }
 
-// Good: より多くのフィールドを含むように成長し、他のメソッド間で共有できる独立したメッセージ // リクエストとレスポンスの間の順序依存性がなく、複数のrepeatedフィールド間の順序依存性がない
+// Good: より多くのフィールドを含むように成長し、他のメソッド間で共有できる独立したメッセージ // リクエストとレスポンスの間の順序依存性が なく、複数のrepeatedフィールド間の順序依存性がない
 message BatchEquationSolverResponse {
   // 非推奨。2014年第2四半期までは、この項目が回答として入力され続ける。
   repeated double solved_values [deprecated = true];
 
   // Good: リクエストの各方程式には一意の識別子があり、
-  // 以下のEquationSolutionに含まれている一意の識別子があり、解答は方程式そのものと関連付けることができる。方程式は並行して解かれ、解が作られるとこの配列に追加される。
+  // 以下のEquationSolutionに含まれている一意の識別子があり、解答は方程式そのものと関連付けることができる。方程式は並行して解かれ、解が作 られるとこの配列に追加される。
   repeated EquationSolution solutions;
 }
 ```
