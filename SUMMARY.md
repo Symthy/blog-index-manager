@@ -38,7 +38,6 @@
     - [GraphQL Code Generator まとめ](./docs/Development/GraphQL/GraphQL_Code_Generator_まとめ/doc.md)
   - gRPC
     - [gRPC：buf とは、buf でできること](./docs/Development/gRPC/gRPC：buf_とは、buf_でできること/doc.md)
-    - [gPRC: Protocol Buffers スタイル規約 & API ベストプラクティスまとめ](./docs/Development/gRPC/gPRC：_Protocol_Buffers_スタイル規約_&_API_ベストプラクティスまとめ/doc.md)
     - [gPRC: Protocol Buffers スタイル規約 ＆ API ベストプラクティスまとめ](./docs/Development/gRPC/gPRC：_Protocol_Buffers_スタイル規約_＆_API_ベストプラクティスまとめ/doc.md)
 - BackEnd
   - ElasticStack
@@ -55,6 +54,7 @@
     - [Redux 基本](./docs/FrontEnd/React/Redux_基本/doc.md)
     - [React 実践のために調べまくったこと書き綴り まとめメモ](./docs/FrontEnd/React/React_実践のために調べまくったこと書き綴り_まとめメモ/doc.md)
     - [urql による Github ＆ Gitlab の マルチクライアント 実現（サンプル）](./docs/FrontEnd/React/urql_による_Github_＆_Gitlab_の_マルチクライアント_実現（サンプル）/doc.md)
+    - [React + GraphQL + Pagination 実装 ＆ コンポーネント分割](./docs/FrontEnd/React/React_+_GraphQL_+_Pagination_実装_＆_コンポーネント分割/doc.md)
   - [フロントエンド 技術要素概要集](./docs/FrontEnd/フロントエンド_技術要素概要集/doc.md)
   - [storybook チュートリアル ＆ CDD（コンポーネント駆動開発）](./docs/FrontEnd/storybook_チュートリアル_＆_CDD（コンポーネント駆動開発）/doc.md)
   - [フロントエンド E2E テスト + MSW (Playwright/Cypress 試行) メモ](./docs/FrontEnd/フロントエンド_E2E_テスト_+_MSW_(Playwright／Cypress_試行)_メモ/doc.md)
