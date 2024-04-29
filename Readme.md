@@ -1,3 +1,5 @@
+開発停止、後継 → https://github.com/Symthy/obs-docs-blog-entries-manager
+
 # My Document & Blog Entry Manager
 
 個人のドキュメント＆ブログ管理ツール
